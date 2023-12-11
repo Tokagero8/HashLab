@@ -1,6 +1,5 @@
 package hashlab.algorithms;
 
-import hashlab.functions.HashFunction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,12 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class BSTHashTest {
 
     private BSTHash<String, Integer> bstHash;
-    private HashFunction mockHashFunction;
 
     @BeforeEach
     void setUp(){
-        mockHashFunction = key -> Integer.toString(key.hashCode());
-        bstHash = new BSTHash<>(10, mockHashFunction);
+        bstHash = new BSTHash<>(10, key -> Integer.toString(key.hashCode()));
     }
 
     @Test
@@ -24,7 +21,7 @@ public class BSTHashTest {
         bstHash.put("key2", 200);
 
         assertEquals(100, bstHash.get("key1"));
-        assertEquals(100, bstHash.get("key1"));
+        assertEquals(200, bstHash.get("key2"));
         assertNull(bstHash.get("key3"));
     }
 
@@ -34,5 +31,18 @@ public class BSTHashTest {
         bstHash.put("key1", 200);
 
         assertEquals(200, bstHash.get("key1"));
+    }
+
+    @Test
+    void deleteValue(){
+        bstHash.put("key1", 100);
+        bstHash.put("key2", 200);
+
+        assertEquals(100, bstHash.get("key1"));
+        assertEquals(200, bstHash.get("key2"));
+
+        bstHash.delete("key1");
+        assertNull(bstHash.get("key1"));
+        assertEquals(200, bstHash.get("key2"));
     }
 }

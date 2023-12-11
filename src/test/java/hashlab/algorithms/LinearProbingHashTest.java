@@ -1,6 +1,5 @@
 package hashlab.algorithms;
 
-import hashlab.functions.HashFunction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,30 +8,41 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class LinearProbingHashTest {
 
-    private LinearProbingHash<String, Integer> bstHash;
-    private HashFunction mockHashFunction;
+    private LinearProbingHash<String, Integer> linearProbingHash;
 
     @BeforeEach
     void setUp(){
-        mockHashFunction = key -> Integer.toString(key.hashCode());
-        bstHash = new LinearProbingHash<>(10, mockHashFunction);
+        linearProbingHash = new LinearProbingHash<>(10, key -> Integer.toString(key.hashCode()));
     }
 
     @Test
     void putAndGet(){
-        bstHash.put("key1", 100);
-        bstHash.put("key2", 200);
+        linearProbingHash.put("key1", 100);
+        linearProbingHash.put("key2", 200);
 
-        assertEquals(100, bstHash.get("key1"));
-        assertEquals(100, bstHash.get("key1"));
-        assertNull(bstHash.get("key3"));
+        assertEquals(100, linearProbingHash.get("key1"));
+        assertEquals(200, linearProbingHash.get("key2"));
+        assertNull(linearProbingHash.get("key3"));
     }
 
     @Test
     void updateValue(){
-        bstHash.put("key1", 100);
-        bstHash.put("key1", 200);
+        linearProbingHash.put("key1", 100);
+        linearProbingHash.put("key1", 200);
 
-        assertEquals(200, bstHash.get("key1"));
+        assertEquals(200, linearProbingHash.get("key1"));
+    }
+
+    @Test
+    void deleteValue(){
+        linearProbingHash.put("key1", 100);
+        linearProbingHash.put("key2", 200);
+
+        assertEquals(100, linearProbingHash.get("key1"));
+        assertEquals(200, linearProbingHash.get("key2"));
+
+        linearProbingHash.delete("key1");
+        assertNull(linearProbingHash.get("key1"));
+        assertEquals(200, linearProbingHash.get("key2"));
     }
 }

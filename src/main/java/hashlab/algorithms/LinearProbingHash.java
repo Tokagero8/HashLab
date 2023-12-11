@@ -39,4 +39,32 @@ public class LinearProbingHash<Key, Value> implements HashAlgorithm<Key, Value> 
                 return values[i];
         return null;
     }
+
+    public void delete(Key key) {
+        if(!contain(key)) return;
+
+        int i = hash(key);
+        while (!key.equals(keys[i])){
+            i = (i + 1) % hashTableSize;
+        }
+
+        keys[i] = null;
+        values[i] = null;
+        size--;
+
+        i = (i + 1) % hashTableSize;
+        while (keys[i] != null) {
+            Key keyToRehash = keys[i];
+            Value valToRehash = values[i];
+            keys[i] = null;
+            values[i] = null;
+            size--;
+            put(keyToRehash, valToRehash);
+            i = (i + 1) % hashTableSize;
+        }
+    }
+
+    private boolean contain(Key key) {
+        return get(key) != null;
+    }
 }

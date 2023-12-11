@@ -9,30 +9,41 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class SeparateChainingHashTest {
 
-    private SeparateChainingHash<String, Integer> bstHash;
-    private HashFunction mockHashFunction;
+    private SeparateChainingHash<String, Integer> SeparateChainingHash;
 
     @BeforeEach
     void setUp(){
-        mockHashFunction = key -> Integer.toString(key.hashCode());
-        bstHash = new SeparateChainingHash<>(10, mockHashFunction);
+        SeparateChainingHash = new SeparateChainingHash<>(10, key -> Integer.toString(key.hashCode()));
     }
 
     @Test
     void putAndGet(){
-        bstHash.put("key1", 100);
-        bstHash.put("key2", 200);
+        SeparateChainingHash.put("key1", 100);
+        SeparateChainingHash.put("key2", 200);
 
-        assertEquals(100, bstHash.get("key1"));
-        assertEquals(100, bstHash.get("key1"));
-        assertNull(bstHash.get("key3"));
+        assertEquals(100, SeparateChainingHash.get("key1"));
+        assertEquals(100, SeparateChainingHash.get("key1"));
+        assertNull(SeparateChainingHash.get("key3"));
     }
 
     @Test
     void updateValue(){
-        bstHash.put("key1", 100);
-        bstHash.put("key1", 200);
+        SeparateChainingHash.put("key1", 100);
+        SeparateChainingHash.put("key1", 200);
 
-        assertEquals(200, bstHash.get("key1"));
+        assertEquals(200, SeparateChainingHash.get("key1"));
+    }
+
+    @Test
+    void deleteValue(){
+        SeparateChainingHash.put("key1", 100);
+        SeparateChainingHash.put("key2", 200);
+
+        assertEquals(100, SeparateChainingHash.get("key1"));
+        assertEquals(200, SeparateChainingHash.get("key2"));
+
+        SeparateChainingHash.delete("key1");
+        assertNull(SeparateChainingHash.get("key1"));
+        assertEquals(200, SeparateChainingHash.get("key2"));
     }
 }
