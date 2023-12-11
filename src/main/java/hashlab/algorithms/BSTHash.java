@@ -2,8 +2,11 @@ package hashlab.algorithms;
 
 import hashlab.functions.HashFunction;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class BSTHash<Key extends Comparable<Key>, Value> {
-    private Node[] hashTable;
+    private Object[] hashTable;
     private int hashTableSize;
     private HashFunction hashFunction;
 
@@ -18,10 +21,11 @@ public class BSTHash<Key extends Comparable<Key>, Value> {
         }
     }
 
+
     public BSTHash(int hashTableSize, HashFunction function) {
         this.hashTableSize = hashTableSize;
         this.hashFunction = function;
-        hashTable = (Node[]) new Object[hashTableSize];
+        hashTable = new Object[hashTableSize];
     }
 
     private int hash(Key key) {
@@ -30,7 +34,7 @@ public class BSTHash<Key extends Comparable<Key>, Value> {
 
     public void put(Key key, Value val) {
         int i = hash(key);
-        hashTable[i] = put(hashTable[i], key, val);
+        hashTable[i] = put((Node) hashTable[i], key, val);
     }
 
     private Node put(Node x, Key key, Value val) {
@@ -44,7 +48,7 @@ public class BSTHash<Key extends Comparable<Key>, Value> {
 
     public Value get(Key key) {
         int i = hash(key);
-        return get(hashTable[i], key);
+        return get((Node)hashTable[i], key);
     }
 
     private Value get(Node x, Key key) {
