@@ -1,8 +1,11 @@
 package hashlab.algorithms;
 
+import hashlab.functions.HashFunction;
+
 public class BSTHash<Key extends Comparable<Key>, Value> {
     private Node[] hashTable;
     private int hashTableSize;
+    private HashFunction hashFunction;
 
     private class Node {
         private Key key;
@@ -15,13 +18,14 @@ public class BSTHash<Key extends Comparable<Key>, Value> {
         }
     }
 
-    public BSTHash(int hashTableSize) {
+    public BSTHash(int hashTableSize, HashFunction function) {
         this.hashTableSize = hashTableSize;
+        this.hashFunction = function;
         hashTable = (Node[]) new Object[hashTableSize];
     }
 
     private int hash(Key key) {
-        return (key.hashCode() & 0x7fffffff) % hashTableSize;
+        return (hashFunction.hash(key.toString()).hashCode() & 0x7fffffff) % hashTableSize;
     }
 
     public void put(Key key, Value val) {

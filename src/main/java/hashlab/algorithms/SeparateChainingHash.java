@@ -1,10 +1,13 @@
 package hashlab.algorithms;
 
+import hashlab.functions.HashFunction;
+
 import java.util.LinkedList;
 
 public class SeparateChainingHash <Key, Value> {
     private int hashTableSize;
     private LinkedList<Entry>[] hashTable;
+    private HashFunction hashFunction;
 
     private static class Entry {
         private final Object key;
@@ -16,8 +19,9 @@ public class SeparateChainingHash <Key, Value> {
         }
     }
 
-    public SeparateChainingHash(int hashTableSize) {
+    public SeparateChainingHash(int hashTableSize, HashFunction hashFunction) {
         this.hashTableSize = hashTableSize;
+        this.hashFunction = hashFunction;
         hashTable = (LinkedList<Entry>[]) new LinkedList[hashTableSize];
         for (int i = 0; i < hashTableSize; i++) {
             hashTable[i] = new LinkedList<>();
@@ -25,7 +29,7 @@ public class SeparateChainingHash <Key, Value> {
     }
 
     private int hash(Key key) {
-        return (key.hashCode() & 0x7fffffff) % hashTableSize;
+        return (hashFunction.hash(key.toString()).hashCode() & 0x7fffffff) % hashTableSize;
     }
 
     public void put(Key key, Value value) {

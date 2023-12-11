@@ -1,19 +1,23 @@
 package hashlab.algorithms;
 
+import hashlab.functions.HashFunction;
+
 public class LinearProbingHash<Key, Value> {
     private int hashTableSize;
     private int size;
     private Key[] keys;
     private Value[] values;
+    private HashFunction hashFunction;
 
-    public LinearProbingHash(int capacity) {
+    public LinearProbingHash(int capacity, HashFunction function) {
         this.hashTableSize = capacity;
+        this.hashFunction = function;
         keys = (Key[]) new Object[hashTableSize];
         values = (Value[]) new Object[hashTableSize];
     }
 
     private int hash(Key key) {
-        return (key.hashCode() & 0x7fffffff) % hashTableSize;
+        return (hashFunction.hash(key.toString()).hashCode() & 0x7fffffff) % hashTableSize;
     }
 
     public void put(Key key, Value val) {
