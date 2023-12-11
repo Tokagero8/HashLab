@@ -2,7 +2,7 @@ package hashlab.algorithms;
 
 import hashlab.functions.HashFunction;
 
-public class LinearProbingHash<Key, Value> {
+public class LinearProbingHash<Key, Value> implements HashAlgorithm<Key, Value> {
     private int hashTableSize;
     private int size;
     private Key[] keys;

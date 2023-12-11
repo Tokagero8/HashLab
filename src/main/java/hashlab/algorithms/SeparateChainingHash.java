@@ -4,7 +4,7 @@ import hashlab.functions.HashFunction;
 
 import java.util.LinkedList;
 
-public class SeparateChainingHash <Key, Value> {
+public class SeparateChainingHash <Key, Value> implements HashAlgorithm<Key, Value> {
     private int hashTableSize;
     private LinkedList<Entry>[] hashTable;
     private HashFunction hashFunction;

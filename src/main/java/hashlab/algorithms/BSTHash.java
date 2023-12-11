@@ -2,10 +2,7 @@ package hashlab.algorithms;
 
 import hashlab.functions.HashFunction;
 
-import java.util.LinkedList;
-import java.util.List;
-
-public class BSTHash<Key extends Comparable<Key>, Value> {
+public class BSTHash<Key extends Comparable<Key>, Value> implements HashAlgorithm<Key, Value> {
     private Object[] hashTable;
     private int hashTableSize;
     private HashFunction hashFunction;
