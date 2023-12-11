@@ -3,6 +3,6 @@ module com.example.hashlab {
     requires javafx.fxml;
 
 
-    opens com.example.hashlab to javafx.fxml;
-    exports com.example.hashlab;
+    opens hashlab.core to javafx.fxml;
+    exports hashlab.core;
 }
