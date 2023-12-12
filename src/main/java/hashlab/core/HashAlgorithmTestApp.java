@@ -2,30 +2,38 @@ package hashlab.core;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.CheckListView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class HashAlgorithmTestApp extends Application {
 
     private File selectedFile;
     List<HashTestConfig> tests = new ArrayList<>();
-    private ListView<String> testListView = new ListView<>();
+    private CheckListView<String> testCheckListView = new CheckListView<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         VBox layout = new VBox(10);
-        layout.setPadding(new Insets(10));
+        layout.setPadding(new Insets(5));
+        VBox.setVgrow(testCheckListView, Priority.ALWAYS);
+        layout.setSpacing(5);
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -36,14 +44,20 @@ public class HashAlgorithmTestApp extends Application {
         algorithmChoice.getItems().addAll("BST", "Linear Probing", "Separate Chaining");
         grid.add(new Label("Algorytm:"), 0, 0);
         grid.add(algorithmChoice, 1, 0);
+        TitledPane hashAlgorithmsPane = new TitledPane("Hash algorithms", algorithmChoice);
+        hashAlgorithmsPane.setCollapsible(false);
 
-        ListView<String> hashFunctionChoice = new ListView<>();
+        CheckListView<String> hashFunctionChoice = new CheckListView<>();
         hashFunctionChoice.getItems().addAll("MD5", "SHA1", "SHA256");
-        hashFunctionChoice.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        TitledPane hashFunctionsPane = new TitledPane("Hash functions", hashFunctionChoice);
+        hashFunctionsPane.setCollapsible(false);
 
         CheckBox putCheckbox = new CheckBox("Put");
         CheckBox getCheckbox = new CheckBox("Get");
         CheckBox deleteCheckbox = new CheckBox("Delete");
+        HBox testOperations = new HBox(10, putCheckbox, getCheckbox, deleteCheckbox);
+        TitledPane testOperationsPane = new TitledPane("Test operations", testOperations);
+        testOperationsPane.setCollapsible(false);
 
         ToggleGroup dataToggleGroup = new ToggleGroup();
         RadioButton generateDataRadio = new RadioButton("Generuj dane");
@@ -74,7 +88,7 @@ public class HashAlgorithmTestApp extends Application {
         lambdaField.setDisable(true);
         lambdaField.setPromptText("Lambda");
 
-        Button fileChooserButton = new Button("Wybierz plik");
+        Button fileChooserButton = new Button("Choose a file");
         fileChooserButton.setDisable(true);
         fileChooserButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
@@ -114,21 +128,45 @@ public class HashAlgorithmTestApp extends Application {
         gaussianCheckBox.selectedProperty().addListener(checkBoxListener);
         exponentialCheckBox.selectedProperty().addListener(checkBoxListener);
 
+        VBox dataSourceBox = new VBox(5, generateDataRadio, loadDataRadio, fileChooserButton);
+        TitledPane dataSourcePane = new TitledPane("Data source", dataSourceBox);
+        dataSourcePane.setCollapsible(false);
+
+        VBox uniformBox = new VBox(5, uniformCheckBox, minField, maxField);
+        TitledPane uniformPane = new TitledPane("Uniform", uniformBox);
+        uniformPane.setCollapsible(false);
+
+        VBox gaussianBox = new VBox(5, gaussianCheckBox, meanField, deviationField);
+        TitledPane gaussianPane = new TitledPane("Gaussian", gaussianBox);
+        gaussianPane.setCollapsible(false);
+
+        VBox exponentialBox = new VBox(5, exponentialCheckBox, lambdaField);
+        TitledPane exponentialPane = new TitledPane("Exponential", exponentialBox);
+        exponentialPane.setCollapsible(false);
+
+        VBox dataGenerationBox = new VBox(5, generateDataRadio, uniformPane, gaussianPane, exponentialPane);
+        TitledPane dataGenerationPane = new TitledPane("Data Generation Methods", dataGenerationBox);
+        dataGenerationPane.setCollapsible(false);
+
         TextField benchmarkIterationsField = new TextField();
         benchmarkIterationsField.setPromptText("Benchmark iterations");
 
         TextField benchmarkThresholdField = new TextField();
         benchmarkThresholdField.setPromptText("Benchmark threshold");
 
-        Button runTestButton = new Button("Uruchom testy");
+        VBox benchmarkParamsBox = new VBox(5, benchmarkIterationsField, benchmarkThresholdField);
+        TitledPane benchmarkParamsPane = new TitledPane("Benchmark parameters", benchmarkParamsBox);
+        benchmarkParamsPane.setCollapsible(false);
+
+        Button runTestButton = new Button("Run tests");
         runTestButton.setOnAction(e -> runTests());
 
-        Button addTestButton = new Button("Dodaj test");
+        Button addTestButton = new Button("Add a test");
         addTestButton.setOnAction(e -> {
             TextInputDialog dialog = new TextInputDialog("Test " + (tests.size() + 1));
-            dialog.setTitle("Nazwa testu");
-            dialog.setHeaderText("Wprowadź nazwę dla nowego testu:");
-            dialog.setContentText("Nazwa:");
+            dialog.setTitle("Test name");
+            dialog.setHeaderText("Enter a name for the new test:");
+            dialog.setContentText("Name:");
 
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(name -> {
@@ -136,7 +174,7 @@ public class HashAlgorithmTestApp extends Application {
 
                 config.testName = name;
                 config.algorithm = algorithmChoice.getValue();
-                config.hashFunctions = new ArrayList<>(hashFunctionChoice.getSelectionModel().getSelectedItems());
+                config.hashFunctions = new ArrayList<>(hashFunctionChoice.getCheckModel().getCheckedItems());
                 config.put = putCheckbox.isSelected();
                 config.get = getCheckbox.isSelected();
                 config.delete = deleteCheckbox.isSelected();
@@ -162,16 +200,26 @@ public class HashAlgorithmTestApp extends Application {
 
                     tests.add(config);
 
-                    testListView.getItems().add(name);
+                    testCheckListView.setItems(FXCollections.observableArrayList(
+                            tests.stream().map(test -> test.testName).collect(Collectors.toList())
+                    ));
                 } catch (NumberFormatException ex) {
-                    showAlert("Błąd", "Proszę wprowadzić poprawne wartości liczbowe");
+                    showAlert("Error", "Please enter valid numerical values");
                 }
             });
         });
 
-        testListView.setOnMouseClicked(event -> {
+        Button removeTestButton = new Button("Delete the selected tests");
+        removeTestButton.setOnAction(e -> {
+            ObservableList<String> selectedTests = testCheckListView.getCheckModel().getCheckedItems();
+            tests.removeIf(test -> selectedTests.contains(test.testName));
+            testCheckListView.getItems().removeIf(selectedTests::contains);
+            testCheckListView.getCheckModel().clearChecks(); // Clear checks after removal
+        });
+
+        testCheckListView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                String selectedTestName = testListView.getSelectionModel().getSelectedItem();
+                String selectedTestName = testCheckListView.getSelectionModel().getSelectedItem();
                 HashTestConfig selectedTest = tests.stream()
                         .filter(t -> t.testName.equals(selectedTestName))
                         .findFirst()
@@ -184,42 +232,38 @@ public class HashAlgorithmTestApp extends Application {
         });
 
 
-        layout.getChildren().addAll(algorithmChoice,
-                hashFunctionChoice,
-                putCheckbox,
-                getCheckbox,
-                deleteCheckbox,
-                generateDataRadio,
-                uniformCheckBox,
-                minField,
-                maxField,
-                gaussianCheckBox,
-                meanField,
-                deviationField,
-                exponentialCheckBox,
-                lambdaField,
-                loadDataRadio,
-                fileChooserButton,
-                benchmarkIterationsField,
-                benchmarkThresholdField,
+        layout.getChildren().addAll(
+                hashAlgorithmsPane,
+                hashFunctionsPane,
+                testOperationsPane,
+                dataGenerationBox,
+                dataSourcePane,
+                benchmarkParamsPane,
                 runTestButton,
                 addTestButton,
-                testListView);
+                removeTestButton,
+                testCheckListView);
 
         layout.getChildren().add(grid);
 
-        Scene scene = new Scene(layout, 600, 800);
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(layout);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+        Scene scene = new Scene(scrollPane, 600, 800);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Testowanie Algorytmów Haszujących");
+        primaryStage.setTitle("Testing Hashing Algorithms");
         primaryStage.show();
 
     }
 
     private void showTestDetails(HashTestConfig test) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Szczegóły testu");
+        alert.setTitle("Test details");
         alert.setHeaderText(test.testName);
-        alert.setContentText(test.toString()); // Załóżmy, że HashTestConfig ma metodę toString generującą szczegółowy opis
+        alert.setContentText(test.toString());
 
         alert.showAndWait();
     }

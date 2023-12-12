@@ -15,15 +15,15 @@ public class HashTestConfig {
 
     @Override
     public String toString() {
-        return "Nazwa testu: " + testName + "\n" +
-                "Algorytm: " + algorithm + "\n" +
-                "Funkcje haszujące: " + hashFunctions + "\n" +
-                "Operacje: " + getOperationsString() + "\n" +
-                "Typ danych: " + (isDataGenerated ? "Generowane" : "Wczytane z pliku") + "\n" +
-                "Metody generacji danych: " + getDataGenerationMethodsString() + "\n" +
-                "Parametry generacji danych: " + getDataGenerationParamsString() + "\n" +
-                "Liczba iteracji benchmarku: " + benchmarkIterations + "\n" +
-                "Próg benchmarku: " + benchmarkThreshold;
+        return "Test name: " + testName + "\n" +
+                "Algorithm: " + algorithm + "\n" +
+                "Hash functions: " + hashFunctions + "\n" +
+                "Operations: " + getOperationsString() + "\n" +
+                "Data type: " + (isDataGenerated ? "Generated" : "Loaded from a file") + "\n" +
+                "Data generation methods: " + getDataGenerationMethodsString() + "\n" +
+                "Data generation parameters: " + getDataGenerationParamsString() + "\n" +
+                "Number of benchmark iterations: " + benchmarkIterations + "\n" +
+                "Benchmark threshold: " + benchmarkThreshold;
     }
 
     private String getOperationsString() {
