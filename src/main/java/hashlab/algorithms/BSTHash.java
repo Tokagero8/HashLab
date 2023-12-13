@@ -61,6 +61,11 @@ public class BSTHash<Key extends Comparable<Key>, Value> implements HashAlgorith
         hashTable[i] = delete((Node)hashTable[i], key);
     }
 
+    @Override
+    public HashFunction getHashFunction() {
+        return hashFunction;
+    }
+
     private Node delete(Node node, Key key) {
         if (node == null) return null;
         int cmp = key.compareTo(node.key);

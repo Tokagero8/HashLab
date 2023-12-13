@@ -65,4 +65,9 @@ public class SeparateChainingHash <Key, Value> implements HashAlgorithm<Key, Val
             }
         }
     }
+
+    @Override
+    public HashFunction getHashFunction() {
+        return hashFunction;
+    }
 }

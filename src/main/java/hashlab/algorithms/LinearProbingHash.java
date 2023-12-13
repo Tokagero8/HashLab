@@ -64,6 +64,11 @@ public class LinearProbingHash<Key, Value> implements HashAlgorithm<Key, Value> 
         }
     }
 
+    @Override
+    public HashFunction getHashFunction() {
+        return hashFunction;
+    }
+
     private boolean contain(Key key) {
         return get(key) != null;
     }
