@@ -5,9 +5,11 @@ import java.util.List;
 public class HashTestConfig {
     String testName;
     String algorithm;
+    int hashTableSize;
     List<String> hashFunctions;
     boolean put, get, delete;
     boolean isDataGenerated;
+    int dataSize;
     boolean uniformSelected, gaussianSelected, exponentialSelected;
     double min, max, mean, deviation, lambda;
     int benchmarkIterations;
@@ -17,9 +19,11 @@ public class HashTestConfig {
     public String toString() {
         return "Test name: " + testName + "\n" +
                 "Algorithm: " + algorithm + "\n" +
+                "Hash Table Size: " + hashTableSize + "\n" +
                 "Hash functions: " + hashFunctions + "\n" +
                 "Operations: " + getOperationsString() + "\n" +
                 "Data type: " + (isDataGenerated ? "Generated" : "Loaded from a file") + "\n" +
+                "Data Size: " + (isDataGenerated ? dataSize : "N/A") + "\n" +
                 "Data generation methods: " + getDataGenerationMethodsString() + "\n" +
                 "Data generation parameters: " + getDataGenerationParamsString() + "\n" +
                 "Number of benchmark iterations: " + benchmarkIterations + "\n" +
