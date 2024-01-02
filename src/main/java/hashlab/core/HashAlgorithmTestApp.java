@@ -202,6 +202,15 @@ public class HashAlgorithmTestApp extends Application {
 
         Button addTestButton = new Button("Add a test");
         addTestButton.setOnAction(e -> {
+            if (!validateTestConfig(algorithmChoice, hashTableSizeField, hashFunctionChoice,
+                    putCheckbox, getCheckbox, deleteCheckbox,
+                    generateDataRadio, loadDataRadio, selectedFile, uniformCheckBox,
+                    gaussianCheckBox, exponentialCheckBox, minField,
+                    maxField, meanField, deviationField, lambdaField,
+                    dataSizeField, benchmarkIterationsField, benchmarkThresholdField)) {
+                return;
+            }
+
             TextInputDialog dialog = new TextInputDialog("Test " + (tests.size() + 1));
             dialog.setTitle("Test name");
             dialog.setHeaderText("Enter a name for the new test:");
@@ -312,6 +321,125 @@ public class HashAlgorithmTestApp extends Application {
         alert.showAndWait();
     }
 
+    private boolean validateTestConfig(ComboBox<String> algorithmChoice, TextField hashTableSizeField,
+                                       CheckListView<String> hashFunctionChoice, CheckBox putCheckbox,
+                                       CheckBox getCheckbox, CheckBox deleteCheckbox, RadioButton generateDataRadio,
+                                       RadioButton loadDataRadio, File selectedFile, CheckBox uniformCheckBox,
+                                       CheckBox gaussianCheckBox, CheckBox exponentialCheckBox, TextField minField,
+                                       TextField maxField, TextField meanField, TextField deviationField,
+                                       TextField lambdaField, TextField dataSizeField, TextField benchmarkIterationsField,
+                                       TextField benchmarkThresholdField) {
+
+        if (algorithmChoice.getValue() == null || algorithmChoice.getValue().isEmpty()) {
+            showAlert("Error", "Please select a hashing algorithm.");
+            return false;
+        }
+
+        try {
+            int hashTableSize = Integer.parseInt(hashTableSizeField.getText());
+            if (hashTableSize <= 0) {
+                showAlert("Error", "Hash table size must be greater than 0.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Hash table size must be a valid integer.");
+            return false;
+        }
+
+        if (hashFunctionChoice.getCheckModel().getCheckedItems().isEmpty()) {
+            showAlert("Error", "Please select at least one hash function.");
+            return false;
+        }
+
+        if (!(putCheckbox.isSelected() || getCheckbox.isSelected() || deleteCheckbox.isSelected())) {
+            showAlert("Error", "Please select at least one test operation.");
+            return false;
+        }
+
+        if (!generateDataRadio.isSelected() && !loadDataRadio.isSelected()) {
+            showAlert("Error", "Please select a data generation method or choose to load data from a file.");
+            return false;
+        }
+
+        if (generateDataRadio.isSelected()) {
+            try {
+                int dataSize = Integer.parseInt(dataSizeField.getText());
+                if (dataSize <= 0) {
+                    showAlert("Error", "Data size must be a positive integer.");
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                showAlert("Error", "Invalid data size. Please enter a valid integer.");
+                return false;
+            }
+
+            if (!uniformCheckBox.isSelected() && !gaussianCheckBox.isSelected() && !exponentialCheckBox.isSelected()) {
+                showAlert("Error", "Please select at least one data generation method.");
+                return false;
+            }
+        }
+
+        if (loadDataRadio.isSelected() && (selectedFile == null || !selectedFile.exists())) {
+            showAlert("Error", "Please choose a valid file to load data from.");
+            return false;
+        }
+
+        if (generateDataRadio.isSelected()) {
+            if (uniformCheckBox.isSelected()) {
+                try {
+                    double min = Double.parseDouble(minField.getText());
+                    double max = Double.parseDouble(maxField.getText());
+                    if (min >= max) {
+                        showAlert("Error", "In Uniform, 'Min' must be less than 'Max'.");
+                        return false;
+                    }
+                } catch (NumberFormatException e) {
+                    showAlert("Error", "Please enter valid numbers for Uniform parameters.");
+                    return false;
+                }
+            }
+
+            if (gaussianCheckBox.isSelected()) {
+                try {
+                    Double.parseDouble(meanField.getText());
+                    Double.parseDouble(deviationField.getText());
+                } catch (NumberFormatException e) {
+                    showAlert("Error", "Please enter valid numbers for Gaussian parameters.");
+                    return false;
+                }
+            }
+
+            if (exponentialCheckBox.isSelected()) {
+                try {
+                    Double.parseDouble(lambdaField.getText());
+                } catch (NumberFormatException e) {
+                    showAlert("Error", "Please enter a valid number for Lambda.");
+                    return false;
+                }
+            }
+        }
+
+        try {
+            int iterations = Integer.parseInt(benchmarkIterationsField.getText());
+            if (iterations <= 0) {
+                showAlert("Error", "Benchmark iterations must be greater than 0.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Benchmark iterations must be a valid integer.");
+            return false;
+        }
+
+        try {
+            Double.parseDouble(benchmarkThresholdField.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Benchmark threshold must be a valid number.");
+            return false;
+        }
+
+        return true;
+    }
+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -411,6 +539,7 @@ public class HashAlgorithmTestApp extends Application {
             testKeysSets.add(new AbstractMap.SimpleEntry<>("FromFile", keys.toArray(new String[0])));
         } catch (IOException e) {
             e.printStackTrace();
+            return new ArrayList<>();
         }
         return testKeysSets;
     }
