@@ -28,10 +28,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -119,11 +116,18 @@ public class HashAlgorithmTestApp extends Application {
         lambdaField.setDisable(true);
         lambdaField.setPromptText("Lambda");
 
+        TextField filePathField = new TextField();
+        filePathField.setDisable(true);
+        filePathField.setEditable(false);
+
         Button fileChooserButton = new Button("Choose a file");
         fileChooserButton.setDisable(true);
         fileChooserButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             selectedFile = fileChooser.showOpenDialog(primaryStage);
+            if (selectedFile != null){
+                filePathField.setText(selectedFile.getAbsolutePath());
+            }
         });
 
         generateDataRadio.selectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -133,6 +137,7 @@ public class HashAlgorithmTestApp extends Application {
             gaussianCheckBox.setDisable(!isGenerateDataSelected);
             exponentialCheckBox.setDisable(!isGenerateDataSelected);
             fileChooserButton.setDisable(isGenerateDataSelected);
+            filePathField.setDisable(isGenerateDataSelected);
             minField.setDisable(!(isGenerateDataSelected && uniformCheckBox.isSelected()));
             maxField.setDisable(!(isGenerateDataSelected && uniformCheckBox.isSelected()));
             meanField.setDisable(!(isGenerateDataSelected && gaussianCheckBox.isSelected()));
@@ -142,6 +147,8 @@ public class HashAlgorithmTestApp extends Application {
 
         loadDataRadio.selectedProperty().addListener((observable, oldValue, newValue) -> {
             boolean isLoadDataSelected = newValue;
+            fileChooserButton.setDisable(!isLoadDataSelected);
+            filePathField.setDisable(!isLoadDataSelected);
             minField.setDisable(isLoadDataSelected);
             maxField.setDisable(isLoadDataSelected);
             meanField.setDisable(isLoadDataSelected);
@@ -160,7 +167,7 @@ public class HashAlgorithmTestApp extends Application {
         gaussianCheckBox.selectedProperty().addListener(checkBoxListener);
         exponentialCheckBox.selectedProperty().addListener(checkBoxListener);
 
-        VBox dataSourceBox = new VBox(5, generateDataPane, loadDataRadio, fileChooserButton);
+        VBox dataSourceBox = new VBox(5, generateDataPane, loadDataRadio, fileChooserButton, filePathField);
         TitledPane dataSourcePane = new TitledPane("Data source", dataSourceBox);
         dataSourcePane.setCollapsible(false);
 
@@ -322,8 +329,19 @@ public class HashAlgorithmTestApp extends Application {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(resultFilePath, true))){
             for(HashTestConfig testConfig : selectedTests) {
                 List<HashAlgorithm<String, Integer>> algorithms = createHashAlgorithms(testConfig);
-                List<Map.Entry<String, String[]>> testKeysSets = generateTestKeys(testConfig);
-                Integer[] testValues = new Integer[testConfig.dataSize];
+                List<Map.Entry<String, String[]>> testKeysSets;
+                if (testConfig.isDataGenerated) {
+                    testKeysSets = generateTestKeys(testConfig);
+
+                } else {
+                    testKeysSets = loadDataFromFile(selectedFile);
+                }
+
+                int totalKetsSetsSize = 0;
+                for (Map.Entry<String, String[]> entry : testKeysSets) {
+                    totalKetsSetsSize += entry.getValue().length;
+                }
+                Integer[] testValues = new Integer[totalKetsSetsSize];
                 Arrays.fill(testValues, 1);
 
                 double baseline = Benchmark.calculateBaseline(testConfig.benchmarkIterations, testConfig.benchmarkThreshold);
@@ -382,6 +400,21 @@ public class HashAlgorithmTestApp extends Application {
         return testKeysSets;
     }
 
+    private List<Map.Entry<String, String[]>> loadDataFromFile(File file) {
+        List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            List<String> keys = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                keys.add(line);
+            }
+            testKeysSets.add(new AbstractMap.SimpleEntry<>("FromFile", keys.toArray(new String[0])));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return testKeysSets;
+    }
+
     private String[] convertDoubleArrayToStringArray(double[] doubleArray) {
         String[] stringArray = new String[doubleArray.length];
         for (int i = 0; i < doubleArray.length; i++) {
@@ -389,6 +422,7 @@ public class HashAlgorithmTestApp extends Application {
         }
         return stringArray;
     }
+
 
     public static void main(String[] args){
         launch(args);
