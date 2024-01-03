@@ -1,5 +1,6 @@
 package hashlab.core;
 
+import com.google.gson.GsonBuilder;
 import hashlab.algorithms.BSTHash;
 import hashlab.algorithms.HashAlgorithm;
 import hashlab.algorithms.LinearProbingHash;
@@ -27,8 +28,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -294,6 +298,12 @@ public class HashAlgorithmTestApp extends Application {
             }
         });
 
+        Button exportSelectedTestsButton = new Button("Export Selected Tests");
+        exportSelectedTestsButton.setOnAction(e -> exportSelectedTests(primaryStage));
+
+        Button importTestsButton = new Button("Import Tests");
+        importTestsButton.setOnAction(e -> importTestsAndAdd(primaryStage));
+
 
         layout.getChildren().addAll(
                 hashAlgorithmsPane,
@@ -305,6 +315,8 @@ public class HashAlgorithmTestApp extends Application {
                 runTestButton,
                 addTestButton,
                 removeTestButton,
+                exportSelectedTestsButton,
+                importTestsButton,
                 testCheckListView);
 
         layout.getChildren().add(grid);
@@ -571,6 +583,48 @@ public class HashAlgorithmTestApp extends Application {
         return stringArray;
     }
 
+    private void exportSelectedTests(Stage primaryStage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName("selected_tests.json");
+        File file = fileChooser.showSaveDialog(primaryStage);
+
+        if (file != null) {
+            List<HashTestConfig> selectedTests = tests.stream()
+                    .filter(test -> testCheckListView.getCheckModel().isChecked(test.getTestName()))
+                    .collect(Collectors.toList());
+
+            try (FileWriter writer = new FileWriter(file)) {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                gson.toJson(selectedTests, writer);
+            } catch (IOException e) {
+                showAlert("Error", "Failed to export tests: " + e.getMessage());
+            }
+        }
+    }
+
+
+    private void importTestsAndAdd(Stage primaryStage) {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(primaryStage);
+
+        if (file != null) {
+            try (FileReader reader = new FileReader(file)) {
+                Gson gson = new Gson();
+                Type testType = new TypeToken<ArrayList<HashTestConfig>>() {}.getType();
+                List<HashTestConfig> importedTests = gson.fromJson(reader, testType);
+                tests.addAll(importedTests);
+                updateTestListView();
+            } catch (IOException e) {
+                showAlert("Error", "Failed to import tests: " + e.getMessage());
+            }
+        }
+    }
+
+    private void updateTestListView() {
+        testCheckListView.setItems(FXCollections.observableArrayList(
+                tests.stream().map(HashTestConfig::getTestName).collect(Collectors.toList())
+        ));
+    }
 
     public static void main(String[] args){
         launch(args);

@@ -55,4 +55,8 @@ public class HashTestConfig {
         if (exponentialSelected) params += "Lambda: " + lambda;
         return params.trim();
     }
+
+    public String getTestName() {
+        return testName;
+    }
 }
