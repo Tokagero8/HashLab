@@ -198,7 +198,17 @@ public class HashAlgorithmTestApp extends Application {
         benchmarkParamsPane.setCollapsible(false);
 
         Button runTestButton = new Button("Run the selected tests");
-        runTestButton.setOnAction(e -> runTests());
+        runTestButton.setOnAction(e -> {
+            TextInputDialog fileDialog = new TextInputDialog("results");
+            fileDialog.setTitle("Result File Name");
+            fileDialog.setHeaderText("Enter the name of the file to save results:");
+            fileDialog.setContentText("File name:");
+
+            Optional<String> resultFileName = fileDialog.showAndWait();
+            resultFileName.ifPresent(name -> {
+                runTests(name);
+            });
+        });
 
         Button addTestButton = new Button("Add a test");
         addTestButton.setOnAction(e -> {
@@ -448,13 +458,19 @@ public class HashAlgorithmTestApp extends Application {
         alert.showAndWait();
     }
 
-    public void runTests(){
+    public void runTests(String resultFileName){
         List<HashTestConfig> selectedTests = tests.stream()
                 .filter(test -> testCheckListView.getCheckModel().isChecked(test.testName))
                 .collect(Collectors.toList());
 
-        String resultFilePath = "test_results.txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(resultFilePath, true))){
+        String resultFilePath = resultFileName + ".csv";
+        File resultFile = new File(resultFilePath);
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(resultFile, true))){
+            if (!resultFile.exists() || resultFile.length() == 0) {
+                writer.write("Algorithm,Function,Table Size,Data Type,Data Size,Operation,Result\n");
+            }
+
             for(HashTestConfig testConfig : selectedTests) {
                 List<HashAlgorithm<String, Integer>> algorithms = createHashAlgorithms(testConfig);
                 List<Map.Entry<String, String[]>> testKeysSets;
@@ -465,11 +481,8 @@ public class HashAlgorithmTestApp extends Application {
                     testKeysSets = loadDataFromFile(selectedFile);
                 }
 
-                int totalKetsSetsSize = 0;
-                for (Map.Entry<String, String[]> entry : testKeysSets) {
-                    totalKetsSetsSize += entry.getValue().length;
-                }
-                Integer[] testValues = new Integer[totalKetsSetsSize];
+                int totalKeysSetsSize = testKeysSets.stream().mapToInt(entry -> entry.getValue().length).sum();
+                Integer[] testValues = new Integer[totalKeysSetsSize];
                 Arrays.fill(testValues, 1);
 
                 double baseline = Benchmark.calculateBaseline(testConfig.benchmarkIterations, testConfig.benchmarkThreshold);
@@ -480,18 +493,9 @@ public class HashAlgorithmTestApp extends Application {
                         String[] testKeysSet = entry.getValue();
                         HashAlgorithmPerformanceTest<String, Integer> performanceTest = new HashAlgorithmPerformanceTest<>(algorithm, testKeysSet, testValues);
 
-                        if (testConfig.put) {
-                            double result = performanceTest.runTest("put", baseline);
-                            writer.write("Test: " + testConfig.testName + ", Algorithm: " + algorithm.getClass().getSimpleName() + ", Function: " + algorithm.getHashFunction().getClass().getSimpleName() + ", Data Type: " + dataType + " - PUT: " + result + "\n");
-                        }
-                        if (testConfig.get) {
-                            double result = performanceTest.runTest("get", baseline);
-                            writer.write("Test: " + testConfig.testName + ", Algorithm: " + algorithm.getClass().getSimpleName() + ", Function: " + algorithm.getHashFunction().getClass().getSimpleName() + ", Data Type: " + dataType + " - GET: " + result + "\n");
-                        }
-                        if (testConfig.delete) {
-                            double result = performanceTest.runTest("delete", baseline);
-                            writer.write("Test: " + testConfig.testName + ", Algorithm: " + algorithm.getClass().getSimpleName() + ", Function: " + algorithm.getHashFunction().getClass().getSimpleName() + ", Data Type: " + dataType + " - DELETE: " + result + "\n");
-                        }
+                        performAndWriteTest("put", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
+                        performAndWriteTest("get", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
+                        performAndWriteTest("delete", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
                     }
                 }
             }
@@ -527,6 +531,21 @@ public class HashAlgorithmTestApp extends Application {
 
         return testKeysSets;
     }
+
+    private void performAndWriteTest(String operation, HashTestConfig testConfig, HashAlgorithm<String, Integer> algorithm, String dataType, int dataSize, double baseline, HashAlgorithmPerformanceTest<String, Integer> performanceTest, BufferedWriter writer) throws IOException {
+        if (operation.equals("put") && testConfig.put || operation.equals("get") && testConfig.get || operation.equals("delete") && testConfig.delete) {
+            double result = performanceTest.runTest(operation, baseline);
+            writer.write(String.format(Locale.ENGLISH, "%s,%s,%d,%s,%d,%s,%.2f\n",
+                    algorithm.getClass().getSimpleName(),
+                    algorithm.getHashFunction().getClass().getSimpleName(),
+                    testConfig.hashTableSize,
+                    dataType,
+                    dataSize,
+                    operation.toUpperCase(),
+                    result));
+        }
+    }
+
 
     private List<Map.Entry<String, String[]>> loadDataFromFile(File file) {
         List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
