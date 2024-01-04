@@ -1,31 +1,25 @@
 package hashlab.core;
 
 import com.google.gson.GsonBuilder;
-import hashlab.algorithms.BSTHash;
 import hashlab.algorithms.HashAlgorithm;
-import hashlab.algorithms.LinearProbingHash;
-import hashlab.algorithms.SeparateChainingHash;
 import hashlab.benchmark.Benchmark;
 import hashlab.benchmark.HashAlgorithmPerformanceTest;
-import hashlab.functions.HashFunction;
-import hashlab.functions.MD5Hash;
-import hashlab.functions.SHA1Hash;
-import hashlab.functions.SHA256Hash;
 import hashlab.utils.DataGenerator;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import com.google.gson.Gson;
@@ -41,6 +35,12 @@ public class HashAlgorithmTestApp extends Application {
     private File selectedFile;
     List<HashTestConfig> tests = new ArrayList<>();
     private CheckListView<String> testCheckListView = new CheckListView<>();
+
+    private Button runTestButton;
+    private Button addTestButton;
+    private Button removeTestButton;
+    private Button exportSelectedTestsButton;
+    private Button importTestsButton;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -201,7 +201,7 @@ public class HashAlgorithmTestApp extends Application {
         TitledPane benchmarkParamsPane = new TitledPane("Benchmark parameters", benchmarkParamsBox);
         benchmarkParamsPane.setCollapsible(false);
 
-        Button runTestButton = new Button("Run the selected tests");
+        runTestButton = new Button("Run the selected tests");
         runTestButton.setOnAction(e -> {
             TextInputDialog fileDialog = new TextInputDialog("results");
             fileDialog.setTitle("Result File Name");
@@ -214,7 +214,7 @@ public class HashAlgorithmTestApp extends Application {
             });
         });
 
-        Button addTestButton = new Button("Add a test");
+        addTestButton = new Button("Add a test");
         addTestButton.setOnAction(e -> {
             if (!validateTestConfig(algorithmChoice, hashTableSizeField, hashFunctionChoice,
                     putCheckbox, getCheckbox, deleteCheckbox,
@@ -276,12 +276,12 @@ public class HashAlgorithmTestApp extends Application {
             });
         });
 
-        Button removeTestButton = new Button("Delete the selected tests");
+        removeTestButton = new Button("Delete the selected tests");
         removeTestButton.setOnAction(e -> {
             ObservableList<String> selectedTests = testCheckListView.getCheckModel().getCheckedItems();
             tests.removeIf(test -> selectedTests.contains(test.testName));
             testCheckListView.getItems().removeIf(selectedTests::contains);
-            testCheckListView.getCheckModel().clearChecks(); // Clear checks after removal
+            testCheckListView.getCheckModel().clearChecks();
         });
 
         testCheckListView.setOnMouseClicked(event -> {
@@ -298,10 +298,10 @@ public class HashAlgorithmTestApp extends Application {
             }
         });
 
-        Button exportSelectedTestsButton = new Button("Export Selected Tests");
+        exportSelectedTestsButton = new Button("Export Selected Tests");
         exportSelectedTestsButton.setOnAction(e -> exportSelectedTests(primaryStage));
 
-        Button importTestsButton = new Button("Import Tests");
+        importTestsButton = new Button("Import Tests");
         importTestsButton.setOnAction(e -> importTestsAndAdd(primaryStage));
 
 
@@ -471,49 +471,57 @@ public class HashAlgorithmTestApp extends Application {
     }
 
     public void runTests(String resultFileName){
-        List<HashTestConfig> selectedTests = tests.stream()
-                .filter(test -> testCheckListView.getCheckModel().isChecked(test.testName))
-                .collect(Collectors.toList());
+        TestTask testTask = new TestTask(resultFileName);
 
-        String resultFilePath = resultFileName + ".csv";
-        File resultFile = new File(resultFilePath);
+        Label testLabel = new Label("Starting tests...");
+        testLabel.setMinWidth(Label.USE_PREF_SIZE);
+        testLabel.setPadding(new Insets(10, 0, 10, 0));
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(resultFile, true))){
-            if (!resultFile.exists() || resultFile.length() == 0) {
-                writer.write("Algorithm,Function,Table Size,Data Type,Data Size,Operation,Result\n");
-            }
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.progressProperty().bind(testTask.progressProperty());
 
-            for(HashTestConfig testConfig : selectedTests) {
-                List<HashAlgorithm<String, Integer>> algorithms = createHashAlgorithms(testConfig);
-                List<Map.Entry<String, String[]>> testKeysSets;
-                if (testConfig.isDataGenerated) {
-                    testKeysSets = generateTestKeys(testConfig);
+        progressIndicator.progressProperty().bind(testTask.progressProperty());
 
-                } else {
-                    testKeysSets = loadDataFromFile(selectedFile);
-                }
+        Button cancelButton = new Button("Cancel");
 
-                int totalKeysSetsSize = testKeysSets.stream().mapToInt(entry -> entry.getValue().length).sum();
-                Integer[] testValues = new Integer[totalKeysSetsSize];
-                Arrays.fill(testValues, 1);
+        VBox progressBox = new VBox(10, testLabel ,progressIndicator, cancelButton);
+        progressBox.setAlignment(Pos.CENTER);
+        progressBox.setPadding(new Insets(20));
 
-                double baseline = Benchmark.calculateBaseline(testConfig.benchmarkIterations, testConfig.benchmarkThreshold);
+        Scene progressScene = new Scene(progressBox);
+        Stage progressStage = new Stage();
+        progressStage.setScene(progressScene);
+        progressStage.setTitle("Test Progress");
+        progressStage.setResizable(false);
+        progressStage.initModality(Modality.APPLICATION_MODAL);
+        progressStage.setWidth(400);
+        progressStage.setHeight(200);
+        progressStage.show();
 
-                for (HashAlgorithm<String, Integer> algorithm : algorithms) {
-                    for (Map.Entry<String, String[]> entry : testKeysSets) {
-                        String dataType = entry.getKey();
-                        String[] testKeysSet = entry.getValue();
-                        HashAlgorithmPerformanceTest<String, Integer> performanceTest = new HashAlgorithmPerformanceTest<>(algorithm, testKeysSet, testValues);
+        cancelButton.setOnAction(e -> {
+            testTask.cancel();
+            progressStage.close();
+        });
 
-                        performAndWriteTest("put", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
-                        performAndWriteTest("get", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
-                        performAndWriteTest("delete", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
-                    }
-                }
-            }
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        setButtonsDisabled(true);
+
+        testTask.messageProperty().addListener((obs, oldMessage, newMessage) -> {
+            testLabel.setText(newMessage);
+        });
+
+        new Thread(testTask).start();
+
+        testTask.setOnSucceeded(e -> {
+            progressStage.close();
+            setButtonsDisabled(false);
+        });
+
+        testTask.setOnCancelled(e -> {
+            progressStage.close();
+            setButtonsDisabled(false);
+        });
+
+
     }
 
     private List<HashAlgorithm<String, Integer>> createHashAlgorithms(HashTestConfig testConfig) {
@@ -624,6 +632,81 @@ public class HashAlgorithmTestApp extends Application {
         testCheckListView.setItems(FXCollections.observableArrayList(
                 tests.stream().map(HashTestConfig::getTestName).collect(Collectors.toList())
         ));
+    }
+
+    class TestTask extends Task<Void> {
+        private String resultFileName;
+
+        public TestTask(String resultFileName) {
+            this.resultFileName = resultFileName;
+        }
+
+        @Override
+        protected Void call() throws Exception {
+            List<HashTestConfig> selectedTests = tests.stream()
+                    .filter(test -> testCheckListView.getCheckModel().isChecked(test.getTestName()))
+                    .collect(Collectors.toList());
+
+            String resultFilePath = resultFileName + ".csv";
+            File resultFile = new File(resultFilePath);
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(resultFile, true))){
+                if (!resultFile.exists() || resultFile.length() == 0) {
+                    writer.write("Algorithm,Function,Table Size,Data Type,Data Size,Operation,Result\n");
+                }
+
+                int totalTests = selectedTests.size();
+                int currentTestIndex = 0;
+
+                for(HashTestConfig testConfig : selectedTests) {
+                    if (isCancelled()) {
+                        break;
+                    }
+
+                    updateMessage("Running test: " + testConfig.getTestName());
+
+                    List<HashAlgorithm<String, Integer>> algorithms = createHashAlgorithms(testConfig);
+                    List<Map.Entry<String, String[]>> testKeysSets;
+                    if (testConfig.isDataGenerated) {
+                        testKeysSets = generateTestKeys(testConfig);
+                    } else {
+                        testKeysSets = loadDataFromFile(selectedFile);
+                    }
+
+                    int totalKeysSetsSize = testKeysSets.stream().mapToInt(entry -> entry.getValue().length).sum();
+                    Integer[] testValues = new Integer[totalKeysSetsSize];
+                    Arrays.fill(testValues, 1);
+
+                    double baseline = Benchmark.calculateBaseline(testConfig.benchmarkIterations, testConfig.benchmarkThreshold);
+
+                    for (HashAlgorithm<String, Integer> algorithm : algorithms) {
+                        for (Map.Entry<String, String[]> entry : testKeysSets) {
+                            String dataType = entry.getKey();
+                            String[] testKeysSet = entry.getValue();
+                            HashAlgorithmPerformanceTest<String, Integer> performanceTest = new HashAlgorithmPerformanceTest<>(algorithm, testKeysSet, testValues);
+
+                            performAndWriteTest("put", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
+                            performAndWriteTest("get", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
+                            performAndWriteTest("delete", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
+                        }
+                    }
+
+                    currentTestIndex++;
+                    updateProgress(currentTestIndex, totalTests);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private void setButtonsDisabled(boolean disabled) {
+        runTestButton.setDisable(disabled);
+        addTestButton.setDisable(disabled);
+        removeTestButton.setDisable(disabled);
+        exportSelectedTestsButton.setDisable(disabled);
+        importTestsButton.setDisable(disabled);
     }
 
     public static void main(String[] args){
