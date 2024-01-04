@@ -35,11 +35,11 @@ public class HashingIntegrationTests {
     }
 
     private void testHasingAlgorithmBST(BSTHash<String, Integer> hashAlgorithm){
-        String key = dataGenerator.generateUniformString(10);
+        Double key = dataGenerator.generateUniformValue(1, 10);
         int value = 123;
 
-        hashAlgorithm.put(key, value);
-        assertEquals(value, hashAlgorithm.get(key));
+        hashAlgorithm.put(key.toString(), value);
+        assertEquals(value, hashAlgorithm.get(key.toString()));
     }
 
     @Test
@@ -61,11 +61,11 @@ public class HashingIntegrationTests {
     }
 
     private void testHasingAlgorithmLinearProbing(LinearProbingHash<String, Integer> hashAlgorithm){
-        String key = dataGenerator.generateUniformString(10);
+        Double key = dataGenerator.generateUniformValue(1, 10);
         int value = 123;
 
-        hashAlgorithm.put(key, value);
-        assertEquals(value, hashAlgorithm.get(key));
+        hashAlgorithm.put(key.toString(), value);
+        assertEquals(value, hashAlgorithm.get(key.toString()));
     }
 
     @Test
@@ -87,11 +87,11 @@ public class HashingIntegrationTests {
     }
 
     private void testHasingAlgorithmSeparateChaining(SeparateChainingHash<String, Integer> hashAlgorithm){
-        String key = dataGenerator.generateUniformString(10);
+        Double key = dataGenerator.generateUniformValue(1, 10);
         int value = 123;
 
-        hashAlgorithm.put(key, value);
-        assertEquals(value, hashAlgorithm.get(key));
+        hashAlgorithm.put(key.toString(), value);
+        assertEquals(value, hashAlgorithm.get(key.toString()));
     }
 
 }
