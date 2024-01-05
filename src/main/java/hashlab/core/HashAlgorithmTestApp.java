@@ -334,6 +334,7 @@ public class HashAlgorithmTestApp extends Application {
 
     }
 
+    //+
     private void showTestDetails(HashTestConfig test) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Test details");
@@ -343,6 +344,7 @@ public class HashAlgorithmTestApp extends Application {
         alert.showAndWait();
     }
 
+    //+
     private boolean validateTestConfig(ComboBox<String> algorithmChoice, TextField hashTableSizeField,
                                        CheckListView<String> hashFunctionChoice, CheckBox putCheckbox,
                                        CheckBox getCheckbox, CheckBox deleteCheckbox, RadioButton generateDataRadio,
@@ -462,6 +464,7 @@ public class HashAlgorithmTestApp extends Application {
         return true;
     }
 
+    //+
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -470,6 +473,7 @@ public class HashAlgorithmTestApp extends Application {
         alert.showAndWait();
     }
 
+    //++
     public void runTests(String resultFileName){
         TestTask testTask = new TestTask(resultFileName);
 
@@ -524,6 +528,7 @@ public class HashAlgorithmTestApp extends Application {
 
     }
 
+    //+
     private List<HashAlgorithm<String, Integer>> createHashAlgorithms(HashTestConfig testConfig) {
         List<HashAlgorithm<String, Integer>> algorithms = new ArrayList<>();
         for (String hashFunction : testConfig.hashFunctions) {
@@ -533,6 +538,7 @@ public class HashAlgorithmTestApp extends Application {
         return algorithms;
     }
 
+    //+
     private List<Map.Entry<String, String[]>> generateTestKeys(HashTestConfig testConfig) {
         List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
 
@@ -552,6 +558,7 @@ public class HashAlgorithmTestApp extends Application {
         return testKeysSets;
     }
 
+    //+
     private void performAndWriteTest(String operation, HashTestConfig testConfig, HashAlgorithm<String, Integer> algorithm, String dataType, int dataSize, double baseline, HashAlgorithmPerformanceTest<String, Integer> performanceTest, BufferedWriter writer) throws IOException {
         if (operation.equals("put") && testConfig.put || operation.equals("get") && testConfig.get || operation.equals("delete") && testConfig.delete) {
             double result = performanceTest.runTest(operation, baseline);
@@ -567,6 +574,7 @@ public class HashAlgorithmTestApp extends Application {
     }
 
 
+    //+
     private List<Map.Entry<String, String[]>> loadDataFromFile(File file) {
         List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -583,6 +591,7 @@ public class HashAlgorithmTestApp extends Application {
         return testKeysSets;
     }
 
+    //+
     private String[] convertDoubleArrayToStringArray(double[] doubleArray) {
         String[] stringArray = new String[doubleArray.length];
         for (int i = 0; i < doubleArray.length; i++) {
@@ -591,6 +600,7 @@ public class HashAlgorithmTestApp extends Application {
         return stringArray;
     }
 
+    //+
     private void exportSelectedTests(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialFileName("selected_tests.json");
@@ -611,6 +621,7 @@ public class HashAlgorithmTestApp extends Application {
     }
 
 
+    //+
     private void importTestsAndAdd(Stage primaryStage) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(primaryStage);
@@ -628,12 +639,14 @@ public class HashAlgorithmTestApp extends Application {
         }
     }
 
+    //+
     private void updateTestListView() {
         testCheckListView.setItems(FXCollections.observableArrayList(
                 tests.stream().map(HashTestConfig::getTestName).collect(Collectors.toList())
         ));
     }
 
+    //+
     class TestTask extends Task<Void> {
         private String resultFileName;
 
@@ -701,6 +714,7 @@ public class HashAlgorithmTestApp extends Application {
         }
     }
 
+    //+
     private void setButtonsDisabled(boolean disabled) {
         runTestButton.setDisable(disabled);
         addTestButton.setDisable(disabled);
@@ -709,6 +723,7 @@ public class HashAlgorithmTestApp extends Application {
         importTestsButton.setDisable(disabled);
     }
 
+    //+
     public static void main(String[] args){
         launch(args);
     }

@@ -7,4 +7,7 @@ module com.example.hashlab {
 
     opens hashlab.core to javafx.fxml;
     exports hashlab.core;
+
+    opens hashlab.ui to javafx.fxml;
+    exports hashlab.ui;
 }
