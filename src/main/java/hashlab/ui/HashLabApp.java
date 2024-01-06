@@ -337,6 +337,9 @@ public class HashLabApp extends Application {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
         Scene scene = new Scene(scrollPane, 600, 800);
+        scene.getStylesheets().add(getClass().getResource("/hashlab/css/fresh-look.css").toExternalForm());
+        primaryStage.setScene(scene);
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Testing Hashing Algorithms");
         primaryStage.show();

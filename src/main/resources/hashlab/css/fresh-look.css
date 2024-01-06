@@ -1,0 +1,107 @@
+.root {
+    -fx-font-family: 'Consolas', 'Arial', sans-serif;
+    -fx-background-color: #1E1E2E;
+    -fx-base: #1E1E2E;
+    -fx-control-inner-background: #1E1E2E;
+    -fx-accent: #4A90E2;
+    -fx-focus-color: #4A90E2;
+}
+
+.label, .text {
+    -fx-font-size: 12pt;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button {
+    -fx-background-color: #2E3A4A;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #4A90E2;
+    -fx-border-width: 2;
+    -fx-padding: 10 20;
+    -fx-font-size: 10pt;
+}
+
+.button:hover {
+    -fx-background-color: #4A90E2;
+}
+
+.titled-pane {
+    -fx-background-color: #1E1E2E;
+    -fx-text-fill: #FFFFFF;
+}
+
+.titled-pane .title {
+    -fx-text-fill: #AFAFCF;
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #2E3A4A, #1E1E2E);
+    -fx-effect: dropshadow(gaussian, #2E3A4A, 10, 0.5, 0, 0);
+    -fx-border-color: #4A90E2;
+    -fx-border-width: 0 0 2 0;
+}
+
+.titled-pane > .content {
+    -fx-background-color: #1E1E2E;
+    -fx-padding: 10px;
+    -fx-border-color: #4A90E2;
+}
+
+.text-field, .text-area, .list-view, .table-view, .tree-view, .combo-box-base {
+    -fx-control-inner-background: #2E3A4A;
+    -fx-text-fill: #FFFFFF;
+    -fx-prompt-text-fill: #5F6A7D;
+    -fx-border-color: #4A90E2;
+    -fx-background-color: #2E3A4A;
+}
+
+.text-field:focused, .text-area:focused, .combo-box-base:focused {
+    -fx-border-color: #4A90E2;
+}
+
+.scroll-pane {
+    -fx-background: #1E1E2E;
+    -fx-border-color: #2E3A4A;
+}
+
+.menu-bar {
+    -fx-background-color: #2E3A4A;
+}
+
+.menu-bar .menu .menu-item {
+    -fx-text-fill: #FFFFFF;
+}
+
+.menu-bar .menu .menu-item:hover {
+    -fx-background-color: #4A90E2;
+}
+
+.check-box, .radio-button {
+    -fx-text-fill: #FFFFFF;
+}
+
+.list-cell {
+    -fx-border-color: transparent;
+    -fx-padding: 5px;
+    -fx-text-fill: #FFFFFF;
+}
+
+.list-cell:filled:selected, .list-cell:filled:selected:hover {
+    -fx-background-color: #4A90E2;
+    -fx-text-fill: #FFFFFF;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #2E3A4A;
+}
+
+.combo-box {
+    -fx-background-color: #2E3A4A;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #1E1E2E;
+    -fx-text-fill: #FFFFFF;
+}
+
+*.titled-pane, *.text-field, *.text-area, *.combo-box-base, *.list-view, *.table-view, *.tree-view {
+    -fx-border-width: 1;
+    -fx-background-insets: 1;
+}
