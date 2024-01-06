@@ -23,11 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class HashLabApp extends Application {
 
-    private HashLabAppController controller = new HashLabAppController();
+    private final HashLabAppController controller = new HashLabAppController();
 
     private File selectedFile;
     ObservableList<HashTestConfig> tests = FXCollections.observableArrayList();
@@ -223,13 +222,9 @@ public class HashLabApp extends Application {
 
             Optional<String> resultFileName = fileDialog.showAndWait();
 
-            List<HashTestConfig> selectedTests = testCheckListView.getCheckModel().getCheckedItems()
-                    .stream()
-                    .collect(Collectors.toList());
+            List<HashTestConfig> selectedTests = new ArrayList<>(testCheckListView.getCheckModel().getCheckedItems());
 
-            resultFileName. ifPresent(name -> {
-                controller.runTests(name, selectedFile, selectedTests);
-            });
+            resultFileName. ifPresent(name -> controller.runTests(name, selectedFile, selectedTests));
         });
 
         addTestButton = new Button("Add a test");

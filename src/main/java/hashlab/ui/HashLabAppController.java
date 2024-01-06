@@ -10,13 +10,12 @@ import org.controlsfx.control.CheckListView;
 
 import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class HashLabAppController {
 
     private HashLabApp view;
-    private TestConfigManager testConfigManager = new TestConfigManager();
-    private TestManager testManager = new TestManager();
+    private final TestConfigManager testConfigManager = new TestConfigManager();
+    private final TestManager testManager = new TestManager();
 
     public void initialize(HashLabApp view){
         this.view = view;

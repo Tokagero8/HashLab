@@ -1,9 +1,6 @@
 package hashlab.core;
 
-import hashlab.algorithms.HashAlgorithm;
-import hashlab.benchmark.HashAlgorithmPerformanceTest;
 import hashlab.ui.HashLabAppController;
-import hashlab.utils.DataGenerator;
 
 import java.io.*;
 import java.util.*;
@@ -26,9 +23,7 @@ public class TestManager {
 
         controller.setButtonsDisabled(true);
 
-        testTask.messageProperty().addListener((obs, oldMessage, newMessage) -> {
-            progressStage.updateTestLabel(newMessage);
-        });
+        testTask.messageProperty().addListener((obs, oldMessage, newMessage) -> progressStage.updateTestLabel(newMessage));
 
         new Thread(testTask).start();
 
@@ -42,10 +37,5 @@ public class TestManager {
             controller.setButtonsDisabled(false);
         });
     }
-
-
-
-
-
 
 }

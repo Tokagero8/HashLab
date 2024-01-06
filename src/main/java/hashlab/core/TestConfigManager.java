@@ -6,7 +6,6 @@ import com.google.gson.reflect.TypeToken;
 import hashlab.ui.HashLabAppController;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.controlsfx.control.CheckListView;
 
 import java.io.File;
 import java.io.FileReader;

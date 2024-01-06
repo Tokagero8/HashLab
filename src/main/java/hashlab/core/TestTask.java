@@ -8,13 +8,12 @@ import javafx.concurrent.Task;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TestTask extends Task<Void> {
 
-    private String resultFileName;
-    private File selectedFile;
-    private List<HashTestConfig> selectedTests;
+    private final String resultFileName;
+    private final File selectedFile;
+    private final List<HashTestConfig> selectedTests;
 
     public TestTask(String resultFileName, File selectedFile, List<HashTestConfig> selectedTests) {
         this.resultFileName = resultFileName;
