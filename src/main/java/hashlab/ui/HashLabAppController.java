@@ -58,6 +58,11 @@ public class HashLabAppController {
             return false;
         }
 
+        if (!(putCheckbox.isSelected())){
+            showAlert("Error", "Operation PUT must be selected.");
+            return false;
+        }
+
         if (!generateDataRadio.isSelected() && !loadDataRadio.isSelected()) {
             showAlert("Error", "Please select a data generation method or choose to load data from a file.");
             return false;

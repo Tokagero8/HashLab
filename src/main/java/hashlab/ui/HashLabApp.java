@@ -224,7 +224,7 @@ public class HashLabApp extends Application {
 
             List<HashTestConfig> selectedTests = new ArrayList<>(testCheckListView.getCheckModel().getCheckedItems());
 
-            resultFileName. ifPresent(name -> controller.runTests(name, selectedFile, selectedTests));
+            resultFileName.ifPresent(name -> controller.runTests(name, selectedFile, selectedTests));
         });
 
         addTestButton = new Button("Add a test");
