@@ -55,7 +55,6 @@ public class HashLabApp extends Application {
 
         controller.initialize(this);
 
-
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(5));
         VBox.setVgrow(testCheckListView, Priority.ALWAYS);
@@ -71,6 +70,7 @@ public class HashLabApp extends Application {
         grid.add(new Label("Algorytm:"), 0, 0);
         grid.add(algorithmChoice, 1, 0);
 
+
         TextField hashTableSizeField = new TextField();
         hashTableSizeField.setPromptText("Hash table size");
         grid.add(new Label("Hash table size:"), 2, 0);
@@ -79,7 +79,6 @@ public class HashLabApp extends Application {
         HBox hashAlgorithms = new HBox(10, algorithmChoice, hashTableSizeField);
         TitledPane hashAlgorithmsPane = new TitledPane("Hash algorithms", hashAlgorithms);
         hashAlgorithmsPane.setCollapsible(false);
-
 
         CheckListView<String> hashFunctionChoice = new CheckListView<>();
         hashFunctionChoice.getItems().addAll("MD5", "SHA1", "SHA256");
@@ -104,7 +103,6 @@ public class HashLabApp extends Application {
         VBox dataSizeBox = new VBox(5, generateDataRadio, dataSizeField);
         TitledPane generateDataPane = new TitledPane("Data", dataSizeBox);
         generateDataPane.setCollapsible(false);
-
 
         RadioButton loadDataRadio = new RadioButton("Load from file");
         loadDataRadio.setToggleGroup(dataToggleGroup);
@@ -224,7 +222,7 @@ public class HashLabApp extends Application {
 
             List<HashTestConfig> selectedTests = new ArrayList<>(testCheckListView.getCheckModel().getCheckedItems());
 
-            resultFileName.ifPresent(name -> controller.runTests(name, selectedFile, selectedTests));
+            resultFileName.ifPresent(name -> controller.runTests(name, selectedTests));
         });
 
         addTestButton = new Button("Add a test");
@@ -255,6 +253,7 @@ public class HashLabApp extends Application {
                 config.setGet(getCheckbox.isSelected());
                 config.setDelete(deleteCheckbox.isSelected());
                 config.setDataGenerated(generateDataRadio.isSelected());
+                config.setSelectedFilePath(selectedFile.getAbsolutePath());
                 config.setUniformSelected(uniformCheckBox.isSelected());
                 config.setGaussianSelected(gaussianCheckBox.isSelected());
                 config.setExponentialSelected(exponentialCheckBox.isSelected());
@@ -313,7 +312,6 @@ public class HashLabApp extends Application {
         importTestsButton = new Button("Import Tests");
         importTestsButton.setOnAction(e -> controller.importTestsAndAdd(primaryStage));
 
-
         layout.getChildren().addAll(
                 hashAlgorithmsPane,
                 hashFunctionsPane,
@@ -329,6 +327,10 @@ public class HashLabApp extends Application {
                 testCheckListView);
 
         layout.getChildren().add(grid);
+
+        //HashLabUIBuilder uiBuilder = new HashLabUIBuilder();
+
+        //uiBuilder.buildUI(primaryStage);
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setContent(layout);

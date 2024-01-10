@@ -10,6 +10,7 @@ public class HashTestConfig {
     List<String> hashFunctions;
     boolean put, get, delete;
     boolean isDataGenerated;
+    String selectedFilePath;
     int dataSize;
     boolean uniformSelected, gaussianSelected, exponentialSelected;
     double min, max, mean, deviation, lambda;
@@ -86,6 +87,14 @@ public class HashTestConfig {
 
     public void setDataGenerated(boolean dataGenerated) {
         isDataGenerated = dataGenerated;
+    }
+
+    public String getselectedFilePath(){
+        return selectedFilePath;
+    }
+
+    public void setSelectedFilePath(String selectedFilePath){
+        this.selectedFilePath = selectedFilePath;
     }
 
     public int getDataSize() {

@@ -14,9 +14,9 @@ public class TestManager {
         this.controller = controller;
     }
 
-    public void runTests(String resultFileName, File selectedFile, List<HashTestConfig> selectedTests){
+    public void runTests(String resultFileName, List<HashTestConfig> selectedTests){
 
-        TestTask testTask = new TestTask(resultFileName, selectedFile, selectedTests);
+        TestTask testTask = new TestTask(resultFileName, selectedTests);
 
         progressStage = new ProgressStage();
         progressStage.showProgressStage(testTask);

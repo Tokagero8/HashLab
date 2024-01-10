@@ -164,8 +164,8 @@ public class HashLabAppController {
         alert.showAndWait();
     }
 
-    void runTests (String resultFileName, File selectedFile, List<HashTestConfig> selectedTests){
-        testManager.runTests(resultFileName, selectedFile, selectedTests);
+    void runTests (String resultFileName, List<HashTestConfig> selectedTests){
+        testManager.runTests(resultFileName, selectedTests);
     }
 
     public void setButtonsDisabled(boolean disabled) {

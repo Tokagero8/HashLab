@@ -12,12 +12,10 @@ import java.util.*;
 public class TestTask extends Task<Void> {
 
     private final String resultFileName;
-    private final File selectedFile;
     private final List<HashTestConfig> selectedTests;
 
-    public TestTask(String resultFileName, File selectedFile, List<HashTestConfig> selectedTests) {
+    public TestTask(String resultFileName,  List<HashTestConfig> selectedTests) {
         this.resultFileName = resultFileName;
-        this.selectedFile = selectedFile;
         this.selectedTests = selectedTests;
     }
 
@@ -47,7 +45,7 @@ public class TestTask extends Task<Void> {
                 if (testConfig.isDataGenerated) {
                     testKeysSets = generateTestKeys(testConfig);
                 } else {
-                    testKeysSets = loadDataFromFile(selectedFile);
+                    testKeysSets = loadDataFromFile(testConfig.getselectedFilePath());
                 }
 
                 int totalKeysSetsSize = testKeysSets.stream().mapToInt(entry -> entry.getValue().length).sum();
@@ -127,8 +125,9 @@ public class TestTask extends Task<Void> {
         }
     }
 
-    private List<Map.Entry<String, String[]>> loadDataFromFile(File file) {
+    private List<Map.Entry<String, String[]>> loadDataFromFile(String selectedFilePath) {
         List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
+        File file = new File(selectedFilePath);
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             List<String> keys = new ArrayList<>();
             String line;
