@@ -1,6 +1,6 @@
 package hashlab.algorithms;
 
-import hashlab.functions.HashFunction;
+import hashlab.algorithms.collision_resolution.SeparateChainingHash;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class SeparateChainingHashTest {
 
-    private SeparateChainingHash<String, Integer> SeparateChainingHash;
+    private hashlab.algorithms.collision_resolution.SeparateChainingHash<String, Integer> SeparateChainingHash;
 
     @BeforeEach
     void setUp(){

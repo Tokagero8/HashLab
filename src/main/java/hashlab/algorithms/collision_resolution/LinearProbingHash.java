@@ -1,6 +1,6 @@
-package hashlab.algorithms;
+package hashlab.algorithms.collision_resolution;
 
-import hashlab.functions.HashFunction;
+import hashlab.algorithms.hash.HashFunction;
 
 public class LinearProbingHash<Key, Value> implements HashAlgorithm<Key, Value> {
     private int hashTableSize;

@@ -1,11 +1,11 @@
 package hashlab.integration;
 
-import hashlab.algorithms.BSTHash;
-import hashlab.algorithms.LinearProbingHash;
-import hashlab.algorithms.SeparateChainingHash;
-import hashlab.functions.MD5Hash;
-import hashlab.functions.SHA1Hash;
-import hashlab.functions.SHA256Hash;
+import hashlab.algorithms.collision_resolution.BSTHash;
+import hashlab.algorithms.collision_resolution.LinearProbingHash;
+import hashlab.algorithms.collision_resolution.SeparateChainingHash;
+import hashlab.algorithms.hash.MD5Hash;
+import hashlab.algorithms.hash.SHA1Hash;
+import hashlab.algorithms.hash.SHA256Hash;
 import hashlab.utils.DataGenerator;
 import org.junit.jupiter.api.Test;
 

@@ -1,10 +1,9 @@
-package hashlab.core;
+package hashlab.tests;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import hashlab.ui.HashLabAppController;
-import hashlab.ui.NewHashLabAppController;
+import hashlab.ui.app.NewHashLabAppController;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -16,7 +15,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestConfigManager {
+public class TestConfigImporterExporter {
 
     NewHashLabAppController controller;
 

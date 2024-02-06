@@ -1,6 +1,6 @@
-package hashlab.ui;
+package hashlab.ui.app;
 
-import hashlab.core.HashTestConfig;
+import hashlab.tests.HashTestConfig;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;

@@ -1,4 +1,4 @@
-package hashlab.core;
+package hashlab.tests;
 
 import java.util.List;
 

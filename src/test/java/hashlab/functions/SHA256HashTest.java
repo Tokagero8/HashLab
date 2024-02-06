@@ -1,5 +1,7 @@
 package hashlab.functions;
 
+import hashlab.algorithms.hash.HashFunction;
+import hashlab.algorithms.hash.SHA256Hash;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

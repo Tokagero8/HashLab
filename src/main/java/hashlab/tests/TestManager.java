@@ -1,9 +1,8 @@
-package hashlab.core;
+package hashlab.tests;
 
-import hashlab.ui.HashLabAppController;
-import hashlab.ui.NewHashLabAppController;
+import hashlab.core.ProgressStage;
+import hashlab.ui.app.NewHashLabAppController;
 
-import java.io.*;
 import java.util.*;
 
 public class TestManager {

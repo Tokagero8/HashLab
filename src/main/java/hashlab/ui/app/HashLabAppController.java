@@ -1,8 +1,8 @@
-package hashlab.ui;
+package hashlab.ui.app;
 
-import hashlab.core.HashTestConfig;
-import hashlab.core.TestConfigManager;
-import hashlab.core.TestManager;
+import hashlab.tests.HashTestConfig;
+import hashlab.tests.TestConfigImporterExporter;
+import hashlab.tests.TestManager;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -14,12 +14,12 @@ import java.util.List;
 public class HashLabAppController {
 
     private HashLabApp view;
-    private final TestConfigManager testConfigManager = new TestConfigManager();
+    private final TestConfigImporterExporter testConfigImporterExporter = new TestConfigImporterExporter();
     private final TestManager testManager = new TestManager();
 
     public void initialize(HashLabApp view){
         this.view = view;
-        //testConfigManager.initialize(this);
+        //testConfigImporterExporter.initialize(this);
         //testManager.initialize(this);
     }
 
@@ -185,11 +185,11 @@ public class HashLabAppController {
     }
 
     void importTestsAndAdd(Stage primaryStage){
-        testConfigManager.importTestsAndAdd(primaryStage);
+        testConfigImporterExporter.importTestsAndAdd(primaryStage);
     }
 
     void exportSelectedTests(Stage primaryStage, List<HashTestConfig> selectedTests){
-        testConfigManager.exportSelectedTests(primaryStage, selectedTests);
+        testConfigImporterExporter.exportSelectedTests(primaryStage, selectedTests);
     }
 
 }

@@ -1,6 +1,8 @@
-package hashlab.ui;
+package hashlab.ui.app;
 
-import hashlab.core.HashTestConfig;
+import hashlab.tests.HashTestConfig;
+import hashlab.ui.components.TestsListInterface;
+import hashlab.ui.components.UIComponentProviderInterface;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;

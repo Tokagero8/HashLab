@@ -1,4 +1,4 @@
-    package hashlab.ui;
+    package hashlab.ui.components;
 
     import javafx.geometry.Insets;
     import javafx.scene.Scene;

@@ -1,5 +1,6 @@
-package hashlab.ui;
+package hashlab.ui.app;
 
+import hashlab.ui.components.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -1,6 +1,6 @@
-package hashlab.algorithms;
+package hashlab.algorithms.collision_resolution;
 
-import hashlab.functions.HashFunction;
+import hashlab.algorithms.hash.HashFunction;
 
 public class BSTHash<Key extends Comparable<Key>, Value> implements HashAlgorithm<Key, Value> {
     private Object[] hashTable;

@@ -1,5 +1,6 @@
 package hashlab.core;
 
+import hashlab.tests.TestTask;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

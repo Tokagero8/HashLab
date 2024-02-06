@@ -8,6 +8,10 @@ module com.example.hashlab {
     opens hashlab.core to javafx.fxml;
     exports hashlab.core;
 
-    opens hashlab.ui to javafx.fxml;
-    exports hashlab.ui;
+    exports hashlab.tests;
+    opens hashlab.tests to javafx.fxml;
+    exports hashlab.ui.app;
+    opens hashlab.ui.app to javafx.fxml;
+    exports hashlab.ui.components;
+    opens hashlab.ui.components to javafx.fxml;
 }

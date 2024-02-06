@@ -1,6 +1,6 @@
-package hashlab.ui;
+package hashlab.ui.components;
 
-import hashlab.core.HashTestConfig;
+import hashlab.tests.HashTestConfig;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.layout.HBox;

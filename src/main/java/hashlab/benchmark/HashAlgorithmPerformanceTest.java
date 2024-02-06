@@ -1,6 +1,6 @@
 package hashlab.benchmark;
 
-import hashlab.algorithms.HashAlgorithm;
+import hashlab.algorithms.collision_resolution.HashAlgorithm;
 
 import java.util.function.Consumer;
 

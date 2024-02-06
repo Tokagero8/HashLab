@@ -1,4 +1,4 @@
-package hashlab.functions;
+package hashlab.algorithms.hash;
 
 public class FNV1aHash implements HashFunction {
 

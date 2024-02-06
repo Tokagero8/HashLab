@@ -1,4 +1,4 @@
-package hashlab.functions;
+package hashlab.algorithms.hash;
 
 import static hashlab.utils.HashUtils.hashWithFunction;
 

@@ -1,5 +1,6 @@
 package hashlab.core;
 
+import hashlab.tests.HashTestConfig;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

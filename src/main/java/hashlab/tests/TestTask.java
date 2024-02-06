@@ -1,8 +1,9 @@
-package hashlab.core;
+package hashlab.tests;
 
-import hashlab.algorithms.HashAlgorithm;
+import hashlab.algorithms.collision_resolution.HashAlgorithm;
 import hashlab.benchmark.Benchmark;
 import hashlab.benchmark.HashAlgorithmPerformanceTest;
+import hashlab.core.HashAlgorithmFactory;
 import hashlab.utils.DataGenerator;
 import javafx.concurrent.Task;
 

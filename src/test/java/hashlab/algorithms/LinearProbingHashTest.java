@@ -1,5 +1,6 @@
 package hashlab.algorithms;
 
+import hashlab.algorithms.collision_resolution.LinearProbingHash;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
