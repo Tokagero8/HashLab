@@ -26,8 +26,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'com.example.hashlab'
-    mainClass = 'com.example.hashlab.HelloApplication'
+    mainModule = 'hashlab'
+    mainClass = 'hashlab.ui.app.NewHashLabApp'
 }
 
 javafx {

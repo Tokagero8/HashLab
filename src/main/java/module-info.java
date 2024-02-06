@@ -1,4 +1,4 @@
-module com.example.hashlab {
+module hashlab {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.controlsfx.controls;
