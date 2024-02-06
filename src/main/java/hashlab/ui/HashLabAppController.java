@@ -19,8 +19,8 @@ public class HashLabAppController {
 
     public void initialize(HashLabApp view){
         this.view = view;
-        testConfigManager.initialize(this);
-        testManager.initialize(this);
+        //testConfigManager.initialize(this);
+        //testManager.initialize(this);
     }
 
     boolean validateTestConfig(ComboBox<String> algorithmChoice, TextField hashTableSizeField,

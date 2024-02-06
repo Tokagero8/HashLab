@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import hashlab.ui.HashLabAppController;
+import hashlab.ui.NewHashLabAppController;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -17,9 +18,9 @@ import java.util.List;
 
 public class TestConfigManager {
 
-    HashLabAppController controller;
+    NewHashLabAppController controller;
 
-    public void initialize(HashLabAppController controller){
+    public void initialize(NewHashLabAppController controller){
         this.controller = controller;
     }
 

@@ -1,16 +1,17 @@
 package hashlab.core;
 
 import hashlab.ui.HashLabAppController;
+import hashlab.ui.NewHashLabAppController;
 
 import java.io.*;
 import java.util.*;
 
 public class TestManager {
 
-    HashLabAppController controller;
+    NewHashLabAppController controller;
     ProgressStage progressStage;
 
-    public void initialize(HashLabAppController controller){
+    public void initialize(NewHashLabAppController controller){
         this.controller = controller;
     }
 
