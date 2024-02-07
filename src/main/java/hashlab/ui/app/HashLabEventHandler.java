@@ -5,6 +5,7 @@ import hashlab.ui.components.TestsListInterface;
 import hashlab.ui.components.UIComponentProviderInterface;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
@@ -52,6 +53,9 @@ public class HashLabEventHandler {
         Button fileChooserButton = uiComponentProvider.getFileChooserButton();
         fileChooserButton.setOnAction(event -> handleFileChooser());
 
+        CheckListView<HashTestConfig> testCheckListView = uiComponentProvider.getTestCheckListView();
+        testCheckListView.setOnMouseClicked(event -> handleTestCheckList(event));
+
         Button runTestButton = uiComponentProvider.getRunTestButton();
         runTestButton.setOnAction(event -> handleRunTest(uiComponentProvider.getTestCheckListView()));
 
@@ -67,6 +71,24 @@ public class HashLabEventHandler {
         Button importButton = uiComponentProvider.getImportTestsButton();
         importButton.setOnAction(event -> handleImportTests());
 
+    }
+
+    private void handleTestCheckList(MouseEvent event){
+        if (event.getClickCount() == 2) {
+            HashTestConfig selectedTest = uiComponentProvider.getTestCheckListView().getSelectionModel().getSelectedItem();
+            if (selectedTest != null) {
+                showTestDetails(selectedTest);
+            }
+        }
+    }
+
+    private void showTestDetails(HashTestConfig test) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Test details");
+        alert.setHeaderText(test.getTestName());
+        alert.setContentText(test.toString());
+
+        alert.showAndWait();
     }
 
     private void updateUIBasedOnSelection(){
