@@ -1,4 +1,4 @@
-package hashlab.core;
+package hashlab.tests;
 
 import hashlab.tests.HashTestConfig;
 import org.junit.jupiter.api.Test;

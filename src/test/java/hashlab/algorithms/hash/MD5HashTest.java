@@ -1,4 +1,4 @@
-package hashlab.functions;
+package hashlab.algorithms.hash;
 
 import hashlab.algorithms.hash.HashFunction;
 import hashlab.algorithms.hash.MD5Hash;
