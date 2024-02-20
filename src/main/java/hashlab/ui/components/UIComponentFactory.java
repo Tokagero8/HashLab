@@ -22,18 +22,22 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private ToggleGroup dataToggleGroup;
     private RadioButton generateDataRadio;
     private TextField dataSizeField;
+    private TextField chunkSizeField;
     private TitledPane generateDataPane;
     private TitledPane dataGenerationPane;
     private CheckBox uniformCheckBox;
     private TextField minField;
     private TextField maxField;
+    private Button generateUniformDataButton;
     private TitledPane uniformPane;
     private CheckBox gaussianCheckBox;
     private TextField meanField;
     private TextField deviationField;
+    private Button generateGaussianDataButton;
     private TitledPane gaussianPane;
     private CheckBox exponentialCheckBox;
     private TextField lambdaField;
+    private Button generateExponentialDataButton;
     private TitledPane exponentialPane;
     private TextField filePathField;
     private Button fileChooserButton;
@@ -95,7 +99,11 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         dataSizeField.setPromptText("Data size");
         dataSizeField.setDisable(true);
 
-        VBox dataSizeBox = new VBox(5, generateDataRadio, dataSizeField);
+        chunkSizeField = new TextField();
+        chunkSizeField.setPromptText("Data chunk size");
+        chunkSizeField.setDisable(true);
+
+        VBox dataSizeBox = new VBox(5, generateDataRadio, dataSizeField, chunkSizeField);
         generateDataPane = new TitledPane("Data", dataSizeBox);
         generateDataPane.setCollapsible(false);
 
@@ -119,7 +127,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         maxField.setDisable(true);
         maxField.setPromptText("Max");
 
-        VBox uniformBox = new VBox(5, uniformCheckBox, minField, maxField);
+        generateUniformDataButton = new Button("Generate Sample Uniform Data");
+        generateUniformDataButton.setDisable(true);
+
+        VBox uniformBox = new VBox(5, uniformCheckBox, minField, maxField, generateUniformDataButton);
         uniformPane = new TitledPane("Uniform", uniformBox);
         uniformPane.setCollapsible(false);
 
@@ -139,7 +150,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         deviationField.setDisable(true);
         deviationField.setPromptText("Deviation");
 
-        VBox gaussianBox = new VBox(5, gaussianCheckBox, meanField, deviationField);
+        generateGaussianDataButton = new Button("Generate Sample Uniform Data");
+        generateGaussianDataButton.setDisable(true);
+
+        VBox gaussianBox = new VBox(5, gaussianCheckBox, meanField, deviationField, generateGaussianDataButton);
         gaussianPane = new TitledPane("Gaussian", gaussianBox);
         gaussianPane.setCollapsible(false);
 
@@ -155,7 +169,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         lambdaField.setDisable(true);
         lambdaField.setPromptText("Lambda");
 
-        VBox exponentialBox = new VBox(5, exponentialCheckBox, lambdaField);
+        generateExponentialDataButton = new Button("Generate Sample Exponential Data");
+        generateExponentialDataButton.setDisable(true);
+
+        VBox exponentialBox = new VBox(5, exponentialCheckBox, lambdaField, generateExponentialDataButton);
         exponentialPane = new TitledPane("Exponential", exponentialBox);
         exponentialPane.setCollapsible(false);
 
@@ -295,6 +312,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         return dataSizeField;
     }
 
+    public TextField getChunkSizeField(){
+        return chunkSizeField;
+    }
+
     public TitledPane getGenerateDataPane() {
         return generateDataPane;
     }
@@ -315,6 +336,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         return maxField;
     }
 
+    public Button getGenerateUniformDataButton(){
+        return generateUniformDataButton;
+    }
+
     public TitledPane getUniformPane() {
         return uniformPane;
     }
@@ -331,6 +356,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         return deviationField;
     }
 
+    public Button getGenerateGaussianDataButton(){
+        return generateGaussianDataButton;
+    }
+
     public TitledPane getGaussianPane() {
         return gaussianPane;
     }
@@ -341,6 +370,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
     public TextField getLambdaField() {
         return lambdaField;
+    }
+
+    public Button getGenerateExponentialDataButton(){
+        return generateExponentialDataButton;
     }
 
     public TitledPane getExponentialPane() {

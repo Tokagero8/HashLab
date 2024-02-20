@@ -3,6 +3,7 @@ package hashlab.ui.app;
 import hashlab.tests.HashTestConfig;
 import hashlab.tests.TestConfigImporterExporter;
 import hashlab.tests.TestManager;
+import hashlab.utils.DataGenerator;
 import javafx.stage.Stage;
 
 import java.util.List;

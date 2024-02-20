@@ -73,6 +73,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
+    public TextField getChunkSizeField() {
+        return uiComponentFactory.getChunkSizeField();
+    }
+
+    @Override
     public TitledPane getGenerateDataPane() {
         return uiComponentFactory.getGenerateDataPane();
     }
@@ -98,6 +103,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
+    public Button getGenerateUniformDataButton() {
+        return uiComponentFactory.getGenerateUniformDataButton();
+    }
+
+    @Override
     public TitledPane getUniformPane() {
         return uiComponentFactory.getUniformPane();
     }
@@ -118,6 +128,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
+    public Button getGenerateGaussianDataButton() {
+        return uiComponentFactory.getGenerateGaussianDataButton();
+    }
+
+    @Override
     public TitledPane getGaussianPane() {
         return uiComponentFactory.getGaussianPane();
     }
@@ -130,6 +145,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     @Override
     public TextField getLambdaField() {
         return uiComponentFactory.getLambdaField();
+    }
+
+    @Override
+    public Button getGenerateExponentialDataButton() {
+        return uiComponentFactory.getGenerateExponentialDataButton();
     }
 
     @Override

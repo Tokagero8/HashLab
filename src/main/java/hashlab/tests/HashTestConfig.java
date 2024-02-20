@@ -12,8 +12,13 @@ public class HashTestConfig {
     boolean isDataGenerated;
     String selectedFilePath;
     int dataSize;
+    int chunkSize;
     boolean uniformSelected, gaussianSelected, exponentialSelected;
     double min, max, mean, deviation, lambda;
+    String uniformDataString;
+    String gaussianDataString;
+    String exponentialDataString;
+    String loadedDataString;
     int benchmarkIterations;
     double benchmarkThreshold;
 
@@ -105,6 +110,14 @@ public class HashTestConfig {
         this.dataSize = dataSize;
     }
 
+    public int getChunkSize() {
+        return chunkSize;
+    }
+
+    public void setChunkSize(int chunkSize) {
+        this.chunkSize = chunkSize;
+    }
+
     public boolean isUniformSelected() {
         return uniformSelected;
     }
@@ -167,6 +180,38 @@ public class HashTestConfig {
 
     public void setLambda(double lambda) {
         this.lambda = lambda;
+    }
+
+    public String getUniformDataString(){
+        return uniformDataString;
+    }
+
+    public void setUniformDataString(String uniformDataString){
+        this.uniformDataString = uniformDataString;
+    }
+
+    public String getGaussianDataString(){
+        return gaussianDataString;
+    }
+
+    public void setGaussianDataString(String gaussianDataString){
+        this.gaussianDataString = gaussianDataString;
+    }
+
+    public String getExponentialDataString(){
+        return exponentialDataString;
+    }
+
+    public void setExponentialDataString(String exponentialDataString){
+        this.exponentialDataString = exponentialDataString;
+    }
+
+    public String getLoadedDataString(){
+        return loadedDataString;
+    }
+
+    public void setLoadedDataString(String loadedDataString){
+        this.loadedDataString = loadedDataString;
     }
 
     public int getBenchmarkIterations() {

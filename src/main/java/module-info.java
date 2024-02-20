@@ -3,6 +3,8 @@ module hashlab {
     requires javafx.fxml;
     requires org.controlsfx.controls;
     requires com.google.gson;
+    requires javafx.swing;
+    requires org.jfree.jfreechart;
 
 
     opens hashlab.core to javafx.fxml;
