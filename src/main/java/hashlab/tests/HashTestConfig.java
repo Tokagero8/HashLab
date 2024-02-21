@@ -7,12 +7,12 @@ public class HashTestConfig {
     String testName;
     String algorithm;
     int hashTableSize;
+    int chunkSize;
     List<String> hashFunctions;
     boolean put, get, delete;
     boolean isDataGenerated;
     String selectedFilePath;
     int dataSize;
-    int chunkSize;
     boolean uniformSelected, gaussianSelected, exponentialSelected;
     double min, max, mean, deviation, lambda;
     String uniformDataString;
@@ -52,6 +52,14 @@ public class HashTestConfig {
 
     public void setHashTableSize(int hashTableSize) {
         this.hashTableSize = hashTableSize;
+    }
+
+    public int getChunkSize() {
+        return chunkSize;
+    }
+
+    public void setChunkSize(int chunkSize) {
+        this.chunkSize = chunkSize;
     }
 
     public List<String> getHashFunctions() {
@@ -108,14 +116,6 @@ public class HashTestConfig {
 
     public void setDataSize(int dataSize) {
         this.dataSize = dataSize;
-    }
-
-    public int getChunkSize() {
-        return chunkSize;
-    }
-
-    public void setChunkSize(int chunkSize) {
-        this.chunkSize = chunkSize;
     }
 
     public boolean isUniformSelected() {

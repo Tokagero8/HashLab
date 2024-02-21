@@ -23,6 +23,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
+    public TextField getChunkSizeField() {
+        return uiComponentFactory.getChunkSizeField();
+    }
+
+    @Override
     public TitledPane getHashAlgorithmsPane() {
         return uiComponentFactory.getHashAlgorithmsPane();
     }
@@ -70,11 +75,6 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     @Override
     public TextField getDataSizeField() {
         return uiComponentFactory.getDataSizeField();
-    }
-
-    @Override
-    public TextField getChunkSizeField() {
-        return uiComponentFactory.getChunkSizeField();
     }
 
     @Override

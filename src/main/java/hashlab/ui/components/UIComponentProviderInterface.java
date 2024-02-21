@@ -7,6 +7,7 @@ import org.controlsfx.control.CheckListView;
 public interface UIComponentProviderInterface {
     ComboBox<String> getAlgorithmChoice();
     TextField getHashTableSizeField();
+    TextField getChunkSizeField();
     TitledPane getHashAlgorithmsPane();
     CheckListView<String> getHashFunctionChoice();
     TitledPane getHashFunctionsPane();
@@ -17,7 +18,6 @@ public interface UIComponentProviderInterface {
     ToggleGroup getDataToggleGroup();
     RadioButton getGenerateDataRadio();
     TextField getDataSizeField();
-    TextField getChunkSizeField();
     TitledPane getGenerateDataPane();
     TitledPane getDataGenerationPane();
     CheckBox getUniformCheckBox();

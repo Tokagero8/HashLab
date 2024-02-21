@@ -12,6 +12,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
     private ComboBox<String> algorithmChoice;
     private TextField hashTableSizeField;
+    private TextField chunkSizeField;
     private TitledPane hashAlgorithmsPane;
     private CheckListView<String> hashFunctionChoice;
     private TitledPane hashFunctionsPane;
@@ -22,7 +23,6 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private ToggleGroup dataToggleGroup;
     private RadioButton generateDataRadio;
     private TextField dataSizeField;
-    private TextField chunkSizeField;
     private TitledPane generateDataPane;
     private TitledPane dataGenerationPane;
     private CheckBox uniformCheckBox;
@@ -60,7 +60,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         hashTableSizeField = new TextField();
         hashTableSizeField.setPromptText("Hash table size");
 
-        HBox hashAlgorithms = new HBox(10, algorithmChoice, hashTableSizeField);
+        chunkSizeField = new TextField();
+        chunkSizeField.setPromptText("Data chunk size");
+
+        HBox hashAlgorithms = new HBox(10, algorithmChoice, hashTableSizeField, chunkSizeField);
         hashAlgorithmsPane = new TitledPane("Hash algorithms", hashAlgorithms);
         hashAlgorithmsPane.setCollapsible(false);
 
@@ -99,11 +102,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         dataSizeField.setPromptText("Data size");
         dataSizeField.setDisable(true);
 
-        chunkSizeField = new TextField();
-        chunkSizeField.setPromptText("Data chunk size");
-        chunkSizeField.setDisable(true);
-
-        VBox dataSizeBox = new VBox(5, generateDataRadio, dataSizeField, chunkSizeField);
+        VBox dataSizeBox = new VBox(5, generateDataRadio, dataSizeField);
         generateDataPane = new TitledPane("Data", dataSizeBox);
         generateDataPane.setCollapsible(false);
 
@@ -272,6 +271,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         return hashTableSizeField;
     }
 
+    public TextField getChunkSizeField(){
+        return chunkSizeField;
+    }
+
     public TitledPane getHashAlgorithmsPane() {
         return hashAlgorithmsPane;
     }
@@ -310,10 +313,6 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
     public TextField getDataSizeField() {
         return dataSizeField;
-    }
-
-    public TextField getChunkSizeField(){
-        return chunkSizeField;
     }
 
     public TitledPane getGenerateDataPane() {

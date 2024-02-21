@@ -110,7 +110,6 @@ public class HashLabEventHandler {
         boolean isLoadDataSelected = uiComponentProvider.getLoadDataRadio().isSelected();
 
         uiComponentProvider.getDataSizeField().setDisable(!isGenerateDataSelected);
-        uiComponentProvider.getChunkSizeField().setDisable(!isGenerateDataSelected);
         uiComponentProvider.getFileChooserButton().setDisable(!isLoadDataSelected);
         uiComponentProvider.getFilePathField().setDisable(!isLoadDataSelected);
 
@@ -289,9 +288,9 @@ public class HashLabEventHandler {
 
             try {
                 config.setHashTableSize(Integer.parseInt(uiComponentProvider.getHashTableSizeField().getText()));
+                config.setChunkSize(Integer.parseInt(uiComponentProvider.getChunkSizeField().getText()));
                 if (config.isDataGenerated()) {
                     config.setDataSize(Integer.parseInt(uiComponentProvider.getDataSizeField().getText()));
-                    config.setChunkSize(Integer.parseInt(uiComponentProvider.getChunkSizeField().getText()));
                 }
                 if(config.isUniformSelected()) {
                     config.setMin(Double.parseDouble(uiComponentProvider.getMinField().getText()));
@@ -485,6 +484,10 @@ public class HashLabEventHandler {
     }
 
     public void setButtonsDisabled(boolean disabled){
+        uiComponentProvider.getGenerateUniformDataButton().setDisable(disabled);
+        uiComponentProvider.getGenerateGaussianDataButton().setDisable(disabled);
+        uiComponentProvider.getGenerateExponentialDataButton().setDisable(disabled);
+        uiComponentProvider.getFileChooserButton().setDisable(disabled);
         uiComponentProvider.getRunTestButton().setDisable(disabled);
         uiComponentProvider.getAddTestButton().setDisable(disabled);
         uiComponentProvider.getRemoveTestButton().setDisable(disabled);
