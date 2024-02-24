@@ -255,9 +255,9 @@ public class HashLabEventHandler {
             config.setTestName(name);
             config.setAlgorithm(uiComponentProvider.getAlgorithmChoice().getValue());
             config.setHashFunctions(new ArrayList<>(uiComponentProvider.getHashFunctionChoice().getCheckModel().getCheckedItems()));
-            config.setPut(uiComponentProvider.getPutCheckbox().isSelected());
-            config.setGet(uiComponentProvider.getGetCheckbox().isSelected());
-            config.setDelete(uiComponentProvider.getDeleteCheckbox().isSelected());
+            config.setPutSelected(uiComponentProvider.getPutCheckbox().isSelected());
+            config.setGetSelected(uiComponentProvider.getGetCheckbox().isSelected());
+            config.setDeleteSelected(uiComponentProvider.getDeleteCheckbox().isSelected());
             config.setDataGenerated(uiComponentProvider.getGenerateDataRadio().isSelected());
             config.setGeneratedOnAdd(uiComponentProvider.getDataGenerationTimingSwitch().isSelected());
             config.setUniformSelected(uiComponentProvider.getUniformCheckBox().isSelected());

@@ -4,26 +4,26 @@ import java.util.List;
 import java.util.Map;
 
 public class HashTestConfig {
-    String id;
-    String testName;
-    String algorithm;
-    int hashTableSize;
-    int chunkSize;
-    List<String> hashFunctions;
-    boolean put, get, delete;
-    boolean isDataGenerated;
-    boolean isGeneratedOnAdd;
-    String selectedFilePath;
-    boolean isLoadedOnAdd;
-    int dataSize;
-    boolean uniformSelected, gaussianSelected, exponentialSelected;
-    double min, max, mean, deviation, lambda;
-    String uniformDataString;
-    String gaussianDataString;
-    String exponentialDataString;
-    List<Map.Entry<String, String[]>> loadedDataString;
-    int benchmarkIterations;
-    double benchmarkThreshold;
+    private String id;
+    private String testName;
+    private String algorithm;
+    private int hashTableSize;
+    private int chunkSize;
+    private List<String> hashFunctions;
+    private boolean isPutSelected, isGetSelected, isDeleteSelected;
+    private boolean isDataGenerated;
+    private boolean isGeneratedOnAdd;
+    private String selectedFilePath;
+    private boolean isLoadedOnAdd;
+    private int dataSize;
+    private boolean isUniformSelected, isGaussianSelected, isExponentialSelected;
+    private double min, max, mean, deviation, lambda;
+    private String uniformDataString;
+    private String gaussianDataString;
+    private String exponentialDataString;
+    private List<Map.Entry<String, String[]>> loadedDataString;
+    private int benchmarkIterations;
+    private double benchmarkThreshold;
 
     public String getId(){
         return id;
@@ -73,28 +73,28 @@ public class HashTestConfig {
         this.hashFunctions = hashFunctions;
     }
 
-    public boolean isPut() {
-        return put;
+    public boolean isPutSelected() {
+        return isPutSelected;
     }
 
-    public void setPut(boolean put) {
-        this.put = put;
+    public void setPutSelected(boolean putSelected) {
+        this.isPutSelected = putSelected;
     }
 
-    public boolean isGet() {
-        return get;
+    public boolean isGetSelected() {
+        return isGetSelected;
     }
 
-    public void setGet(boolean get) {
-        this.get = get;
+    public void setGetSelected(boolean getSelected) {
+        this.isGetSelected = getSelected;
     }
 
-    public boolean isDelete() {
-        return delete;
+    public boolean isDeleteSelected() {
+        return isDeleteSelected;
     }
 
-    public void setDelete(boolean delete) {
-        this.delete = delete;
+    public void setDeleteSelected(boolean deleteSelected) {
+        this.isDeleteSelected = deleteSelected;
     }
 
     public boolean isDataGenerated() {
@@ -138,27 +138,27 @@ public class HashTestConfig {
     }
 
     public boolean isUniformSelected() {
-        return uniformSelected;
+        return isUniformSelected;
     }
 
     public void setUniformSelected(boolean uniformSelected) {
-        this.uniformSelected = uniformSelected;
+        this.isUniformSelected = uniformSelected;
     }
 
     public boolean isGaussianSelected() {
-        return gaussianSelected;
+        return isGaussianSelected;
     }
 
     public void setGaussianSelected(boolean gaussianSelected) {
-        this.gaussianSelected = gaussianSelected;
+        this.isGaussianSelected = gaussianSelected;
     }
 
     public boolean isExponentialSelected() {
-        return exponentialSelected;
+        return isExponentialSelected;
     }
 
     public void setExponentialSelected(boolean exponentialSelected) {
-        this.exponentialSelected = exponentialSelected;
+        this.isExponentialSelected = exponentialSelected;
     }
 
     public double getMin() {
@@ -280,27 +280,27 @@ public class HashTestConfig {
 
     private String getOperationsString() {
         String operations = "";
-        if (put) operations += "Put ";
-        if (get) operations += "Get ";
-        if (delete) operations += "Delete";
+        if (isPutSelected) operations += "Put ";
+        if (isGetSelected) operations += "Get ";
+        if (isDeleteSelected) operations += "Delete";
         return operations.trim();
     }
 
 
     private String getDataGenerationMethodsString() {
         String methods = "";
-        if (uniformSelected) methods += "Uniform ";
-        if (gaussianSelected) methods += "Gaussian ";
-        if (exponentialSelected) methods += "Exponential";
+        if (isUniformSelected) methods += "Uniform ";
+        if (isGaussianSelected) methods += "Gaussian ";
+        if (isExponentialSelected) methods += "Exponential";
         return methods.trim();
     }
 
     private String getDataGenerationParamsString() {
         if (!isDataGenerated) return "N/A";
         String params = "";
-        if (uniformSelected) params += "Min: " + min + ", Max: " + max + "; ";
-        if (gaussianSelected) params += "Mean: " + mean + ", Deviation: " + deviation + "; ";
-        if (exponentialSelected) params += "Lambda: " + lambda;
+        if (isUniformSelected) params += "Min: " + min + ", Max: " + max + "; ";
+        if (isGaussianSelected) params += "Mean: " + mean + ", Deviation: " + deviation + "; ";
+        if (isExponentialSelected) params += "Lambda: " + lambda;
         return params.trim();
     }
 }

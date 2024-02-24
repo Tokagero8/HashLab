@@ -249,9 +249,9 @@ public class HashLabApp extends Application {
                 config.setTestName(name);
                 config.setAlgorithm(algorithmChoice.getValue());
                 config.setHashFunctions(new ArrayList<>(hashFunctionChoice.getCheckModel().getCheckedItems()));
-                config.setPut(putCheckbox.isSelected());
-                config.setGet(getCheckbox.isSelected());
-                config.setDelete(deleteCheckbox.isSelected());
+                config.setPutSelected(putCheckbox.isSelected());
+                config.setGetSelected(getCheckbox.isSelected());
+                config.setDeleteSelected(deleteCheckbox.isSelected());
                 config.setDataGenerated(generateDataRadio.isSelected());
                 config.setSelectedFilePath(selectedFile.getAbsolutePath());
                 config.setUniformSelected(uniformCheckBox.isSelected());

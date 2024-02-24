@@ -1,6 +1,5 @@
 package hashlab.tests;
 
-import hashlab.tests.HashTestConfig;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -19,9 +18,9 @@ public class HashTestConfigTest {
         config.setAlgorithm("LinearProbing");
         config.setHashTableSize(1000);
         config.setHashFunctions(Arrays.asList("MD5", "SHA1"));
-        config.setPut(true);
-        config.setGet(false);
-        config.setDelete(true);
+        config.setPutSelected(true);
+        config.setGetSelected(false);
+        config.setDeleteSelected(true);
         config.setDataGenerated(true);
         config.setDataSize(500);
         config.setUniformSelected(true);
@@ -71,14 +70,14 @@ public class HashTestConfigTest {
         config.setHashFunctions(hashFunctions);
         assertEquals(hashFunctions, config.getHashFunctions());
 
-        config.setPut(true);
-        assertTrue(config.isPut());
+        config.setPutSelected(true);
+        assertTrue(config.isPutSelected());
 
-        config.setGet(false);
-        assertFalse(config.isGet());
+        config.setGetSelected(false);
+        assertFalse(config.isGetSelected());
 
-        config.setDelete(true);
-        assertTrue(config.isDelete());
+        config.setDeleteSelected(true);
+        assertTrue(config.isDeleteSelected());
 
         config.setDataGenerated(true);
         assertTrue(config.isDataGenerated());
