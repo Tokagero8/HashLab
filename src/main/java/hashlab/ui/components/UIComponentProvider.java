@@ -3,6 +3,7 @@ package hashlab.ui.components;
 import hashlab.tests.HashTestConfig;
 import javafx.scene.control.*;
 import org.controlsfx.control.CheckListView;
+import org.controlsfx.control.ToggleSwitch;
 
 public class UIComponentProvider implements UIComponentProviderInterface{
 
@@ -75,6 +76,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     @Override
     public TextField getDataSizeField() {
         return uiComponentFactory.getDataSizeField();
+    }
+
+    @Override
+    public ToggleSwitch getDataGenerationTimingSwitch() {
+        return uiComponentFactory.getDataGenerationTimingSwitch();
     }
 
     @Override
@@ -170,6 +176,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     @Override
     public RadioButton getLoadDataRadio() {
         return uiComponentFactory.getLoadDataRadio();
+    }
+
+    @Override
+    public ToggleSwitch getDataLoadingTimingSwitch() {
+        return uiComponentFactory.getDataLoadingTimingSwitch();
     }
 
     @Override

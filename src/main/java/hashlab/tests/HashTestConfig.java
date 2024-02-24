@@ -1,6 +1,7 @@
 package hashlab.tests;
 
 import java.util.List;
+import java.util.Map;
 
 public class HashTestConfig {
     String id;
@@ -11,14 +12,16 @@ public class HashTestConfig {
     List<String> hashFunctions;
     boolean put, get, delete;
     boolean isDataGenerated;
+    boolean isGeneratedOnAdd;
     String selectedFilePath;
+    boolean isLoadedOnAdd;
     int dataSize;
     boolean uniformSelected, gaussianSelected, exponentialSelected;
     double min, max, mean, deviation, lambda;
     String uniformDataString;
     String gaussianDataString;
     String exponentialDataString;
-    String loadedDataString;
+    List<Map.Entry<String, String[]>> loadedDataString;
     int benchmarkIterations;
     double benchmarkThreshold;
 
@@ -102,12 +105,28 @@ public class HashTestConfig {
         isDataGenerated = dataGenerated;
     }
 
-    public String getselectedFilePath(){
+    public boolean isGeneratedOnAdd(){
+        return isGeneratedOnAdd;
+    }
+
+    public void setGeneratedOnAdd(boolean generatedOnAdd){
+        isGeneratedOnAdd = generatedOnAdd;
+    }
+
+    public String getSelectedFilePath(){
         return selectedFilePath;
     }
 
     public void setSelectedFilePath(String selectedFilePath){
         this.selectedFilePath = selectedFilePath;
+    }
+
+    public boolean isLoadedOnAdd(){
+        return isLoadedOnAdd;
+    }
+
+    public void setLoadedOnAdd(boolean loadedOnAdd){
+        isLoadedOnAdd = loadedOnAdd;
     }
 
     public int getDataSize() {
@@ -206,11 +225,11 @@ public class HashTestConfig {
         this.exponentialDataString = exponentialDataString;
     }
 
-    public String getLoadedDataString(){
+    public List<Map.Entry<String, String[]>> getLoadedDataString(){
         return loadedDataString;
     }
 
-    public void setLoadedDataString(String loadedDataString){
+    public void setLoadedDataString(List<Map.Entry<String, String[]>> loadedDataString){
         this.loadedDataString = loadedDataString;
     }
 
@@ -236,14 +255,27 @@ public class HashTestConfig {
                 "Test name: " + testName + "\n" +
                 "Algorithm: " + algorithm + "\n" +
                 "Hash Table Size: " + hashTableSize + "\n" +
+                "Chunk Size: " + chunkSize + "\n" +
                 "Hash functions: " + hashFunctions + "\n" +
                 "Operations: " + getOperationsString() + "\n" +
-                "Data type: " + (isDataGenerated ? "Generated" : "Loaded from a file") + "\n" +
+                "Data type: " + getDataType() + "\n" +
                 "Data Size: " + (isDataGenerated ? dataSize : "N/A") + "\n" +
                 "Data generation methods: " + getDataGenerationMethodsString() + "\n" +
                 "Data generation parameters: " + getDataGenerationParamsString() + "\n" +
                 "Number of benchmark iterations: " + benchmarkIterations + "\n" +
                 "Benchmark threshold: " + benchmarkThreshold;
+    }
+
+    private String getDataType(){
+        final String GENERATED_ON_ADD = "Generated on a test add";
+        final String GENERATED_DURING_TEST = "Generated during a test";
+        final String LOADED_ON_ADD = "Load from file on a test add";
+        final String LOADED_DURING_TEST = "Load from file during a test";
+        if (isDataGenerated) {
+            return isGeneratedOnAdd ? GENERATED_ON_ADD : GENERATED_DURING_TEST;
+        } else {
+            return isLoadedOnAdd ? LOADED_ON_ADD : LOADED_DURING_TEST;
+        }
     }
 
     private String getOperationsString() {

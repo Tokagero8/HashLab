@@ -15,11 +15,11 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 
 import javax.swing.*;
+import java.io.BufferedReader;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 public class HashLabEventHandler {
 
@@ -110,8 +110,10 @@ public class HashLabEventHandler {
         boolean isLoadDataSelected = uiComponentProvider.getLoadDataRadio().isSelected();
 
         uiComponentProvider.getDataSizeField().setDisable(!isGenerateDataSelected);
+        uiComponentProvider.getDataGenerationTimingSwitch().setDisable(!isGenerateDataSelected);
         uiComponentProvider.getFileChooserButton().setDisable(!isLoadDataSelected);
         uiComponentProvider.getFilePathField().setDisable(!isLoadDataSelected);
+        uiComponentProvider.getDataLoadingTimingSwitch().setDisable(!isLoadDataSelected);
 
         uiComponentProvider.getUniformCheckBox().setDisable(!isGenerateDataSelected);
         uiComponentProvider.getGaussianCheckBox().setDisable(!isGenerateDataSelected);
@@ -236,34 +238,9 @@ public class HashLabEventHandler {
 
     private void handleAddTest(){
 
-
         if(!validateTestConfig()){
             return;
         }
-        String uniformData;
-        String gaussianData;
-        String exponentialData;
-
-
-        try{
-            uniformData = DataGenerator.generateUniformASCIIValue(Integer.parseInt(uiComponentProvider.getDataSizeField().getText()));
-
-            gaussianData= DataGenerator.generateGaussianASCIIValue(
-                    Double.parseDouble(uiComponentProvider.getMeanField().getText()),
-                    Double.parseDouble(uiComponentProvider.getDeviationField().getText()),
-                    Integer.parseInt(uiComponentProvider.getDataSizeField().getText()));
-
-            exponentialData =DataGenerator.generateExponentialASCIIValue(
-                    Double.parseDouble(uiComponentProvider.getLambdaField().getText()),
-                    Integer.parseInt(uiComponentProvider.getDataSizeField().getText()));
-        } catch (NumberFormatException exception) {
-            showAlert("Error", "Invalid parameters format. Please enter a correct numeric value.");
-            return;
-        } catch (Exception exception){
-            showAlert("Error", "A problem occurred while generating data. Please check the validity of the input parameters.");
-            return;
-        }
-
 
         TextInputDialog dialog = new TextInputDialog("Test " + (tests.getTestsList().size() + 1));
         dialog.setTitle("Test name");
@@ -282,6 +259,7 @@ public class HashLabEventHandler {
             config.setGet(uiComponentProvider.getGetCheckbox().isSelected());
             config.setDelete(uiComponentProvider.getDeleteCheckbox().isSelected());
             config.setDataGenerated(uiComponentProvider.getGenerateDataRadio().isSelected());
+            config.setGeneratedOnAdd(uiComponentProvider.getDataGenerationTimingSwitch().isSelected());
             config.setUniformSelected(uiComponentProvider.getUniformCheckBox().isSelected());
             config.setGaussianSelected(uiComponentProvider.getGaussianCheckBox().isSelected());
             config.setExponentialSelected(uiComponentProvider.getExponentialCheckBox().isSelected());
@@ -291,21 +269,39 @@ public class HashLabEventHandler {
                 config.setChunkSize(Integer.parseInt(uiComponentProvider.getChunkSizeField().getText()));
                 if (config.isDataGenerated()) {
                     config.setDataSize(Integer.parseInt(uiComponentProvider.getDataSizeField().getText()));
+                    if(config.isUniformSelected()) {
+                        config.setMin(Double.parseDouble(uiComponentProvider.getMinField().getText()));
+                        config.setMax(Double.parseDouble(uiComponentProvider.getMinField().getText()));
+                        if(uiComponentProvider.getDataGenerationTimingSwitch().isSelected()){
+                            config.setUniformDataString(DataGenerator.generateUniformASCIIValue(Integer.parseInt(uiComponentProvider.getDataSizeField().getText())));
+                        }
+                    }
+                    if(config.isGaussianSelected()) {
+                        config.setMean(Double.parseDouble(uiComponentProvider.getMeanField().getText()));
+                        config.setDeviation(Double.parseDouble(uiComponentProvider.getDeviationField().getText()));
+                        if(uiComponentProvider.getDataGenerationTimingSwitch().isSelected()){
+                            config.setGaussianDataString(DataGenerator.generateGaussianASCIIValue(
+                                    Double.parseDouble(uiComponentProvider.getMeanField().getText()),
+                                    Double.parseDouble(uiComponentProvider.getDeviationField().getText()),
+                                    Integer.parseInt(uiComponentProvider.getDataSizeField().getText())));
+                        }
+                    }
+                    if(config.isExponentialSelected()) {
+                        config.setLambda(Double.parseDouble(uiComponentProvider.getLambdaField().getText()));
+                        if(uiComponentProvider.getDataGenerationTimingSwitch().isSelected()){
+                            config.setExponentialDataString(DataGenerator.generateExponentialASCIIValue(
+                                    Double.parseDouble(uiComponentProvider.getLambdaField().getText()),
+                                    Integer.parseInt(uiComponentProvider.getDataSizeField().getText())));
+                        }
+
+                    }
+                } else {
+                    config.setSelectedFilePath(uiComponentProvider.getFilePathField().getText());
+                    if(uiComponentProvider.getDataLoadingTimingSwitch().isSelected()){
+                        config.setLoadedDataString(loadDataFromFile(config.getSelectedFilePath()));
+                    }
                 }
-                if(config.isUniformSelected()) {
-                    config.setMin(Double.parseDouble(uiComponentProvider.getMinField().getText()));
-                    config.setMax(Double.parseDouble(uiComponentProvider.getMinField().getText()));
-                    config.setUniformDataString(uniformData);
-                }
-                if(config.isGaussianSelected()) {
-                    config.setMean(Double.parseDouble(uiComponentProvider.getMeanField().getText()));
-                    config.setDeviation(Double.parseDouble(uiComponentProvider.getDeviationField().getText()));
-                    config.setGaussianDataString(gaussianData);
-                }
-                if(config.isExponentialSelected()) {
-                    config.setLambda(Double.parseDouble(uiComponentProvider.getLambdaField().getText()));
-                    config.setExponentialDataString(exponentialData);
-                }
+
 
                 config.setBenchmarkIterations(Integer.parseInt(uiComponentProvider.getBenchmarkIterationsField().getText()));
                 config.setBenchmarkThreshold(Double.parseDouble(uiComponentProvider.getBenchmarkThresholdField().getText()));
@@ -318,6 +314,23 @@ public class HashLabEventHandler {
         });
 
 
+    }
+
+    private List<Map.Entry<String, String[]>> loadDataFromFile(String filePath){
+        List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
+        File file = new File(filePath);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            List<String> keys = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                keys.add(line);
+            }
+            testKeysSets.add(new AbstractMap.SimpleEntry<>("FromFile", keys.toArray(new String[0])));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        return testKeysSets;
     }
 
     private boolean validateTestConfig(){
@@ -361,14 +374,8 @@ public class HashLabEventHandler {
         if (uiComponentProvider.getGenerateDataRadio().isSelected()) {
             try {
                 int dataSize = Integer.parseInt(uiComponentProvider.getDataSizeField().getText());
-                int chunkSize = Integer.parseInt(uiComponentProvider.getChunkSizeField().getText());
-                int tableSize = Integer.parseInt(uiComponentProvider.getHashTableSizeField().getText());
                 if (dataSize <= 0) {
                     showAlert("Error", "Data size must be a positive integer.");
-                    return false;
-                }
-                if(dataSize / chunkSize > tableSize){
-                    showAlert("Error", "The number of chunks exceeds the size of the hash table.");
                     return false;
                 }
             } catch (NumberFormatException e) {

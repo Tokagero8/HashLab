@@ -3,6 +3,7 @@ package hashlab.ui.components;
 import hashlab.tests.HashTestConfig;
 import javafx.scene.control.*;
 import org.controlsfx.control.CheckListView;
+import org.controlsfx.control.ToggleSwitch;
 
 public interface UIComponentProviderInterface {
     ComboBox<String> getAlgorithmChoice();
@@ -18,6 +19,7 @@ public interface UIComponentProviderInterface {
     ToggleGroup getDataToggleGroup();
     RadioButton getGenerateDataRadio();
     TextField getDataSizeField();
+    ToggleSwitch getDataGenerationTimingSwitch();
     TitledPane getGenerateDataPane();
     TitledPane getDataGenerationPane();
     CheckBox getUniformCheckBox();
@@ -37,6 +39,7 @@ public interface UIComponentProviderInterface {
     TextField getFilePathField();
     Button getFileChooserButton();
     RadioButton getLoadDataRadio();
+    ToggleSwitch getDataLoadingTimingSwitch();
     TextField getBenchmarkIterationsField();
     TextField getBenchmarkThresholdField();
     TitledPane getBenchmarkParamsPane();

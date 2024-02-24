@@ -46,7 +46,7 @@ public class TestTask extends Task<Void> {
                 if (testConfig.isDataGenerated) {
                     testKeysSets = generateTestKeys(testConfig);
                 } else {
-                    testKeysSets = loadDataFromFile(testConfig.getselectedFilePath());
+                    testKeysSets = loadDataFromFile(testConfig.getSelectedFilePath());
                 }
 
                 int totalKeysSetsSize = testKeysSets.stream().mapToInt(entry -> entry.getValue().length).sum();

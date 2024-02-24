@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
+import org.controlsfx.control.ToggleSwitch;
 
 public class UIComponentFactory implements UIComponentFactoryInterface{
 
@@ -23,6 +24,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private ToggleGroup dataToggleGroup;
     private RadioButton generateDataRadio;
     private TextField dataSizeField;
+    private ToggleSwitch dataGenerationTimingSwitch;
     private TitledPane generateDataPane;
     private TitledPane dataGenerationPane;
     private CheckBox uniformCheckBox;
@@ -42,6 +44,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private TextField filePathField;
     private Button fileChooserButton;
     private RadioButton loadDataRadio;
+    private ToggleSwitch dataLoadingTimingSwitch;
     private TextField benchmarkIterationsField;
     private TextField benchmarkThresholdField;
     private TitledPane benchmarkParamsPane;
@@ -102,7 +105,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         dataSizeField.setPromptText("Data size");
         dataSizeField.setDisable(true);
 
-        VBox dataSizeBox = new VBox(5, generateDataRadio, dataSizeField);
+        dataGenerationTimingSwitch = new ToggleSwitch("Generate data during test addition: ");
+        dataGenerationTimingSwitch.setDisable(true);
+
+        VBox dataSizeBox = new VBox(5, generateDataRadio, dataSizeField, dataGenerationTimingSwitch);
         generateDataPane = new TitledPane("Data", dataSizeBox);
         generateDataPane.setCollapsible(false);
 
@@ -190,7 +196,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         loadDataRadio = new RadioButton("Load from file");
         loadDataRadio.setToggleGroup(dataToggleGroup);
 
-        VBox dataSourceBox = new VBox(5, loadDataRadio, fileChooserButton, filePathField);
+        dataLoadingTimingSwitch = new ToggleSwitch("Load data during test addition: ");
+        dataLoadingTimingSwitch.setDisable(true);
+
+        VBox dataSourceBox = new VBox(5, loadDataRadio, fileChooserButton, filePathField, dataLoadingTimingSwitch);
         TitledPane dataSourcePane = new TitledPane("Data source", dataSourceBox);
         dataSourcePane.setCollapsible(false);
 
@@ -315,6 +324,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         return dataSizeField;
     }
 
+    public ToggleSwitch getDataGenerationTimingSwitch(){
+        return dataGenerationTimingSwitch;
+    }
+
     public TitledPane getGenerateDataPane() {
         return generateDataPane;
     }
@@ -389,6 +402,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
     public RadioButton getLoadDataRadio() {
         return loadDataRadio;
+    }
+
+    public ToggleSwitch getDataLoadingTimingSwitch(){
+        return dataLoadingTimingSwitch;
     }
 
     public TextField getBenchmarkIterationsField() {

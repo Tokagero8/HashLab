@@ -44,7 +44,7 @@
             scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
             scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-            Scene scene = new Scene(scrollPane, 600, 800);
+            Scene scene = new Scene(scrollPane, 1600, 900);
             scene.getStylesheets().add(getClass().getResource("/hashlab/css/fresh-look.css").toExternalForm());
             primaryStage.setScene(scene);
 
