@@ -36,6 +36,17 @@ public class TestManager {
             progressStage.closeStage();
             controller.setButtonsDisabled(false);
         });
+
+        testTask.setOnFailed(e -> {
+            Throwable throwable = testTask.getException();
+            progressStage.closeStage();
+            controller.setButtonsDisabled(false);
+            String errorMessage = "An error occurred during running of the test: "  + throwable.getMessage();
+            if (throwable.getCause() != null) {
+                errorMessage += "\nReason: " + throwable.getCause().getMessage();
+            }
+            controller.showAlert("Error", errorMessage);
+        });
     }
 
 }

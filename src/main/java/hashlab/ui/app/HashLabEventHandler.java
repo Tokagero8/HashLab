@@ -15,10 +15,8 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class HashLabEventHandler {
@@ -316,21 +314,19 @@ public class HashLabEventHandler {
 
     }
 
-    private List<Map.Entry<String, String[]>> loadDataFromFile(String filePath){
-        List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
+    private String loadDataFromFile(String filePath) {
+        StringBuilder contentBuilder = new StringBuilder();
         File file = new File(filePath);
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            List<String> keys = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                keys.add(line);
+                contentBuilder.append(line).append(System.lineSeparator());
             }
-            testKeysSets.add(new AbstractMap.SimpleEntry<>("FromFile", keys.toArray(new String[0])));
         } catch (IOException e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return "";
         }
-        return testKeysSets;
+        return contentBuilder.toString();
     }
 
     private boolean validateTestConfig(){
@@ -463,13 +459,10 @@ public class HashLabEventHandler {
     }
 
     private void handleRemoveTest(){
-
         List<HashTestConfig> selectedTests = new ArrayList<>(uiComponentProvider.getTestCheckListView().getCheckModel().getCheckedItems());
         tests.getTestsList().removeAll(selectedTests);
         uiComponentProvider.getTestCheckListView().setItems(tests.getTestsList());
         uiComponentProvider.getTestCheckListView().getCheckModel().clearChecks();
-
-
     }
 
     private void handleExportTests(){

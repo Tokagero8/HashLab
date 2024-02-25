@@ -21,7 +21,7 @@ public class HashTestConfig {
     private String uniformDataString;
     private String gaussianDataString;
     private String exponentialDataString;
-    private List<Map.Entry<String, String[]>> loadedDataString;
+    private String loadedDataString;
     private int benchmarkIterations;
     private double benchmarkThreshold;
 
@@ -225,11 +225,11 @@ public class HashTestConfig {
         this.exponentialDataString = exponentialDataString;
     }
 
-    public List<Map.Entry<String, String[]>> getLoadedDataString(){
+    public String getLoadedDataString(){
         return loadedDataString;
     }
 
-    public void setLoadedDataString(List<Map.Entry<String, String[]>> loadedDataString){
+    public void setLoadedDataString(String loadedDataString){
         this.loadedDataString = loadedDataString;
     }
 

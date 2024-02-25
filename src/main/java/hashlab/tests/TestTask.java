@@ -8,6 +8,7 @@ import hashlab.utils.DataGenerator;
 import javafx.concurrent.Task;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class TestTask extends Task<Void> {
@@ -41,19 +42,15 @@ public class TestTask extends Task<Void> {
 
                 updateMessage("Running test: " + testConfig.getTestName());
 
-                List<HashAlgorithm<String, Integer>> algorithms = createHashAlgorithms(testConfig);
-                List<Map.Entry<String, String[]>> testKeysSets;
-                if (testConfig.isDataGenerated) {
-                    testKeysSets = generateTestKeys(testConfig);
-                } else {
-                    testKeysSets = loadDataFromFile(testConfig.getSelectedFilePath());
-                }
+                List<Map.Entry<String, String[]>> testKeysSets = getOrGenerateTestKeys(testConfig);
 
                 int totalKeysSetsSize = testKeysSets.stream().mapToInt(entry -> entry.getValue().length).sum();
                 Integer[] testValues = new Integer[totalKeysSetsSize];
                 Arrays.fill(testValues, 1);
 
-                double baseline = Benchmark.calculateBaseline(testConfig.benchmarkIterations, testConfig.benchmarkThreshold);
+                double baseline = Benchmark.calculateBaseline(testConfig.getBenchmarkIterations(), testConfig.getBenchmarkThreshold());
+
+                List<HashAlgorithm<String, Integer>> algorithms = createHashAlgorithms(testConfig);
 
                 for (HashAlgorithm<String, Integer> algorithm : algorithms) {
                     for (Map.Entry<String, String[]> entry : testKeysSets) {
@@ -71,54 +68,116 @@ public class TestTask extends Task<Void> {
                 updateProgress(currentTestIndex, totalTests);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            updateMessage("Error during saving a results: " + e.getMessage());
         }
         return null;
     }
 
     private List<HashAlgorithm<String, Integer>> createHashAlgorithms(HashTestConfig testConfig) {
         List<HashAlgorithm<String, Integer>> algorithms = new ArrayList<>();
-        for (String hashFunction : testConfig.hashFunctions) {
-            HashAlgorithm<String, Integer> algorithm = HashAlgorithmFactory.createAlgorithm(testConfig.algorithm, hashFunction, testConfig.hashTableSize);
+        for (String hashFunction : testConfig.getHashFunctions()) {
+            HashAlgorithm<String, Integer> algorithm = HashAlgorithmFactory.createAlgorithm(testConfig.getAlgorithm(), hashFunction, testConfig.getHashTableSize());
             algorithms.add(algorithm);
         }
         return algorithms;
     }
 
-    private List<Map.Entry<String, String[]>> generateTestKeys(HashTestConfig testConfig) {
-        List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
+    private List<Map.Entry<String, String[]>> getOrGenerateTestKeys(HashTestConfig testConfig) {
+        if (testConfig.isDataGenerated()) {
+            return testConfig.isGeneratedOnAdd() ? getTestKeys(testConfig) : generateTestKeys(testConfig);
+        } else {
+            return testConfig.isLoadedOnAdd() ? prepareLoadedData(testConfig) : loadDataFromFile(testConfig);
+        }
+    }
 
-        if (testConfig.uniformSelected) {
-            String[] keys = convertDoubleArrayToStringArray(DataGenerator.generateUniformValues(testConfig.min, testConfig.max, testConfig.dataSize));
+    private List<Map.Entry<String, String[]>> getTestKeys(HashTestConfig testConfig){
+        List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
+        if (testConfig.isUniformSelected()) {
+            String[] keys = divideIntoChunks(testConfig.getUniformDataString(), testConfig.getChunkSize());
             testKeysSets.add(new AbstractMap.SimpleEntry<>("Uniform", keys));
         }
-        if (testConfig.gaussianSelected) {
-            String[] keys = convertDoubleArrayToStringArray(DataGenerator.generateGaussianValues(testConfig.mean, testConfig.deviation, testConfig.dataSize));
+        if (testConfig.isGaussianSelected()) {
+            String[] keys = divideIntoChunks(testConfig.getGaussianDataString(), testConfig.getChunkSize());
             testKeysSets.add(new AbstractMap.SimpleEntry<>("Gaussian", keys));
         }
-        if (testConfig.exponentialSelected) {
-            String[] keys = convertDoubleArrayToStringArray(DataGenerator.generateExponentialValues(testConfig.lambda, testConfig.dataSize));
+        if (testConfig.isExponentialSelected()) {
+            String[] keys = divideIntoChunks(testConfig.getExponentialDataString(), testConfig.getChunkSize());
             testKeysSets.add(new AbstractMap.SimpleEntry<>("Exponential", keys));
         }
-
         return testKeysSets;
     }
 
-    private String[] convertDoubleArrayToStringArray(double[] doubleArray) {
-        String[] stringArray = new String[doubleArray.length];
-        for (int i = 0; i < doubleArray.length; i++) {
-            stringArray[i] = String.valueOf(doubleArray[i]);
+    private List<Map.Entry<String, String[]>> generateTestKeys(HashTestConfig testConfig) {
+        List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
+
+        if (testConfig.isUniformSelected()) {
+            String[] keys = divideIntoChunks(DataGenerator.generateUniformASCIIValue(testConfig.getDataSize()), testConfig.getChunkSize());
+            testKeysSets.add(new AbstractMap.SimpleEntry<>("Uniform", keys));
         }
-        return stringArray;
+        if (testConfig.isGaussianSelected()) {
+            String[] keys = divideIntoChunks(
+                    DataGenerator.generateGaussianASCIIValue(
+                            testConfig.getMean(),
+                            testConfig.getDeviation(),
+                            testConfig.getDataSize()),
+                    testConfig.getChunkSize());
+            testKeysSets.add(new AbstractMap.SimpleEntry<>("Gaussian", keys));
+        }
+        if (testConfig.isExponentialSelected()) {
+            String[] keys = divideIntoChunks(
+                    DataGenerator.generateExponentialASCIIValue(
+                            testConfig.getLambda(),
+                            testConfig.getDataSize()),
+                    testConfig.getChunkSize());
+            testKeysSets.add(new AbstractMap.SimpleEntry<>("Exponential", keys));
+        }
+        return testKeysSets;
+    }
+
+    private List<Map.Entry<String, String[]>> prepareLoadedData(HashTestConfig testConfig){
+        List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
+        String[] keys = divideIntoChunks(testConfig.getLoadedDataString(), testConfig.getChunkSize());
+        testKeysSets.add(new AbstractMap.SimpleEntry<>("FromFile", keys));
+        return testKeysSets;
+    }
+
+    private List<Map.Entry<String, String[]>> loadDataFromFile(HashTestConfig testConfig) {
+        List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
+        StringBuilder contentBuilder = new StringBuilder();
+        File file = new File(testConfig.getSelectedFilePath());
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contentBuilder.append(line).append(System.lineSeparator());
+            }
+        } catch (FileNotFoundException e) {
+            updateMessage("The file was not found: " + e.getMessage());
+            return Collections.emptyList();
+        } catch (IOException e) {
+            updateMessage("Error during reading of the file: " + e.getMessage());
+            return Collections.emptyList();
+        }
+        String[] keys = divideIntoChunks(contentBuilder.toString(), testConfig.getChunkSize());
+        testKeysSets.add(new AbstractMap.SimpleEntry<>("FromFile", keys));
+        return testKeysSets;
+    }
+
+    private String[] divideIntoChunks(String data, int chunkSize) {
+        int numberOfChunks = (int)Math.ceil((double)data.length() / chunkSize);
+        String[] dataChunks = new String[numberOfChunks];
+        for(int i = 0, j = 0; i < numberOfChunks; i++, j += chunkSize) {
+            dataChunks[i] = data.substring(j, Math.min(data.length(), j + chunkSize));
+        }
+        return dataChunks;
     }
 
     private void performAndWriteTest(String operation, HashTestConfig testConfig, HashAlgorithm<String, Integer> algorithm, String dataType, int dataSize, double baseline, HashAlgorithmPerformanceTest<String, Integer> performanceTest, BufferedWriter writer) throws IOException {
-        if (operation.equals("put") && testConfig.put || operation.equals("get") && testConfig.get || operation.equals("delete") && testConfig.delete) {
+        if (operation.equals("put") && testConfig.isPutSelected() || operation.equals("get") && testConfig.isGetSelected() || operation.equals("delete") && testConfig.isDeleteSelected()) {
             double result = performanceTest.runTest(operation, baseline);
             writer.write(String.format(Locale.ENGLISH, "%s,%s,%d,%s,%d,%s,%.2f\n",
                     algorithm.getClass().getSimpleName(),
                     algorithm.getHashFunction().getClass().getSimpleName(),
-                    testConfig.hashTableSize,
+                    testConfig.getHashTableSize(),
                     dataType,
                     dataSize,
                     operation.toUpperCase(),
@@ -126,20 +185,5 @@ public class TestTask extends Task<Void> {
         }
     }
 
-    private List<Map.Entry<String, String[]>> loadDataFromFile(String selectedFilePath) {
-        List<Map.Entry<String, String[]>> testKeysSets = new ArrayList<>();
-        File file = new File(selectedFilePath);
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            List<String> keys = new ArrayList<>();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                keys.add(line);
-            }
-            testKeysSets.add(new AbstractMap.SimpleEntry<>("FromFile", keys.toArray(new String[0])));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-        return testKeysSets;
-    }
+
 }
