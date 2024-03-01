@@ -264,8 +264,6 @@ public class HashLabApp extends Application {
                         config.setDataSize(Integer.parseInt(dataSizeField.getText()));
                     }
                     if(config.isUniformSelected()) {
-                        config.setMin(Double.parseDouble(minField.getText()));
-                        config.setMax(Double.parseDouble(maxField.getText()));
                     }
                     if(config.isGaussianSelected()) {
                         config.setMean(Double.parseDouble(meanField.getText()));

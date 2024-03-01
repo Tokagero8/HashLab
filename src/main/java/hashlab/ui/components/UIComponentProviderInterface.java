@@ -23,8 +23,6 @@ public interface UIComponentProviderInterface {
     TitledPane getGenerateDataPane();
     TitledPane getDataGenerationPane();
     CheckBox getUniformCheckBox();
-    TextField getMinField();
-    TextField getMaxField();
     Button getGenerateUniformDataButton();
     TitledPane getUniformPane();
     CheckBox getGaussianCheckBox();

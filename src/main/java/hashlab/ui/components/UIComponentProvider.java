@@ -99,16 +99,6 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
-    public TextField getMinField() {
-        return uiComponentFactory.getMinField();
-    }
-
-    @Override
-    public TextField getMaxField() {
-        return uiComponentFactory.getMaxField();
-    }
-
-    @Override
     public Button getGenerateUniformDataButton() {
         return uiComponentFactory.getGenerateUniformDataButton();
     }

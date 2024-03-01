@@ -28,8 +28,6 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private TitledPane generateDataPane;
     private TitledPane dataGenerationPane;
     private CheckBox uniformCheckBox;
-    private TextField minField;
-    private TextField maxField;
     private Button generateUniformDataButton;
     private TitledPane uniformPane;
     private CheckBox gaussianCheckBox;
@@ -128,18 +126,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         uniformCheckBox = new CheckBox("Uniform");
         uniformCheckBox.setDisable(true);
 
-        minField = new TextField();
-        minField.setDisable(true);
-        minField.setPromptText("Min");
-
-        maxField = new TextField();
-        maxField.setDisable(true);
-        maxField.setPromptText("Max");
-
         generateUniformDataButton = new Button("Generate Sample Uniform Data");
         generateUniformDataButton.setDisable(true);
 
-        VBox uniformBox = new VBox(5, uniformCheckBox, minField, maxField, generateUniformDataButton);
+        VBox uniformBox = new VBox(5, uniformCheckBox, generateUniformDataButton);
         uniformPane = new TitledPane("Uniform", uniformBox);
         uniformPane.setCollapsible(false);
 
@@ -360,14 +350,6 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
     public CheckBox getUniformCheckBox() {
         return uniformCheckBox;
-    }
-
-    public TextField getMinField() {
-        return minField;
-    }
-
-    public TextField getMaxField() {
-        return maxField;
     }
 
     public Button getGenerateUniformDataButton(){

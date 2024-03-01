@@ -117,8 +117,6 @@ public class HashLabEventHandler {
         uiComponentProvider.getGaussianCheckBox().setDisable(!isGenerateDataSelected);
         uiComponentProvider.getExponentialCheckBox().setDisable(!isGenerateDataSelected);
 
-        uiComponentProvider.getMinField().setDisable(!isGenerateDataSelected || !uiComponentProvider.getUniformCheckBox().isSelected());
-        uiComponentProvider.getMaxField().setDisable(!isGenerateDataSelected || !uiComponentProvider.getUniformCheckBox().isSelected());
         uiComponentProvider.getGenerateUniformDataButton().setDisable(!isGenerateDataSelected || !uiComponentProvider.getUniformCheckBox().isSelected());
 
         uiComponentProvider.getMeanField().setDisable(!isGenerateDataSelected || !uiComponentProvider.getGaussianCheckBox().isSelected());
@@ -268,8 +266,6 @@ public class HashLabEventHandler {
                 if (config.isDataGenerated()) {
                     config.setDataSize(Integer.parseInt(uiComponentProvider.getDataSizeField().getText()));
                     if(config.isUniformSelected()) {
-                        config.setMin(Double.parseDouble(uiComponentProvider.getMinField().getText()));
-                        config.setMax(Double.parseDouble(uiComponentProvider.getMinField().getText()));
                         if(uiComponentProvider.getDataGenerationTimingSwitch().isSelected()){
                             config.setUniformDataString(DataGenerator.generateUniformASCIIValue(Integer.parseInt(uiComponentProvider.getDataSizeField().getText())));
                         }
@@ -397,19 +393,6 @@ public class HashLabEventHandler {
 
 
         if (uiComponentProvider.getGenerateDataRadio().isSelected()) {
-            if (uiComponentProvider.getUniformCheckBox().isSelected()) {
-                try {
-                    double min = Double.parseDouble(uiComponentProvider.getMinField().getText());
-                    double max = Double.parseDouble(uiComponentProvider.getMaxField().getText());
-                    if (min >= max) {
-                        showAlert("Error", "In Uniform, 'Min' must be less than 'Max'.");
-                        return false;
-                    }
-                } catch (NumberFormatException e) {
-                    showAlert("Error", "Please enter valid numbers for Uniform parameters.");
-                    return false;
-                }
-            }
 
             if (uiComponentProvider.getGaussianCheckBox().isSelected()) {
                 try {

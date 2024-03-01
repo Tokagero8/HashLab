@@ -17,7 +17,7 @@ public class HashTestConfig {
     private boolean isLoadedOnAdd;
     private int dataSize;
     private boolean isUniformSelected, isGaussianSelected, isExponentialSelected;
-    private double min, max, mean, deviation, lambda;
+    private double mean, deviation, lambda;
     private String uniformDataString;
     private String gaussianDataString;
     private String exponentialDataString;
@@ -162,22 +162,6 @@ public class HashTestConfig {
 
     public void setExponentialSelected(boolean exponentialSelected) {
         this.isExponentialSelected = exponentialSelected;
-    }
-
-    public double getMin() {
-        return min;
-    }
-
-    public void setMin(double min) {
-        this.min = min;
-    }
-
-    public double getMax() {
-        return max;
-    }
-
-    public void setMax(double max) {
-        this.max = max;
     }
 
     public double getMean() {
@@ -328,7 +312,6 @@ public class HashTestConfig {
     private String getDataGenerationParamsString() {
         if (!isDataGenerated) return "N/A";
         String params = "";
-        if (isUniformSelected) params += "Min: " + min + ", Max: " + max + "; ";
         if (isGaussianSelected) params += "Mean: " + mean + ", Deviation: " + deviation + "; ";
         if (isExponentialSelected) params += "Lambda: " + lambda;
         return params.trim();

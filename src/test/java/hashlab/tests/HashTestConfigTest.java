@@ -26,8 +26,6 @@ public class HashTestConfigTest {
         config.setUniformSelected(true);
         config.setGaussianSelected(false);
         config.setExponentialSelected(true);
-        config.setMin(0.0);
-        config.setMax(10.0);
         config.setMean(5.0);
         config.setDeviation(1.0);
         config.setLambda(0.1);
@@ -43,7 +41,7 @@ public class HashTestConfigTest {
                 "Data type: Generated\n" +
                 "Data Size: 500\n" +
                 "Data generation methods: Uniform Exponential\n" +
-                "Data generation parameters: Min: 0.0, Max: 10.0; Lambda: 0.1\n" +
+                "Data generation parameters: Lambda: 0.1\n" +
                 "Number of benchmark iterations: 100\n" +
                 "Benchmark threshold: 0.05";
 
@@ -93,12 +91,6 @@ public class HashTestConfigTest {
 
         config.setExponentialSelected(true);
         assertTrue(config.isExponentialSelected());
-
-        config.setMin(0.0);
-        assertEquals(0.0, config.getMin());
-
-        config.setMax(10.0);
-        assertEquals(10.0, config.getMax());
 
         config.setMean(5.0);
         assertEquals(5.0, config.getMean());
