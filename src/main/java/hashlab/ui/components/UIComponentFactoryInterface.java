@@ -16,6 +16,7 @@ public interface UIComponentFactoryInterface {
     TitledPane createExponentialPane();
     TitledPane createDataSourcePane(Stage primaryStage);
     TitledPane createBenchmarkParamsPane();
+    TitledPane createAdditionalSettingsPane();
     Button createRunTestButton();
     Button createAddTestButton();
     Button createRemoveTestButton();

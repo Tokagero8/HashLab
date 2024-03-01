@@ -48,6 +48,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private TextField benchmarkIterationsField;
     private TextField benchmarkThresholdField;
     private TitledPane benchmarkParamsPane;
+    private TextField testIterationsField;
+    private TextField testThresholdField;
+    private TextField warmupIterationsField;
+    private TitledPane additionalSettingsPane;
     private Button runTestButton;
     private Button addTestButton;
     private Button removeTestButton;
@@ -219,6 +223,24 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
         benchmarkParamsPane.setCollapsible(false);
 
         return benchmarkParamsPane;
+    }
+
+    @Override
+    public TitledPane createAdditionalSettingsPane() {
+        testIterationsField = new TextField();
+        testIterationsField.setPromptText("Test iterations");
+
+        testThresholdField = new TextField();
+        testThresholdField.setPromptText("Test Threshold");
+
+        warmupIterationsField = new TextField();
+        warmupIterationsField.setPromptText("Warmup iterations");
+
+        VBox testParamsBox = new VBox(5, testIterationsField, testThresholdField, warmupIterationsField);
+        additionalSettingsPane = new TitledPane("Additional Settings", testParamsBox);
+        additionalSettingsPane.setCollapsible(false);
+
+        return additionalSettingsPane;
     }
 
     @Override
@@ -418,6 +440,22 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
     public TitledPane getBenchmarkParamsPane() {
         return benchmarkParamsPane;
+    }
+
+    public TextField getTestIterationsField(){
+        return testIterationsField;
+    }
+
+    public TextField getTestThresholdField(){
+        return testThresholdField;
+    }
+
+    public TextField getWarmupIterationsField(){
+        return warmupIterationsField;
+    }
+
+    public TitledPane getAdditionalSettingsPane(){
+        return additionalSettingsPane;
     }
 
     public Button getRunTestButton() {

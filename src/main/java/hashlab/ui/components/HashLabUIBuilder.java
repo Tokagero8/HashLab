@@ -30,6 +30,7 @@
                     uiComponentFactory.createDataGenerationPane(),
                     uiComponentFactory.createDataSourcePane(primaryStage),
                     uiComponentFactory.createBenchmarkParamsPane(),
+                    uiComponentFactory.createAdditionalSettingsPane(),
                     uiComponentFactory.createRunTestButton(),
                     uiComponentFactory.createAddTestButton(),
                     uiComponentFactory.createRemoveTestButton(),

@@ -24,6 +24,9 @@ public class HashTestConfig {
     private String loadedDataString;
     private int benchmarkIterations;
     private double benchmarkThreshold;
+    private int testIterations;
+    private double testThreshold;
+    private int warmupIterations;
 
     public String getId(){
         return id;
@@ -249,6 +252,30 @@ public class HashTestConfig {
         this.benchmarkThreshold = benchmarkThreshold;
     }
 
+    public int getTestIterations(){
+        return testIterations;
+    }
+
+    public void setTestIterations(int testIterations){
+        this.testIterations = testIterations;
+    }
+
+    public double getTestThreshold(){
+        return testThreshold;
+    }
+
+    public void setTestThreshold(double testThreshold){
+        this.testThreshold = testThreshold;
+    }
+
+    public int getWarmupIterations(){
+        return warmupIterations;
+    }
+
+    public void setWarmupIterations(int warmupIterations){
+        this.warmupIterations = warmupIterations;
+    }
+
     @Override
     public String toString() {
         return  "Id: " + id + "\n" +
@@ -263,7 +290,10 @@ public class HashTestConfig {
                 "Data generation methods: " + getDataGenerationMethodsString() + "\n" +
                 "Data generation parameters: " + getDataGenerationParamsString() + "\n" +
                 "Number of benchmark iterations: " + benchmarkIterations + "\n" +
-                "Benchmark threshold: " + benchmarkThreshold;
+                "Benchmark threshold: " + benchmarkThreshold + "\n" +
+                "Test iterations: " + testIterations + "\n" +
+                "Test threshold: " + testThreshold + "\n" +
+                "Warnup iterations" + warmupIterations;
     }
 
     private String getDataType(){

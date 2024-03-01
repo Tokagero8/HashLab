@@ -303,6 +303,9 @@ public class HashLabEventHandler {
 
                 config.setBenchmarkIterations(Integer.parseInt(uiComponentProvider.getBenchmarkIterationsField().getText()));
                 config.setBenchmarkThreshold(Double.parseDouble(uiComponentProvider.getBenchmarkThresholdField().getText()));
+                config.setTestIterations(Integer.parseInt(uiComponentProvider.getTestIterationsField().getText()));
+                config.setTestThreshold(Double.parseDouble(uiComponentProvider.getTestThresholdField().getText()));
+                config.setWarmupIterations(Integer.parseInt(uiComponentProvider.getWarmupIterationsField().getText()));
 
                 tests.addTest(config);
                 uiComponentProvider.getTestCheckListView().setItems(FXCollections.observableArrayList(tests.getTestsList()));
@@ -429,8 +432,8 @@ public class HashLabEventHandler {
         }
 
         try {
-            int iterations = Integer.parseInt(uiComponentProvider.getBenchmarkIterationsField().getText());
-            if (iterations <= 0) {
+            int benchmarkIterations = Integer.parseInt(uiComponentProvider.getBenchmarkIterationsField().getText());
+            if (benchmarkIterations <= 0) {
                 showAlert("Error", "Benchmark iterations must be greater than 0.");
                 return false;
             }
@@ -445,6 +448,37 @@ public class HashLabEventHandler {
             showAlert("Error", "Benchmark threshold must be a valid number.");
             return false;
         }
+
+        try {
+            int testIterations = Integer.parseInt(uiComponentProvider.getTestIterationsField().getText());
+            if (testIterations <= 0) {
+                showAlert("Error", "Test iterations must be greater than 0.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Test iterations must be a valid integer.");
+            return false;
+        }
+
+        try {
+            Double.parseDouble(uiComponentProvider.getTestThresholdField().getText());
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Benchmark threshold must be a valid number.");
+            return false;
+        }
+
+        try {
+            int warmupIterations = Integer.parseInt(uiComponentProvider.getWarmupIterationsField().getText());
+            if (warmupIterations <= 0) {
+                showAlert("Error", "Warmup iterations must be greater than 0.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Warmup iterations must be a valid integer.");
+            return false;
+        }
+
+
 
         return true;
     }

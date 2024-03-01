@@ -43,6 +43,10 @@ public interface UIComponentProviderInterface {
     TextField getBenchmarkIterationsField();
     TextField getBenchmarkThresholdField();
     TitledPane getBenchmarkParamsPane();
+    TextField getTestIterationsField();
+    TextField getTestThresholdField();
+    TextField getWarmupIterationsField();
+    TitledPane getAdditionalSettingsPane();
     Button getRunTestButton();
     Button getAddTestButton();
     Button getRemoveTestButton();

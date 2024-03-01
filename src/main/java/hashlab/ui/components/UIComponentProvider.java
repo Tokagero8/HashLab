@@ -199,6 +199,26 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
+    public TextField getTestIterationsField() {
+        return uiComponentFactory.getTestIterationsField();
+    }
+
+    @Override
+    public TextField getTestThresholdField() {
+        return uiComponentFactory.getTestThresholdField();
+    }
+
+    @Override
+    public TextField getWarmupIterationsField() {
+        return uiComponentFactory.getWarmupIterationsField();
+    }
+
+    @Override
+    public TitledPane getAdditionalSettingsPane() {
+        return uiComponentFactory.getAdditionalSettingsPane();
+    }
+
+    @Override
     public Button getRunTestButton() {
         return uiComponentFactory.getRunTestButton();
     }
