@@ -29,7 +29,7 @@ public class TestTask extends Task<Void> {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(resultFile, true))){
             if (!resultFile.exists() || resultFile.length() == 0) {
-                writer.write("Algorithm,Function,Table Size,Data Type,Data Size,Operation,Result\n");
+                writer.write("Algorithm,Function,Table Size,Data Type,Data Size,Chunk Size,Operation,Result\n");
             }
 
             int totalTests = selectedTests.size();
@@ -47,6 +47,10 @@ public class TestTask extends Task<Void> {
                 int totalKeysSetsSize = testKeysSets.stream().mapToInt(entry -> entry.getValue().length).sum();
                 Integer[] testValues = new Integer[totalKeysSetsSize];
                 Arrays.fill(testValues, 1);
+
+                List<HashAlgorithm<String, Integer>> WarmupAlgorithms = createHashAlgorithms(testConfig);
+
+                performWarmup(testConfig, WarmupAlgorithms, testKeysSets, testValues);
 
                 double baseline = Benchmark.calculateBaseline(testConfig.getBenchmarkIterations(), testConfig.getBenchmarkThreshold());
 
@@ -171,19 +175,55 @@ public class TestTask extends Task<Void> {
         return dataChunks;
     }
 
+    private void performWarmup(HashTestConfig testConfig, List<HashAlgorithm<String, Integer>> algorithms, List<Map.Entry<String, String[]>> testKeysSets, Integer[] testValues){
+        double baseline = Benchmark.calculateBaseline(testConfig.getBenchmarkIterations(), testConfig.getBenchmarkThreshold());
+        for (int i = 0; i < testConfig.getWarmupIterations(); i++) {
+            for (HashAlgorithm<String, Integer> algorithm : algorithms) {
+                for (Map.Entry<String, String[]> entry : testKeysSets) {
+                    String[] testKeysSet = entry.getValue();
+                    HashAlgorithmPerformanceTest<String, Integer> performanceTest = new HashAlgorithmPerformanceTest<>(algorithm, testKeysSet, testValues);
+                    performTest("put", testConfig, baseline, performanceTest);
+                    performTest("get", testConfig, baseline, performanceTest);
+                    performTest("delete", testConfig, baseline, performanceTest);
+                }
+            }
+        }
+    }
+
+    private void performTest(String operation, HashTestConfig testConfig, double baseline, HashAlgorithmPerformanceTest<String, Integer> performanceTest) {
+        if (operation.equals("put") && testConfig.isPutSelected() || operation.equals("get") && testConfig.isGetSelected() || operation.equals("delete") && testConfig.isDeleteSelected()) {
+            performanceTest.runTest(operation, baseline);
+        }
+    }
+
+
     private void performAndWriteTest(String operation, HashTestConfig testConfig, HashAlgorithm<String, Integer> algorithm, String dataType, int dataSize, double baseline, HashAlgorithmPerformanceTest<String, Integer> performanceTest, BufferedWriter writer) throws IOException {
         if (operation.equals("put") && testConfig.isPutSelected() || operation.equals("get") && testConfig.isGetSelected() || operation.equals("delete") && testConfig.isDeleteSelected()) {
-            double result = performanceTest.runTest(operation, baseline);
-            writer.write(String.format(Locale.ENGLISH, "%s,%s,%d,%s,%d,%s,%.2f\n",
+            double previousAverage = 0;
+            double totalResult = 0;
+            int iterations = 0;
+            boolean thresholdMet = false;
+            while(!thresholdMet){
+                double result = performanceTest.runTest(operation, baseline);
+                totalResult += result;
+                iterations++;
+                double currentAverage = totalResult / iterations;
+
+                if(iterations > 1 && Math.abs(currentAverage - previousAverage) < testConfig.getBenchmarkThreshold()){
+                    thresholdMet = true;
+                } else {
+                        previousAverage = currentAverage;
+                }
+            }
+            writer.write(String.format(Locale.ENGLISH, "%s,%s,%d,%s,%d,%d,%s,%.2f\n",
                     algorithm.getClass().getSimpleName(),
                     algorithm.getHashFunction().getClass().getSimpleName(),
                     testConfig.getHashTableSize(),
                     dataType,
                     dataSize,
+                    testConfig.getChunkSize(),
                     operation.toUpperCase(),
-                    result));
+                    previousAverage));
         }
     }
-
-
 }
