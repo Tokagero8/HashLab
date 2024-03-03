@@ -72,4 +72,10 @@ public class LinearProbingHash<Key, Value> implements HashAlgorithm<Key, Value> 
     private boolean contain(Key key) {
         return get(key) != null;
     }
+
+    public void reset(){
+        keys = (Key[]) new Object[hashTableSize];
+        values = (Value[]) new Object[hashTableSize];
+        size = 0;
+    }
 }

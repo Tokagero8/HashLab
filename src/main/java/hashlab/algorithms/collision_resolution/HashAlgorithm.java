@@ -8,4 +8,5 @@ public interface HashAlgorithm<Key, Value> {
     Value get(Key key);
     void delete(Key key);
     HashFunction getHashFunction();
+    void reset();
 }

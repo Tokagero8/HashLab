@@ -92,4 +92,8 @@ public class BSTHash<Key extends Comparable<Key>, Value> implements HashAlgorith
         node.left = deleteMin(node.left);
         return node;
     }
+
+    public void reset(){
+        hashTable = new Object[hashTableSize];
+    }
 }

@@ -30,6 +30,9 @@ public class TestManager {
         testTask.setOnSucceeded(e -> {
             progressStage.closeStage();
             controller.setButtonsDisabled(false);
+            progressStage.showCompletionDialog(() -> {
+                System.out.println(resultFileName);
+            });
         });
 
         testTask.setOnCancelled(e -> {

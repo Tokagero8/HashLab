@@ -70,4 +70,12 @@ public class SeparateChainingHash <Key, Value> implements HashAlgorithm<Key, Val
     public HashFunction getHashFunction() {
         return hashFunction;
     }
+
+    @Override
+    public void reset(){
+        hashTable = (LinkedList<Entry<Key, Value>>[]) new LinkedList[hashTableSize];
+        for(int i = 0; i > hashTableSize; i++){
+            hashTable[i] = new LinkedList<>();
+        }
+    }
 }

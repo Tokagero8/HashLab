@@ -5,6 +5,8 @@ import hashlab.benchmark.Benchmark;
 import hashlab.benchmark.HashAlgorithmPerformanceTest;
 import hashlab.core.HashAlgorithmFactory;
 import hashlab.utils.DataGenerator;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 
 import java.io.*;
@@ -15,10 +17,21 @@ public class TestTask extends Task<Void> {
 
     private final String resultFileName;
     private final List<HashTestConfig> selectedTests;
+    private StringProperty currentStatus = new SimpleStringProperty("");
+    private String currentTestName = "";
 
     public TestTask(String resultFileName,  List<HashTestConfig> selectedTests) {
         this.resultFileName = resultFileName;
         this.selectedTests = selectedTests;
+    }
+
+    public void updateStatus(String additionalInfo){
+        String status = "Running test: " + currentTestName + "\n" + additionalInfo;
+        updateMessage(status);
+    }
+
+    public StringProperty getCurrentStatusProperty(){
+        return currentStatus;
     }
 
     @Override
@@ -40,7 +53,8 @@ public class TestTask extends Task<Void> {
                     break;
                 }
 
-                updateMessage("Running test: " + testConfig.getTestName());
+                currentTestName = testConfig.getTestName();
+                updateStatus("Reading or generating data...");
 
                 List<Map.Entry<String, String[]>> testKeysSets = getOrGenerateTestKeys(testConfig);
 
@@ -48,9 +62,12 @@ public class TestTask extends Task<Void> {
                 Integer[] testValues = new Integer[totalKeysSetsSize];
                 Arrays.fill(testValues, 1);
 
-                List<HashAlgorithm<String, Integer>> WarmupAlgorithms = createHashAlgorithms(testConfig);
+                updateStatus("Performing warmup...");
 
+                List<HashAlgorithm<String, Integer>> WarmupAlgorithms = createHashAlgorithms(testConfig);
                 performWarmup(testConfig, WarmupAlgorithms, testKeysSets, testValues);
+
+                updateStatus("Executing algorithm...");
 
                 double baseline = Benchmark.calculateBaseline(testConfig.getBenchmarkIterations(), testConfig.getBenchmarkThreshold());
 
@@ -58,13 +75,9 @@ public class TestTask extends Task<Void> {
 
                 for (HashAlgorithm<String, Integer> algorithm : algorithms) {
                     for (Map.Entry<String, String[]> entry : testKeysSets) {
-                        String dataType = entry.getKey();
-                        String[] testKeysSet = entry.getValue();
-                        HashAlgorithmPerformanceTest<String, Integer> performanceTest = new HashAlgorithmPerformanceTest<>(algorithm, testKeysSet, testValues);
-
-                        performAndWriteTest("put", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
-                        performAndWriteTest("get", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
-                        performAndWriteTest("delete", testConfig, algorithm, dataType, entry.getValue().length, baseline, performanceTest, writer);
+                        performAndWriteTest("put", testConfig, algorithm, entry, testValues, baseline, writer);
+                        performAndWriteTest("get", testConfig, algorithm, entry, testValues, baseline, writer);
+                        performAndWriteTest("delete", testConfig, algorithm, entry, testValues, baseline, writer);
                     }
                 }
 
@@ -175,41 +188,113 @@ public class TestTask extends Task<Void> {
         return dataChunks;
     }
 
+    interface OperationStrategy {
+        double execute(HashAlgorithm<String, Integer> algorithm, String[] data, Integer[] testValues, double baseline);
+    }
+
+    class PutStrategy implements OperationStrategy {
+        @Override
+        public double execute(HashAlgorithm<String, Integer> algorithm, String[] data, Integer[] testValues, double baseline) {
+            algorithm.reset();
+            HashAlgorithmPerformanceTest<String, Integer> performanceTest = new HashAlgorithmPerformanceTest<>(algorithm, data, testValues);
+            return performanceTest.runTest("PUT", baseline);
+        }
+    }
+
+    class GetStrategy implements OperationStrategy {
+        @Override
+        public double execute(HashAlgorithm<String, Integer> algorithm, String[] data, Integer[] testValues, double baseline) {
+            algorithm.reset();
+            HashAlgorithmPerformanceTest<String, Integer> performanceTest = new HashAlgorithmPerformanceTest<>(algorithm, data, testValues);
+            performanceTest.runTest("PUT", baseline);
+            return performanceTest.runTest("GET", baseline);
+        }
+    }
+
+    class DeleteStrategy implements OperationStrategy {
+        @Override
+        public double execute(HashAlgorithm<String, Integer> algorithm, String[] data, Integer[] testValues, double baseline) {
+            algorithm.reset();
+            HashAlgorithmPerformanceTest<String, Integer> performanceTest = new HashAlgorithmPerformanceTest<>(algorithm, data, testValues);
+            performanceTest.runTest("PUT", baseline);
+            return performanceTest.runTest("DELETE", baseline);
+        }
+    }
+
     private void performWarmup(HashTestConfig testConfig, List<HashAlgorithm<String, Integer>> algorithms, List<Map.Entry<String, String[]>> testKeysSets, Integer[] testValues){
         double baseline = Benchmark.calculateBaseline(testConfig.getBenchmarkIterations(), testConfig.getBenchmarkThreshold());
-        for (int i = 0; i < testConfig.getWarmupIterations(); i++) {
-            for (HashAlgorithm<String, Integer> algorithm : algorithms) {
-                for (Map.Entry<String, String[]> entry : testKeysSets) {
-                    String[] testKeysSet = entry.getValue();
-                    HashAlgorithmPerformanceTest<String, Integer> performanceTest = new HashAlgorithmPerformanceTest<>(algorithm, testKeysSet, testValues);
-                    performTest("put", testConfig, baseline, performanceTest);
-                    performTest("get", testConfig, baseline, performanceTest);
-                    performTest("delete", testConfig, baseline, performanceTest);
-                }
+        for (HashAlgorithm<String, Integer> algorithm : algorithms) {
+            for (Map.Entry<String, String[]> entry : testKeysSets) {
+                performTest("put", testConfig, algorithm, entry, testValues, baseline);
+                performTest("get", testConfig, algorithm, entry, testValues, baseline);
+                performTest("delete", testConfig, algorithm, entry, testValues, baseline);
             }
         }
     }
 
-    private void performTest(String operation, HashTestConfig testConfig, double baseline, HashAlgorithmPerformanceTest<String, Integer> performanceTest) {
+    private void performTest(String operation, HashTestConfig testConfig, HashAlgorithm<String, Integer> algorithm, Map.Entry<String, String[]> entry, Integer[] testValues, double baseline) {
         if (operation.equals("put") && testConfig.isPutSelected() || operation.equals("get") && testConfig.isGetSelected() || operation.equals("delete") && testConfig.isDeleteSelected()) {
-            performanceTest.runTest(operation, baseline);
+            OperationStrategy strategy = null;
+            switch (operation.toLowerCase()) {
+                case "put":
+                    strategy = new PutStrategy();
+                    break;
+                case "get":
+                    strategy = new GetStrategy();
+                    break;
+                case "delete":
+                    strategy = new DeleteStrategy();
+                    break;
+            }
+
+            for(int i = 0; i < testConfig.getWarmupIterations(); i++){
+                updateStatus("Performing warmup..." +
+                        "\nHash function: " +  algorithm.getHashFunction().getClass().getSimpleName() +
+                        "\nData set: " + entry.getKey() +
+                        "\nOperation: " + operation +
+                        "\nIteration: " + i);
+                strategy.execute(algorithm, entry.getValue(), testValues, baseline);
+            }
         }
     }
 
 
-    private void performAndWriteTest(String operation, HashTestConfig testConfig, HashAlgorithm<String, Integer> algorithm, String dataType, int dataSize, double baseline, HashAlgorithmPerformanceTest<String, Integer> performanceTest, BufferedWriter writer) throws IOException {
+    private void performAndWriteTest(String operation, HashTestConfig testConfig, HashAlgorithm<String, Integer> algorithm, Map.Entry<String, String[]> entry, Integer[] testValues, double baseline, BufferedWriter writer) throws IOException {
         if (operation.equals("put") && testConfig.isPutSelected() || operation.equals("get") && testConfig.isGetSelected() || operation.equals("delete") && testConfig.isDeleteSelected()) {
+
             double previousAverage = 0;
             double totalResult = 0;
             int iterations = 0;
             boolean thresholdMet = false;
+
+            OperationStrategy strategy = null;
+            switch (operation.toLowerCase()) {
+                case "put":
+                    strategy = new PutStrategy();
+                    break;
+                case "get":
+                    strategy = new GetStrategy();
+                    break;
+                case "delete":
+                    strategy = new DeleteStrategy();
+                    break;
+            }
+
             while(!thresholdMet){
-                double result = performanceTest.runTest(operation, baseline);
+                updateStatus("Executing algorithm...\n" +
+                        "Hash function: " +  algorithm.getHashFunction().getClass().getSimpleName() +
+                        "\nData set: " + entry.getKey() +
+                        "\nOperation: " + operation +
+                        "\nIteration: " + iterations);
+
+                double result = strategy.execute(algorithm, entry.getValue(), testValues, baseline);
                 totalResult += result;
                 iterations++;
                 double currentAverage = totalResult / iterations;
 
-                if(iterations > 1 && Math.abs(currentAverage - previousAverage) < testConfig.getBenchmarkThreshold()){
+
+
+                if((iterations > 1 && Math.abs(currentAverage - previousAverage) < testConfig.getTestThreshold()) || iterations >= testConfig.getTestIterations()){
                     thresholdMet = true;
                 } else {
                         previousAverage = currentAverage;
@@ -219,8 +304,8 @@ public class TestTask extends Task<Void> {
                     algorithm.getClass().getSimpleName(),
                     algorithm.getHashFunction().getClass().getSimpleName(),
                     testConfig.getHashTableSize(),
-                    dataType,
-                    dataSize,
+                    entry.getKey(),
+                    entry.getValue().length,
                     testConfig.getChunkSize(),
                     operation.toUpperCase(),
                     previousAverage));
