@@ -14,7 +14,6 @@ import java.util.List;
 public class NewHashLabAppController {
 
     private HashLabEventHandler view;
-    private ChartDisplay chartDisplay = new ChartDisplay();
     private final TestConfigImporterExporter testConfigImporterExporter = new TestConfigImporterExporter();
     private final TestManager testManager = new TestManager();
 

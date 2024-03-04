@@ -191,12 +191,12 @@ public class HashLabEventHandler {
 
     public void showChart(String resultFilePath){
         final Stage dialog = new Stage();
-        dialog.initOwner(primaryStage);
         SwingNode swingNode = new SwingNode();
 
+
         SwingUtilities.invokeLater(() -> {
-            ChartController chartController = new ChartController();
-            swingNode.setContent(chartController.createChartPanel(resultFilePath));
+            ChartController chartController = new ChartController(resultFilePath);
+            swingNode.setContent(chartController.getMainPanel());
         });
 
         StackPane dialogLayout = new StackPane();
