@@ -70,8 +70,6 @@ public class ProgressStage {
         });
     }
 
-
-
     public void closeStage() {
         if (progressStage != null) {
             progressStage.close();

@@ -4,6 +4,9 @@ import hashlab.tests.HashTestConfig;
 import hashlab.tests.TestConfigImporterExporter;
 import hashlab.tests.TestManager;
 import hashlab.utils.DataGenerator;
+import hashlab.utils.FileUnils;
+import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -11,6 +14,7 @@ import java.util.List;
 public class NewHashLabAppController {
 
     private HashLabEventHandler view;
+    private ChartDisplay chartDisplay = new ChartDisplay();
     private final TestConfigImporterExporter testConfigImporterExporter = new TestConfigImporterExporter();
     private final TestManager testManager = new TestManager();
 
@@ -46,6 +50,10 @@ public class NewHashLabAppController {
 
     public void showAlert(String title, String message){
         view.showAlert(title, message);
+    }
+
+    public void showResultChart(String resultFileName){
+        view.showChart(FileUnils.getFilePath(resultFileName));
     }
 
 }

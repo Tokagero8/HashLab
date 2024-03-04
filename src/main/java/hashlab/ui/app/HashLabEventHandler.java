@@ -189,6 +189,25 @@ public class HashLabEventHandler {
         nudgeWindow(dialog);
     }
 
+    public void showChart(String resultFilePath){
+        final Stage dialog = new Stage();
+        dialog.initOwner(primaryStage);
+        SwingNode swingNode = new SwingNode();
+
+        SwingUtilities.invokeLater(() -> {
+            ChartController chartController = new ChartController();
+            swingNode.setContent(chartController.createChartPanel(resultFilePath));
+        });
+
+        StackPane dialogLayout = new StackPane();
+        dialogLayout.getChildren().add(swingNode);
+
+        Scene dialogScene = new Scene(dialogLayout, 1600, 900);
+        dialog.setScene(dialogScene);
+        dialog.setTitle("Result Charts");
+        dialog.show();
+    }
+
     private void nudgeWindow(Stage stage) {
         double originalX = stage.getX();
         double originalY = stage.getY();
