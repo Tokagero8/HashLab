@@ -22,5 +22,6 @@ public interface UIComponentFactoryInterface {
     Button createRemoveTestButton();
     Button createExportSelectedTestsButton();
     Button createImportTestsButton();
+    Button createLoadCSVFileButton();
     CheckListView<HashTestConfig> createTestCheckListView();
 }

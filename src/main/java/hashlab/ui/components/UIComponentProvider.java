@@ -234,6 +234,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
+    public Button getLoadCSVFileButton() {
+        return uiComponentFactory.getLoadCSVFileButton();
+    }
+
+    @Override
     public CheckListView<HashTestConfig> getTestCheckListView() {
         return uiComponentFactory.getTestCheckListView();
     }

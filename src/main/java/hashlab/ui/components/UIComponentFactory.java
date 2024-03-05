@@ -55,6 +55,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private Button removeTestButton;
     private Button exportSelectedTestsButton;
     private Button importTestsButton;
+    private Button loadCSVFileButton;
     private CheckListView<HashTestConfig> testCheckListView;
 
     @Override
@@ -264,6 +265,12 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     }
 
     @Override
+    public Button createLoadCSVFileButton(){
+        loadCSVFileButton = new Button("Load Results");
+        return loadCSVFileButton;
+    }
+
+    @Override
     public CheckListView<HashTestConfig> createTestCheckListView() {
 
         testCheckListView = new CheckListView<>();
@@ -458,6 +465,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
     public Button getImportTestsButton() {
         return importTestsButton;
+    }
+
+    public Button getLoadCSVFileButton(){
+        return loadCSVFileButton;
     }
 
     public CheckListView<HashTestConfig> getTestCheckListView() {

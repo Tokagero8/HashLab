@@ -36,6 +36,7 @@
                     uiComponentFactory.createRemoveTestButton(),
                     uiComponentFactory.createExportSelectedTestsButton(),
                     uiComponentFactory.createImportTestsButton(),
+                    uiComponentFactory.createLoadCSVFileButton(),
                     uiComponentFactory.createTestCheckListView()
             );
 

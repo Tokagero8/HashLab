@@ -65,9 +65,6 @@ public class HashLabEventHandler {
         Button fileChooserButton = uiComponentProvider.getFileChooserButton();
         fileChooserButton.setOnAction(event -> handleFileChooser());
 
-        CheckListView<HashTestConfig> testCheckListView = uiComponentProvider.getTestCheckListView();
-        testCheckListView.setOnMouseClicked(event -> handleTestCheckList(event));
-
         Button runTestButton = uiComponentProvider.getRunTestButton();
         runTestButton.setOnAction(event -> handleRunTest(uiComponentProvider.getTestCheckListView()));
 
@@ -83,6 +80,11 @@ public class HashLabEventHandler {
         Button importButton = uiComponentProvider.getImportTestsButton();
         importButton.setOnAction(event -> handleImportTests());
 
+        Button loadCSVFileButton = uiComponentProvider.getLoadCSVFileButton();
+        loadCSVFileButton.setOnAction(event -> handleLoadCSVFile());
+
+        CheckListView<HashTestConfig> testCheckListView = uiComponentProvider.getTestCheckListView();
+        testCheckListView.setOnMouseClicked(event -> handleTestCheckList(event));
     }
 
     private void handleTestCheckList(MouseEvent event){
@@ -142,6 +144,18 @@ public class HashLabEventHandler {
             return;
         }
         showHistogram(data);
+    }
+
+    private void handleLoadCSVFile(){
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        File file = fileChooser.showOpenDialog(primaryStage);
+
+        if (file != null) {
+            showChart(file.getAbsolutePath());
+        }
     }
 
     private void updateUIBasedOnSelection(){
