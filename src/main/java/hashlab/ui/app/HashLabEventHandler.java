@@ -96,11 +96,52 @@ public class HashLabEventHandler {
 
     private void showTestDetails(HashTestConfig test) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Test details");
+        alert.setTitle("Test Details");
         alert.setHeaderText(test.getTestName());
         alert.setContentText(test.toString());
 
-        alert.showAndWait();
+        ButtonType buttonUniform = new ButtonType("Uniform Data");
+        ButtonType buttonGaussian = new ButtonType("Gaussian Data");
+        ButtonType buttonExponential = new ButtonType("Exponential Data");
+        ButtonType buttonFileData = new ButtonType("File Data");
+
+
+        if (test.isUniformSelected()) {
+            alert.getButtonTypes().add(buttonUniform);
+        }
+        if (test.isGaussianSelected()) {
+            alert.getButtonTypes().add(buttonGaussian);
+        }
+        if (test.isExponentialSelected()) {
+            alert.getButtonTypes().add(buttonExponential);
+        }
+        if (!test.isDataGenerated()) {
+            alert.getButtonTypes().add(buttonFileData);
+        }
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent()) {
+            if (result.get() == buttonUniform) {
+                checkAndDisplayHistogram(test.getUniformDataString());
+            } else if (result.get() == buttonGaussian) {
+                checkAndDisplayHistogram(test.getGaussianDataString());
+            } else if (result.get() == buttonExponential) {
+                checkAndDisplayHistogram(test.getExponentialDataString());
+            } else if (result.get() == buttonFileData) {
+                if (test.getLoadedDataString() == null || test.getLoadedDataString().isEmpty()) {
+                    test.setLoadedDataString(loadDataFromFile(test.getSelectedFilePath()));
+                }
+                checkAndDisplayHistogram(test.getLoadedDataString());
+            }
+        }
+    }
+
+    private void checkAndDisplayHistogram(String data){
+        if (data == null || data.isEmpty()) {
+            showAlert("Error", "No data available to display.");
+            return;
+        }
+        showHistogram(data);
     }
 
     private void updateUIBasedOnSelection(){
