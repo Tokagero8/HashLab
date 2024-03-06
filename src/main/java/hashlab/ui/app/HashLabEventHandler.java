@@ -53,14 +53,14 @@ public class HashLabEventHandler {
         CheckBox gaussianCheckBox = uiComponentProvider.getGaussianCheckBox();
         gaussianCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateUIBasedOnSelection());
 
-        Button generateGaussainDataButton = uiComponentProvider.getGenerateGaussianDataButton();
-        generateGaussainDataButton.setOnAction(event -> handleGaussianDataGeneration());
+        Button generateGaussianDataButton = uiComponentProvider.getGenerateGaussianDataButton();
+        generateGaussianDataButton.setOnAction(event -> handleGaussianDataGeneration());
 
         CheckBox exponentialCheckBox = uiComponentProvider.getExponentialCheckBox();
         exponentialCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateUIBasedOnSelection());
 
         Button generateExponentialDataButton = uiComponentProvider.getGenerateExponentialDataButton();
-        generateExponentialDataButton.setOnAction(event -> handleExponenialDataGeneration());
+        generateExponentialDataButton.setOnAction(event -> handleExponentialDataGeneration());
 
         Button fileChooserButton = uiComponentProvider.getFileChooserButton();
         fileChooserButton.setOnAction(event -> handleFileChooser());
@@ -209,7 +209,7 @@ public class HashLabEventHandler {
 
     }
 
-    private void handleExponenialDataGeneration(){
+    private void handleExponentialDataGeneration(){
         try{
             String sampleData = DataGenerator.generateExponentialASCIIValue(
                     Double.parseDouble(uiComponentProvider.getLambdaField().getText()),

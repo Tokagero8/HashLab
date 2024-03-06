@@ -3,10 +3,7 @@ package hashlab.ui.app;
 import hashlab.tests.HashTestConfig;
 import hashlab.tests.TestConfigImporterExporter;
 import hashlab.tests.TestManager;
-import hashlab.utils.DataGenerator;
-import hashlab.utils.FileUnils;
-import javafx.application.Platform;
-import javafx.scene.Scene;
+import hashlab.utils.FileUtils;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -52,7 +49,7 @@ public class NewHashLabAppController {
     }
 
     public void showResultChart(String resultFileName){
-        view.showChart(FileUnils.getFilePath(resultFileName));
+        view.showChart(FileUtils.getFilePath(resultFileName));
     }
 
 }

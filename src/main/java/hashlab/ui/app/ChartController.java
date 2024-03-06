@@ -27,7 +27,7 @@ public class ChartController {
     private String resultFilePath;
     private ResultDataConfig resultDataConfig;
     private JPanel filtersPanel;
-    private Map<String, JComboBox<String>> filtersComboboxes = new HashMap<>();
+    private Map<String, JComboBox<String>> filtersComboBoxes = new HashMap<>();
 
     public ChartController(String resultFilePath) {
         this.resultFilePath = resultFilePath;
@@ -96,15 +96,15 @@ public class ChartController {
         comboBox.setSelectedIndex(0);
         panel.add(comboBox);
 
-        filtersComboboxes.put(label, comboBox);
+        filtersComboBoxes.put(label, comboBox);
         filtersPanel.add(panel);
     }
 
     private void applyFilters() {
-        String selectedAlgorithm = (String) filtersComboboxes.get("Algorithm").getSelectedItem();
-        String selectedFunction = (String) filtersComboboxes.get("Function").getSelectedItem();
-        String selectedDataType = (String) filtersComboboxes.get("Data Type").getSelectedItem();
-        String selectedOperation = (String) filtersComboboxes.get("Operation").getSelectedItem();
+        String selectedAlgorithm = (String) filtersComboBoxes.get("Algorithm").getSelectedItem();
+        String selectedFunction = (String) filtersComboBoxes.get("Function").getSelectedItem();
+        String selectedDataType = (String) filtersComboBoxes.get("Data Type").getSelectedItem();
+        String selectedOperation = (String) filtersComboBoxes.get("Operation").getSelectedItem();
 
 
         Stream<ResultDataConfig.TestResult> filteredResults = resultDataConfig.getResults().stream()

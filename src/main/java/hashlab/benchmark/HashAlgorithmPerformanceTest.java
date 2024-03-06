@@ -30,7 +30,7 @@ public class HashAlgorithmPerformanceTest<Key, Value> {
                 testOperation = this::testDelete;
                 break;
             default:
-                throw new IllegalArgumentException("Nieznana operacja: " + operation);
+                throw new IllegalArgumentException("Unknown operation: " + operation);
         }
 
         double duration = measurePerformance(testOperation);

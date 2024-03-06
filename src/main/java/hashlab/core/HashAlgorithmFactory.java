@@ -21,7 +21,7 @@ public class HashAlgorithmFactory {
             case "Separate Chaining":
                 return new SeparateChainingHash<>(size, hashFunction);
             default:
-                throw new IllegalArgumentException("Nieznany typ algorytmu: " + algorithmType);
+                throw new IllegalArgumentException("Unknown algorithm type: " + algorithmType);
         }
     }
 
@@ -34,7 +34,7 @@ public class HashAlgorithmFactory {
             case "SHA256":
                 return new SHA256Hash();
             default:
-                throw new IllegalArgumentException("Nieznany typ funkcji haszującej: " + hashFunctionType);
+                throw new IllegalArgumentException("Unknown type of hash function: " + hashFunctionType);
         }
     }
 }

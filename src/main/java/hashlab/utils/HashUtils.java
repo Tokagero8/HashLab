@@ -8,8 +8,8 @@ public class HashUtils {
     public static String hashWithFunction(String function, String input){
         try {
             MessageDigest digest = MessageDigest.getInstance(function);
-            byte[] encodedhash = digest.digest(input.getBytes());
-            return bytesToHex(encodedhash);
+            byte[] encodedHash = digest.digest(input.getBytes());
+            return bytesToHex(encodedHash);
         } catch (NoSuchAlgorithmException e){
             throw new RuntimeException("Algorithm not found: " + function, e);
         }
