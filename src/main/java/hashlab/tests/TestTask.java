@@ -1,9 +1,9 @@
 package hashlab.tests;
 
 import hashlab.algorithms.collision_resolution.HashAlgorithm;
+import hashlab.algorithms.registry.HashRegistry;
 import hashlab.benchmark.Benchmark;
 import hashlab.benchmark.HashAlgorithmPerformanceTest;
-import hashlab.core.HashAlgorithmFactory;
 import hashlab.utils.DataGenerator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -93,7 +93,7 @@ public class TestTask extends Task<Void> {
     private List<HashAlgorithm<String, Integer>> createHashAlgorithms(HashTestConfig testConfig) {
         List<HashAlgorithm<String, Integer>> algorithms = new ArrayList<>();
         for (String hashFunction : testConfig.getHashFunctions()) {
-            HashAlgorithm<String, Integer> algorithm = HashAlgorithmFactory.createAlgorithm(testConfig.getAlgorithm(), hashFunction, testConfig.getHashTableSize());
+            HashAlgorithm<String, Integer> algorithm = HashRegistry.createAlgorithm(testConfig.getAlgorithm(), hashFunction, testConfig.getHashTableSize());
             algorithms.add(algorithm);
         }
         return algorithms;

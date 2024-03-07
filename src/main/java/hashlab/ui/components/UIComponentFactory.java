@@ -1,5 +1,6 @@
 package hashlab.ui.components;
 
+import hashlab.algorithms.registry.HashRegistry;
 import hashlab.tests.HashTestConfig;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
@@ -61,7 +62,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     @Override
     public TitledPane createHashAlgorithmsPane() {
         algorithmChoice = new ComboBox<>();
-        algorithmChoice.getItems().addAll("BST", "Linear Probing", "Separate Chaining");
+        algorithmChoice.getItems().addAll(HashRegistry.getHashAlgorithms());
 
         hashTableSizeField = new TextField();
         hashTableSizeField.setPromptText("Hash table size");
@@ -79,7 +80,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     @Override
     public TitledPane createHashFunctionsPane() {
         hashFunctionChoice = new CheckListView<>();
-        hashFunctionChoice.getItems().addAll("MD5", "SHA1", "SHA256");
+        hashFunctionChoice.getItems().addAll(HashRegistry.getHashFunctions());
         hashFunctionsPane = new TitledPane("Hash functions", hashFunctionChoice);
         hashFunctionsPane.setCollapsible(false);
 
