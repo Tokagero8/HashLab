@@ -277,7 +277,7 @@ public class HashTestConfig {
                 "Benchmark threshold: " + benchmarkThreshold + "\n" +
                 "Test iterations: " + testIterations + "\n" +
                 "Test threshold: " + testThreshold + "\n" +
-                "Warmup iterations" + warmupIterations;
+                "Warmup iterations: " + warmupIterations;
     }
 
     private String getDataType(){
