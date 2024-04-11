@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 
 public class NewHashLabApp extends Application {
 
-
     @Override
     public void start(Stage primaryStage){
         UIComponentFactory uiComponentFactory = new UIComponentFactory();

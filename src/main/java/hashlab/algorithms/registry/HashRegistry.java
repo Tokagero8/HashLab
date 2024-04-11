@@ -9,7 +9,10 @@ import hashlab.algorithms.hash.MD5Hash;
 import hashlab.algorithms.hash.SHA1Hash;
 import hashlab.algorithms.hash.SHA256Hash;
 
-import java.util.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
