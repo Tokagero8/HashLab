@@ -5,35 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class DataGenerator {
 
-
-    public static double generateUniformValue(double min, double max){
-        return ThreadLocalRandom.current().nextDouble(min, max);
-    }
-
-    public static double[] generateUniformValues(double min, double max, int amount) {
-        double[] values = new double[amount];
-        for (int i = 0; i < amount; i++) {
-            values[i] = ThreadLocalRandom.current().nextDouble(min, max);
-        }
-        return values;
-    }
-
-    public static double[] generateGaussianValues(double mean, double deviation, int amount) {
-        double[] values = new double[amount];
-        for (int i = 0; i < amount; i++) {
-            values[i] = ThreadLocalRandom.current().nextGaussian() * deviation + mean;
-        }
-        return values;
-    }
-
-    public static double[] generateExponentialValues(double lambda, int amount) {
-        double[] values = new double[amount];
-        for (int i = 0; i < amount; i++) {
-            values[i] = Math.log(1 - ThreadLocalRandom.current().nextDouble()) / (-lambda);
-        }
-        return values;
-    }
-
     private static char getRandomCharFromAllowed(boolean[] allowedChars){
         int randomIndex;
         do {

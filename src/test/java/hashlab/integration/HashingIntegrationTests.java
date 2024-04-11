@@ -35,7 +35,7 @@ public class HashingIntegrationTests {
     }
 
     private void testHasingAlgorithmBST(BSTHash<String, Integer> hashAlgorithm){
-        Double key = dataGenerator.generateUniformValue(1, 10);
+        Double key = 123.0;
         int value = 123;
 
         hashAlgorithm.put(key.toString(), value);
@@ -61,7 +61,7 @@ public class HashingIntegrationTests {
     }
 
     private void testHasingAlgorithmLinearProbing(LinearProbingHash<String, Integer> hashAlgorithm){
-        Double key = dataGenerator.generateUniformValue(1, 10);
+        Double key = 123.0;
         int value = 123;
 
         hashAlgorithm.put(key.toString(), value);
@@ -87,7 +87,7 @@ public class HashingIntegrationTests {
     }
 
     private void testHasingAlgorithmSeparateChaining(SeparateChainingHash<String, Integer> hashAlgorithm){
-        Double key = dataGenerator.generateUniformValue(1, 10);
+        Double key = 123.0;
         int value = 123;
 
         hashAlgorithm.put(key.toString(), value);
