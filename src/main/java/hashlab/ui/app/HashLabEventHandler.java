@@ -396,6 +396,7 @@ public class HashLabEventHandler {
                 contentBuilder.append(line).append(System.lineSeparator());
             }
         } catch (IOException e) {
+            showAlert("Error", "Failed to load data from file: " + filePath + ". Please check the file path and try again.");
             e.printStackTrace();
             return "";
         }
@@ -534,8 +535,6 @@ public class HashLabEventHandler {
             showAlert("Error", "Warmup iterations must be a valid integer.");
             return false;
         }
-
-
 
         return true;
     }
