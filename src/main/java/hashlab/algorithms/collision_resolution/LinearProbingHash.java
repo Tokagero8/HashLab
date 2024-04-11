@@ -21,6 +21,9 @@ public class LinearProbingHash<Key, Value> implements HashAlgorithm<Key, Value> 
     }
 
     public void put(Key key, Value val) {
+        if(size == hashTableSize) {
+            throw new RuntimeException("The table is full. Unable to add new item: " + key.toString());
+        }
         int i;
         for (i = hash(key); keys[i] != null; i = (i + 1) % hashTableSize) {
             if (keys[i].equals(key)) {
