@@ -1,49 +1,58 @@
 package hashlab.algorithms.collision_resolution;
 
-import hashlab.algorithms.collision_resolution.LinearProbingHash;
+import hashlab.algorithms.hash.MD5Hash;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LinearProbingHashTest {
 
-    private LinearProbingHash<String, Integer> linearProbingHash;
+    private LinearProbingHash<String, Integer> hashTable;
 
     @BeforeEach
-    void setUp(){
-        linearProbingHash = new LinearProbingHash<>(10, key -> Integer.toString(key.hashCode()));
+    void setUp() {
+        hashTable = new LinearProbingHash<>(5, new MD5Hash());
     }
 
     @Test
-    void putAndGet(){
-        linearProbingHash.put("key1", 100);
-        linearProbingHash.put("key2", 200);
-
-        assertEquals(100, linearProbingHash.get("key1"));
-        assertEquals(200, linearProbingHash.get("key2"));
-        assertNull(linearProbingHash.get("key3"));
+    void putAndGet() {
+        hashTable.put("key1", 1);
+        assertEquals(Integer.valueOf(1), hashTable.get("key1"), "Value for 'key1' should be equal 1.");
     }
 
     @Test
-    void updateValue(){
-        linearProbingHash.put("key1", 100);
-        linearProbingHash.put("key1", 200);
+    void handleCollisions() {
+        hashTable.put("key1", 1);
+        hashTable.put("key2", 2);
+        hashTable.put("key3", 3);
 
-        assertEquals(200, linearProbingHash.get("key1"));
+        assertEquals(Integer.valueOf(2), hashTable.get("key2"), "Value for 'key2' should be equal 2.");
+        assertEquals(Integer.valueOf(3), hashTable.get("key3"), "Value for 'key3' should be equal 3.");
     }
 
     @Test
-    void deleteValue(){
-        linearProbingHash.put("key1", 100);
-        linearProbingHash.put("key2", 200);
+    void delete() {
+        hashTable.put("key1", 1);
+        hashTable.delete("key1");
+        assertNull(hashTable.get("key1"), "After deletion, the value for 'key1' should be null.");
+    }
 
-        assertEquals(100, linearProbingHash.get("key1"));
-        assertEquals(200, linearProbingHash.get("key2"));
+    @Test
+    void reset() {
+        hashTable.put("key1", 1);
+        hashTable.reset();
+        assertNull(hashTable.get("key1"), "After reset, the value for 'key1' should be null.");
+    }
 
-        linearProbingHash.delete("key1");
-        assertNull(linearProbingHash.get("key1"));
-        assertEquals(200, linearProbingHash.get("key2"));
+    @Test
+    void fullTableBehavior() {
+        hashTable.put("key1", 1);
+        hashTable.put("key2", 2);
+        hashTable.put("key3", 3);
+        hashTable.put("key4", 4);
+        hashTable.put("key5", 5);
+        Exception exception = assertThrows(RuntimeException.class, () -> hashTable.put("key6", 6), "Adding an item to the full table should result in an exception.");
+        assertTrue(exception.getMessage().contains("The table is full. Unable to add new item: " + "key6"), "The exception should report the full table.");
     }
 }
