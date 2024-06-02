@@ -1,13 +1,7 @@
 package hashlab.algorithms.registry;
 
-import hashlab.algorithms.collision_resolution.BSTHash;
-import hashlab.algorithms.collision_resolution.HashAlgorithm;
-import hashlab.algorithms.collision_resolution.LinearProbingHash;
-import hashlab.algorithms.collision_resolution.SeparateChainingHash;
-import hashlab.algorithms.hash.HashFunction;
-import hashlab.algorithms.hash.MD5Hash;
-import hashlab.algorithms.hash.SHA1Hash;
-import hashlab.algorithms.hash.SHA256Hash;
+import hashlab.algorithms.collision_resolution.*;
+import hashlab.algorithms.hash.*;
 
 
 import java.util.HashMap;
@@ -24,10 +18,12 @@ public class HashRegistry {
         registerHashAlgorithm("BST", BSTHash::new);
         registerHashAlgorithm("Linear Probing", LinearProbingHash::new);
         registerHashAlgorithm("Separate Chaining", SeparateChainingHash::new);
+        registerHashAlgorithm("Quadratic Probing", QuadraticProbingHash::new);
 
         registerHashFunction("MD5", v -> new MD5Hash());
         registerHashFunction("SHA1",  v -> new SHA1Hash());
         registerHashFunction("SHA256", v -> new SHA256Hash());
+        registerHashFunction("Jenkins Hash", v-> new JenkinsHash());
     }
 
     public static void registerHashAlgorithm(String algorithm, BiFunction<Integer, HashFunction, HashAlgorithm<String, Integer>> creator) {
