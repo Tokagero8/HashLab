@@ -18,137 +18,229 @@ public class HashTestConfigTest {
     }
 
     @Test
-    void testToString() {
-        HashTestConfig config = new HashTestConfig();
-
+    void testId() {
         config.setId("testId");
-        config.setTestName("SampleTest");
-        config.setAlgorithm("SHA-256");
+        assertEquals("testId", config.getId(), "Id should be 'testId'");
+    }
+
+    @Test
+    void testTestName() {
+        config.setTestName("testName");
+        assertEquals("testName", config.getTestName(), "Test name should be 'testName'");
+    }
+
+    @Test
+    void testAlgorithm() {
+        config.setAlgorithm("BST");
+        assertEquals("BST", config.getAlgorithm(), "Algorithm should be 'BST'");
+    }
+
+    @Test
+    void testHashTableSize() {
         config.setHashTableSize(100);
-        config.setChunkSize(5);
+        assertEquals(100, config.getHashTableSize(), "Hash table size should be 100");
+    }
+
+    @Test
+    void testChunkSize() {
+        config.setChunkSize(10);
+        assertEquals(10, config.getChunkSize(), "Chunk size should be 10");
+    }
+
+    @Test
+    void testHashFunctions() {
+        List<String> hashFunctions = Arrays.asList("MD5", "SHA1");
+        config.setHashFunctions(hashFunctions);
+        assertEquals(hashFunctions, config.getHashFunctions(), "Hash functions should match the set list");
+    }
+
+    @Test
+    void testPutSelected() {
+        config.setPutSelected(true);
+        assertTrue(config.isPutSelected(), "Put selected should be true");
+    }
+
+    @Test
+    void testGetSelected() {
+        config.setGetSelected(true);
+        assertTrue(config.isGetSelected(), "Get selected should be true");
+    }
+
+    @Test
+    void testDeleteSelected() {
+        config.setDeleteSelected(true);
+        assertTrue(config.isDeleteSelected(), "Delete selected should be true");
+    }
+
+    @Test
+    void testDataGenerated() {
+        config.setDataGenerated(true);
+        assertTrue(config.isDataGenerated(), "Data generated should be true");
+    }
+
+    @Test
+    void testGeneratedOnAdd() {
+        config.setGeneratedOnAdd(true);
+        assertTrue(config.isGeneratedOnAdd(), "Generated on add should be true");
+    }
+
+    @Test
+    void testSelectedFilePath() {
+        config.setSelectedFilePath("path/to/file");
+        assertEquals("path/to/file", config.getSelectedFilePath(), "Selected file path should be 'path/to/file'");
+    }
+
+    @Test
+    void testLoadedOnAdd() {
+        config.setLoadedOnAdd(true);
+        assertTrue(config.isLoadedOnAdd(), "Loaded on add should be true");
+    }
+
+    @Test
+    void testDataSize() {
+        config.setDataSize(1000);
+        assertEquals(1000, config.getDataSize(), "Data size should be 1000");
+    }
+
+    @Test
+    void testUniformSelected() {
+        config.setUniformSelected(true);
+        assertTrue(config.isUniformSelected(), "Uniform selected should be true");
+    }
+
+    @Test
+    void testGaussianSelected() {
+        config.setGaussianSelected(true);
+        assertTrue(config.isGaussianSelected(), "Gaussian selected should be true");
+    }
+
+    @Test
+    void testExponentialSelected() {
+        config.setExponentialSelected(true);
+        assertTrue(config.isExponentialSelected(), "Exponential selected should be true");
+    }
+
+    @Test
+    void testMean() {
+        config.setMean(5.0);
+        assertEquals(5.0, config.getMean(), "Mean should be 5.0");
+    }
+
+    @Test
+    void testDeviation() {
+        config.setDeviation(1.0);
+        assertEquals(1.0, config.getDeviation(), "Deviation should be 1.0");
+    }
+
+    @Test
+    void testLambda() {
+        config.setLambda(0.5);
+        assertEquals(0.5, config.getLambda(), "Lambda should be 0.5");
+    }
+
+    @Test
+    void testUniformDataString() {
+        config.setUniformDataString("uniformData");
+        assertEquals("uniformData", config.getUniformDataString(), "Uniform data string should be 'uniformData'");
+    }
+
+    @Test
+    void testGaussianDataString() {
+        config.setGaussianDataString("gaussianData");
+        assertEquals("gaussianData", config.getGaussianDataString(), "Gaussian data string should be 'gaussianData'");
+    }
+
+    @Test
+    void testExponentialDataString() {
+        config.setExponentialDataString("exponentialData");
+        assertEquals("exponentialData", config.getExponentialDataString(), "Exponential data string should be 'exponentialData'");
+    }
+
+    @Test
+    void testLoadedDataString() {
+        config.setLoadedDataString("loadedData");
+        assertEquals("loadedData", config.getLoadedDataString(), "Loaded data string should be 'loadedData'");
+    }
+
+    @Test
+    void testBenchmarkIterations() {
+        config.setBenchmarkIterations(10);
+        assertEquals(10, config.getBenchmarkIterations(), "Benchmark iterations should be 10");
+    }
+
+    @Test
+    void testBenchmarkThreshold() {
+        config.setBenchmarkThreshold(0.1);
+        assertEquals(0.1, config.getBenchmarkThreshold(), "Benchmark threshold should be 0.1");
+    }
+
+    @Test
+    void testTestIterations() {
+        config.setTestIterations(20);
+        assertEquals(20, config.getTestIterations(), "Test iterations should be 20");
+    }
+
+    @Test
+    void testTestThreshold() {
+        config.setTestThreshold(0.2);
+        assertEquals(0.2, config.getTestThreshold(), "Test threshold should be 0.2");
+    }
+
+    @Test
+    void testWarmupIterations() {
+        config.setWarmupIterations(5);
+        assertEquals(5, config.getWarmupIterations(), "Warmup iterations should be 5");
+    }
+
+    @Test
+    void testToString() {
+        config.setId("testId");
+        config.setTestName("testName");
+        config.setAlgorithm("BST");
+        config.setHashTableSize(100);
+        config.setChunkSize(10);
         config.setHashFunctions(Arrays.asList("MD5", "SHA1"));
         config.setPutSelected(true);
-        config.setGetSelected(false);
+        config.setGetSelected(true);
         config.setDeleteSelected(true);
         config.setDataGenerated(true);
         config.setGeneratedOnAdd(true);
-        config.setSelectedFilePath("path/to/data");
-        config.setLoadedOnAdd(false);
-        config.setDataSize(200);
+        config.setSelectedFilePath("path/to/file");
+        config.setLoadedOnAdd(true);
+        config.setDataSize(1000);
         config.setUniformSelected(true);
         config.setGaussianSelected(true);
-        config.setExponentialSelected(false);
-        config.setMean(0.0);
-        config.setDeviation(1.0);
-        config.setBenchmarkIterations(10);
-        config.setBenchmarkThreshold(0.01);
-        config.setTestIterations(5);
-        config.setTestThreshold(0.005);
-        config.setWarmupIterations(2);
-
-        String expected = "Id: testId\n" +
-                "Test name: SampleTest\n" +
-                "Algorithm: SHA-256\n" +
-                "Hash Table Size: 100\n" +
-                "Chunk Size: 5\n" +
-                "Hash functions: [MD5, SHA1]\n" +
-                "Operations: Put Delete\n" +
-                "Data type: Generated on a test add\n" +
-                "Data Size: 200\n" +
-                "Data generation methods: Uniform Gaussian\n" +
-                "Data generation parameters: Mean: 0.0, Deviation: 1.0;\n" +
-                "Number of benchmark iterations: 10\n" +
-                "Benchmark threshold: 0.01\n" +
-                "Test iterations: 5\n" +
-                "Test threshold: 0.005\n" +
-                "Warmup iterations: 2";
-
-        assertEquals(expected, config.toString().trim(), "The toString method should return the expected string representation.");
-    }
-
-
-    @Test
-    void testGettersAndSetters() {
-        HashTestConfig config = new HashTestConfig();
-
-        String id = "testId";
-        config.setId(id);
-        String testName = "MyTest";
-        config.setTestName(testName);
-        String algorithm = "SHA256";
-        config.setAlgorithm(algorithm);
-        int hashTableSize = 100;
-        config.setHashTableSize(hashTableSize);
-        int chunkSize = 10;
-        config.setChunkSize(chunkSize);
-        List<String> hashFunctions = Arrays.asList("MD5", "SHA1");
-        config.setHashFunctions(hashFunctions);
-        config.setPutSelected(true);
-        config.setGetSelected(true);
-        config.setDeleteSelected(false);
-        config.setDataGenerated(true);
-        config.setGeneratedOnAdd(true);
-        String selectedFilePath = "/path/to/file";
-        config.setSelectedFilePath(selectedFilePath);
-        config.setLoadedOnAdd(false);
-        int dataSize = 1000;
-        config.setDataSize(dataSize);
-        config.setUniformSelected(true);
-        config.setGaussianSelected(false);
         config.setExponentialSelected(true);
-        double mean = 0.0;
-        config.setMean(mean);
-        double deviation = 1.0;
-        config.setDeviation(deviation);
-        double lambda = 0.5;
-        config.setLambda(lambda);
-        String uniformDataString = "uniformData";
-        config.setUniformDataString(uniformDataString);
-        String gaussianDataString = "gaussianData";
-        config.setGaussianDataString(gaussianDataString);
-        String exponentialDataString = "exponentialData";
-        config.setExponentialDataString(exponentialDataString);
-        String loadedDataString = "loadedData";
-        config.setLoadedDataString(loadedDataString);
-        int benchmarkIterations = 10;
-        config.setBenchmarkIterations(benchmarkIterations);
-        double benchmarkThreshold = 0.01;
-        config.setBenchmarkThreshold(benchmarkThreshold);
-        int testIterations = 5;
-        config.setTestIterations(testIterations);
-        double testThreshold = 0.01;
-        config.setTestThreshold(testThreshold);
-        int warmupIterations = 2;
-        config.setWarmupIterations(warmupIterations);
+        config.setMean(5.0);
+        config.setDeviation(1.0);
+        config.setLambda(0.5);
+        config.setUniformDataString("uniformData");
+        config.setGaussianDataString("gaussianData");
+        config.setExponentialDataString("exponentialData");
+        config.setLoadedDataString("loadedData");
+        config.setBenchmarkIterations(10);
+        config.setBenchmarkThreshold(0.1);
+        config.setTestIterations(20);
+        config.setTestThreshold(0.2);
+        config.setWarmupIterations(5);
 
-        assertEquals("testId", config.getId(), "ID should match the set value.");
-        assertEquals("MyTest", config.getTestName(), "Test name should match the set value.");
-        assertEquals("SHA256", config.getAlgorithm(), "Algorithm should match the set value.");
-        assertEquals(100, config.getHashTableSize(), "Hash table size should match the set value.");
-        assertEquals(10, config.getChunkSize(), "Chunk size should match the set value.");
-        assertEquals(Arrays.asList("MD5", "SHA1"), config.getHashFunctions(), "Hash functions list should match the set value.");
-        assertTrue(config.isPutSelected(), "Put operation selection should be true.");
-        assertTrue(config.isGetSelected(), "Get operation selection should be true.");
-        assertFalse(config.isDeleteSelected(), "Delete operation selection should be false.");
-        assertTrue(config.isDataGenerated(), "Data generation flag should be true.");
-        assertTrue(config.isGeneratedOnAdd(), "Generated on add flag should be true.");
-        assertEquals("/path/to/file", config.getSelectedFilePath(), "Selected file path should match the set value.");
-        assertFalse(config.isLoadedOnAdd(), "Loaded on add flag should be false.");
-        assertEquals(1000, config.getDataSize(), "Data size should match the set value.");
-        assertTrue(config.isUniformSelected(), "Uniform data selection should be true.");
-        assertFalse(config.isGaussianSelected(), "Gaussian data selection should be false.");
-        assertTrue(config.isExponentialSelected(), "Exponential data selection should be true.");
-        assertEquals(0.0, config.getMean(), 0.01, "Mean value should match the set value.");
-        assertEquals(1.0, config.getDeviation(), 0.01, "Deviation value should match the set value.");
-        assertEquals(0.5, config.getLambda(), 0.01, "Lambda value should match the set value.");
-        assertEquals("uniformData", config.getUniformDataString(), "Uniform data string should match the set value.");
-        assertEquals("gaussianData", config.getGaussianDataString(), "Gaussian data string should match the set value.");
-        assertEquals("exponentialData", config.getExponentialDataString(), "Exponential data string should match the set value.");
-        assertEquals("loadedData", config.getLoadedDataString(), "Loaded data string should match the set value.");
-        assertEquals(10, config.getBenchmarkIterations(), "Benchmark iterations should match the set value.");
-        assertEquals(0.01, config.getBenchmarkThreshold(), 0.001, "Benchmark threshold should match the set value.");
-        assertEquals(5, config.getTestIterations(), "Test iterations should match the set value.");
-        assertEquals(0.01, config.getTestThreshold(), 0.001, "Test threshold should match the set value.");
-        assertEquals(2, config.getWarmupIterations(), "Warmup iterations should match the set value.");
+        String expectedString = "Id: testId\n" +
+                "Test name: testName\n" +
+                "Algorithm: BST\n" +
+                "Hash Table Size: 100\n" +
+                "Chunk Size: 10\n" +
+                "Hash functions: [MD5, SHA1]\n" +
+                "Operations: Put Get Delete\n" +
+                "Data type: Generated on a test add\n" +
+                "Data Size: 1000\n" +
+                "Data generation methods: Uniform Gaussian Exponential\n" +
+                "Data generation parameters: Mean: 5.0, Deviation: 1.0; Lambda: 0.5\n" +
+                "Number of benchmark iterations: 10\n" +
+                "Benchmark threshold: 0.1\n" +
+                "Test iterations: 20\n" +
+                "Test threshold: 0.2\n" +
+                "Warmup iterations: 5";
+
+        assertEquals(expectedString, config.toString(), "toString output should match the expected string");
     }
 }

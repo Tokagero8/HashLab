@@ -2,6 +2,8 @@ package hashlab.utils;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,6 +52,57 @@ public class DataGeneratorTest {
         allowedChars['C'] = true;
         String result = DataGenerator.generateExponentialASCIIValue(allowedChars, 0.5, 50);
         assertTrue(result.matches("C+"), "Generated string should only contain 'C'.");
+    }
+
+    @Test
+    void testUniformASCIIValueWithMixedAllowedChars() {
+        boolean[] allowedChars = new boolean[128];
+        allowedChars['A'] = true;
+        allowedChars['B'] = true;
+        String result = DataGenerator.generateUniformASCIIValue(allowedChars, 50);
+        assertTrue(result.matches("[AB]+"), "Generated string should only contain 'A' and 'B'.");
+    }
+
+    @Test
+    void testGaussianASCIIValueWithMixedAllowedChars() {
+        boolean[] allowedChars = new boolean[128];
+        allowedChars['A'] = true;
+        allowedChars['B'] = true;
+        String result = DataGenerator.generateGaussianASCIIValue(allowedChars, 64, 20, 50);
+        assertTrue(result.matches("[AB]+"), "Generated string should only contain 'A' and 'B'.");
+    }
+
+    @Test
+    void testExponentialASCIIValueWithMixedAllowedChars() {
+        boolean[] allowedChars = new boolean[128];
+        allowedChars['A'] = true;
+        allowedChars['B'] = true;
+        String result = DataGenerator.generateExponentialASCIIValue(allowedChars, 0.5, 50);
+        assertTrue(result.matches("[AB]+"), "Generated string should only contain 'A' and 'B'.");
+    }
+
+    @Test
+    void testUniformASCIIValueWithAllAllowedChars() {
+        boolean[] allowedChars = new boolean[128];
+        Arrays.fill(allowedChars, true);
+        String result = DataGenerator.generateUniformASCIIValue(allowedChars, 50);
+        assertEquals(50, result.length(), "Generated string should have the correct length.");
+    }
+
+    @Test
+    void testGaussianASCIIValueWithAllAllowedChars() {
+        boolean[] allowedChars = new boolean[128];
+        Arrays.fill(allowedChars, true);
+        String result = DataGenerator.generateGaussianASCIIValue(allowedChars, 64, 20, 50);
+        assertEquals(50, result.length(), "Generated string should have the correct length.");
+    }
+
+    @Test
+    void testExponentialASCIIValueWithAllAllowedChars() {
+        boolean[] allowedChars = new boolean[128];
+        Arrays.fill(allowedChars, true);
+        String result = DataGenerator.generateExponentialASCIIValue(allowedChars, 0.5, 50);
+        assertEquals(50, result.length(), "Generated string should have the correct length.");
     }
 
 }

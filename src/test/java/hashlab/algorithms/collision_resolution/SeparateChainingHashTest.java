@@ -38,10 +38,27 @@ public class SeparateChainingHashTest {
     }
 
     @Test
+    void updateValue() {
+        hashTable.put("key1", 1);
+        hashTable.put("key1", 2);
+        assertEquals(Integer.valueOf(2), hashTable.get("key1"), "The value for 'key1' should be updated to 2.");
+    }
+
+    @Test
+    void retrieveNonExistentKey() {
+        assertNull(hashTable.get("nonexistent"), "The value for a non-existent key should be null.");
+    }
+
+    @Test
     void delete() {
         hashTable.put("key1", 1);
         hashTable.delete("key1");
         assertNull(hashTable.get("key1"), "After deletion, the value for 'key1' should be null.");
+    }
+
+    @Test
+    void deleteNonExistentKey() {
+        hashTable.delete("nonexistent"); // Should not throw any exception
     }
 
     @Test
@@ -50,6 +67,35 @@ public class SeparateChainingHashTest {
         assertNotNull(hashTable.get("key1"));
         hashTable.reset();
         assertNull(hashTable.get("key1"), "The table should be empty after the reset.");
+    }
+
+    @Test
+    void handleMultipleCollisions() {
+        hashTable.put("key1", 1);
+        hashTable.put("key2", 2);
+        hashTable.put("key3", 3);
+
+        assertEquals(Integer.valueOf(1), hashTable.get("key1"), "The value for 'key1' should be 1.");
+        assertEquals(Integer.valueOf(2), hashTable.get("key2"), "The value for 'key2' should be 2.");
+        assertEquals(Integer.valueOf(3), hashTable.get("key3"), "The value for 'key3' should be 3.");
+    }
+
+    @Test
+    void extensiveOperations() {
+        hashTable.put("key1", 1);
+        hashTable.put("key2", 2);
+        assertEquals(Integer.valueOf(1), hashTable.get("key1"), "The value for 'key1' should be 1.");
+        assertEquals(Integer.valueOf(2), hashTable.get("key2"), "The value for 'key2' should be 2.");
+
+        hashTable.delete("key1");
+        assertNull(hashTable.get("key1"), "After deletion, the value for 'key1' should be null.");
+
+        hashTable.put("key1", 3);
+        assertEquals(Integer.valueOf(3), hashTable.get("key1"), "The value for 'key1' should be 3.");
+
+        hashTable.reset();
+        assertNull(hashTable.get("key1"), "After the reset, the hash table should be empty.");
+        assertNull(hashTable.get("key2"), "After the reset, the hash table should be empty.");
     }
 
 }
