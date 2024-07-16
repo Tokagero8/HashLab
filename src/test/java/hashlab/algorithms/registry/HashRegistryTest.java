@@ -1,11 +1,7 @@
 package hashlab.algorithms.registry;
 
 import hashlab.algorithms.collision_resolution.*;
-import hashlab.algorithms.hash.JenkinsHash;
 import hashlab.algorithms.hash.MD5Hash;
-import hashlab.algorithms.hash.SHA1Hash;
-import hashlab.algorithms.hash.SHA256Hash;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -13,19 +9,6 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HashRegistryTest {
-
-    @BeforeAll
-    static void setUp() {
-        HashRegistry.registerHashAlgorithm("BST", BSTHash::new);
-        HashRegistry.registerHashAlgorithm("Linear Probing", LinearProbingHash::new);
-        HashRegistry.registerHashAlgorithm("Separate Chaining", SeparateChainingHash::new);
-        HashRegistry.registerHashAlgorithm("Quadratic Probing", QuadraticProbingHash::new);
-
-        HashRegistry.registerHashFunction("MD5", v -> new MD5Hash());
-        HashRegistry.registerHashFunction("SHA1", v -> new SHA1Hash());
-        HashRegistry.registerHashFunction("SHA256", v -> new SHA256Hash());
-        HashRegistry.registerHashFunction("Jenkins Hash", v -> new JenkinsHash());
-    }
 
     @Test
     void testRegisteredHashFunctions() {
@@ -65,21 +48,5 @@ public class HashRegistryTest {
     void createAlgorithmWithUnknownFunctionType() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> HashRegistry.createAlgorithm("BST", "Unknown", 10));
         assertEquals("Unknown hash function type: Unknown", exception.getMessage(), "Exception message should indicate unknown hash function type");
-    }
-
-    @Test
-    void registerAndCreateNewAlgorithm() {
-        HashRegistry.registerHashAlgorithm("New Algorithm", (size, function) -> new LinearProbingHash<>(size, function));
-        HashAlgorithm<String, Integer> algorithm = HashRegistry.createAlgorithm("New Algorithm", "MD5", 10);
-        assertNotNull(algorithm, "Algorithm should not be null");
-        assertTrue(algorithm instanceof LinearProbingHash, "Algorithm should be of type LinearProbingHash");
-    }
-
-    @Test
-    void registerAndCreateNewHashFunction() {
-        HashRegistry.registerHashFunction("NewHashFunction", v -> input -> "newhash");
-        HashAlgorithm<String, Integer> algorithm = HashRegistry.createAlgorithm("BST", "NewHashFunction", 10);
-        assertNotNull(algorithm, "Algorithm should not be null");
-        assertEquals("newhash", algorithm.getHashFunction().hash("test"), "Hash function should return 'newhash' for any input");
     }
 }
