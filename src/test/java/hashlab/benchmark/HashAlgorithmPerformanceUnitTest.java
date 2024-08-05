@@ -42,7 +42,6 @@ public class HashAlgorithmPerformanceUnitTest {
 
     @Test
     void testDeleteOperationPerformance() {
-        // Populate the algorithm first to ensure delete operations have data to remove
         for (int i = 0; i < testKeys.length; i++) {
             algorithm.put(testKeys[i], testValues[i]);
         }
@@ -81,7 +80,7 @@ public class HashAlgorithmPerformanceUnitTest {
         double putResult = singleTest.runTest("put", baseline);
         assertTrue(putResult > 0, "Performance ratio for 'put' with single element arrays should be greater than 0");
 
-        algorithm.put(singleKey[0], singleValue[0]);  // Ensure there is data for get and delete
+        algorithm.put(singleKey[0], singleValue[0]);
         double getResult = singleTest.runTest("get", baseline);
         assertTrue(getResult > 0, "Performance ratio for 'get' with single element arrays should be greater than 0");
 
@@ -104,7 +103,7 @@ public class HashAlgorithmPerformanceUnitTest {
         assertTrue(putResult > 0, "Performance ratio for 'put' with large data should be greater than 0");
 
         for (int i = 0; i < largeSize; i++) {
-            algorithm.put(largeKeys[i], largeValues[i]);  // Ensure there is data for get and delete
+            algorithm.put(largeKeys[i], largeValues[i]);
         }
         double getResult = largeTest.runTest("get", baseline);
         assertTrue(getResult > 0, "Performance ratio for 'get' with large data should be greater than 0");

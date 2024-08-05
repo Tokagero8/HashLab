@@ -7,6 +7,9 @@ public class Benchmark {
     }
 
     public static double calculateBaseline(int iterations, double threshold){
+        if (iterations < 0) {
+            throw new IllegalArgumentException("Negative iterations: " + iterations);
+        }
         double previousAverage = 0;
         double total = 0;
 

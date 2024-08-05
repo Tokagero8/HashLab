@@ -109,7 +109,6 @@ public class HashLabAppIntegrationTest {
             hashLabUIBuilder.buildUI(primaryStage);
             eventHandler.attachEventHandlers();
 
-            // Simulate user input
             uiComponentFactory.getAlgorithmChoice().setValue("BST");
             uiComponentFactory.getHashFunctionChoice().getCheckModel().check("MD5");
             uiComponentFactory.getPutCheckbox().setSelected(true);
@@ -121,10 +120,8 @@ public class HashLabAppIntegrationTest {
             uiComponentFactory.getTestThresholdField().setText("0.1");
             uiComponentFactory.getWarmupIterationsField().setText("5");
 
-            // Add test
             uiComponentFactory.getAddTestButton().fire();
 
-            // Verify the test is added
             assertEquals(1, testsList.getTestsList().size(), "There should be one test in the tests list");
             HashTestConfig addedTest = testsList.getTestsList().get(0);
             assertEquals("BST", addedTest.getAlgorithm(), "Algorithm should be BST");
@@ -143,15 +140,12 @@ public class HashLabAppIntegrationTest {
             hashLabUIBuilder.buildUI(primaryStage);
             eventHandler.attachEventHandlers();
 
-            // Simulate data generation action
             uiComponentFactory.getGenerateDataRadio().setSelected(true);
             uiComponentFactory.getUniformCheckBox().setSelected(true);
             uiComponentFactory.getDataSizeField().setText("50");
 
-            // Generate uniform data
             uiComponentFactory.getGenerateUniformDataButton().fire();
 
-            // Verify uniform data generation
             String sampleData = DataGenerator.generateUniformASCIIValue(50);
             assertNotNull(sampleData, "Sample data should not be null");
             assertEquals(50, sampleData.length(), "Sample data should have correct length");

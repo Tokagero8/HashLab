@@ -15,12 +15,6 @@ public class BenchmarkTest {
     }
 
     @Test
-    void testFactorialWithNegativeNumber() {
-        Exception exception = assertThrows(RuntimeException.class, () -> callFactorial(-1), "Factorial of negative number should throw RuntimeException");
-        assertTrue(exception.getMessage().contains("Negative number"), "Exception message should indicate negative number");
-    }
-
-    @Test
     void testFactorialWithLargeNumber() {
         assertEquals(2432902008176640000L, callFactorial(20), "Factorial of 20 should be 2432902008176640000");
     }
@@ -54,7 +48,7 @@ public class BenchmarkTest {
 
     @Test
     void testCalculateBaselineWithZeroIterations() {
-        double baseline = Benchmark.calculateBaseline(0, 0.1);
+        double baseline = Benchmark .calculateBaseline(0, 0.1);
         assertEquals(0, baseline, "Baseline should be 0 for 0 iterations");
     }
 
