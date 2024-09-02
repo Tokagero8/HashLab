@@ -421,6 +421,17 @@ public class HashLabEventHandler {
             return false;
         }
 
+        try{
+            int chunkSize = Integer.parseInt(uiComponentProvider.getChunkSizeField().getText());
+            if (chunkSize <= 0) {
+                showAlert("Error", "Chunk size must be a greater than 0.");
+                return false;
+            }
+        } catch(NumberFormatException e) {
+            showAlert("Error", "Chunk size must be a valid integer.");
+            return false;
+        }
+
         if (uiComponentProvider.getHashFunctionChoice().getCheckModel().getCheckedItems().isEmpty()) {
             showAlert("Error", "Please select at least one hash function.");
             return false;
@@ -521,7 +532,7 @@ public class HashLabEventHandler {
         try {
             Double.parseDouble(uiComponentProvider.getTestThresholdField().getText());
         } catch (NumberFormatException e) {
-            showAlert("Error", "Benchmark threshold must be a valid number.");
+            showAlert("Error", "Test threshold must be a valid number.");
             return false;
         }
 
