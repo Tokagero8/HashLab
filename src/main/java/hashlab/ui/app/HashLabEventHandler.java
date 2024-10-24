@@ -442,11 +442,6 @@ public class HashLabEventHandler {
             return false;
         }
 
-        if (!(uiComponentProvider.getPutCheckbox().isSelected())){
-            showAlert("Error", "Operation PUT must be selected.");
-            return false;
-        }
-
         if (!uiComponentProvider.getGenerateDataRadio().isSelected() && !uiComponentProvider.getLoadDataRadio().isSelected()) {
             showAlert("Error", "Please select a data generation method or choose to load data from a file.");
             return false;
