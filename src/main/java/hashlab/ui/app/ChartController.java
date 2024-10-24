@@ -129,7 +129,7 @@ public class ChartController {
         JFreeChart chart = ChartFactory.createXYLineChart(
                 "Filtered Results",
                 "Table Size",
-                "Execution Time (ms)",
+                "Normalized Performance Score",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true,
