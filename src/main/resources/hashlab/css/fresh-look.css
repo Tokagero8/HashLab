@@ -119,3 +119,23 @@
 .scroll-bar .increment-button, .scroll-bar .decrement-button {
     -fx-background-color: transparent;
 }
+
+.text-field-default {
+    -fx-border-color: #DDDDDD;
+    -fx-border-width: 2px;
+}
+
+.text-field-green {
+    -fx-border-color: #4CCF50;
+    -fx-border-width: 2px;
+}
+
+.text-field-blue {
+    -fx-border-color: #64B5F6;
+    -fx-border-width: 2px;
+}
+
+.text-field-red {
+    -fx-border-color: #F57373;
+    -fx-border-width: 2px;
+}

@@ -5,6 +5,7 @@ import hashlab.ui.components.TestsListInterface;
 import hashlab.ui.components.UIComponentProviderInterface;
 import hashlab.utils.DataGenerator;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -38,32 +39,88 @@ public class HashLabEventHandler {
     }
 
     public void attachEventHandlers() {
+        ComboBox<String> algorithmChoiceComboBox = uiComponentProvider.getAlgorithmChoice();
+        monitorChanges(algorithmChoiceComboBox);
+
+        TextField hashTableSizeField = uiComponentProvider.getHashTableSizeField();
+        monitorChanges(hashTableSizeField, "^[1-9]\\d*$");
+
+        TextField chunkSizeField = uiComponentProvider.getChunkSizeField();
+        monitorChanges(chunkSizeField, "^[1-9]\\d*$");
+
+        TextField dataSizeField = uiComponentProvider.getDataSizeField();
+        monitorChanges(dataSizeField, "^[1-9]\\d*$");
+
+        CheckListView<String> hashFunctionCheckListView = uiComponentProvider.getHashFunctionChoice();
+        monitorChanges(hashFunctionCheckListView);
+
+        CheckBox putCheckBox = uiComponentProvider.getPutCheckbox();
+        monitorChanges(putCheckBox);
+
+        CheckBox getCheckBox = uiComponentProvider.getGetCheckbox();
+        monitorChanges(getCheckBox);
+
+        CheckBox deleteCheckBox = uiComponentProvider.getDeleteCheckbox();
+        monitorChanges(deleteCheckBox);
+
         RadioButton generateDataRadio = uiComponentProvider.getGenerateDataRadio();
         generateDataRadio.selectedProperty().addListener((observable, oldValue, newValue) -> updateUIBasedOnSelection());
+        monitorChanges(generateDataRadio);
 
         RadioButton loadDataRadio = uiComponentProvider.getLoadDataRadio();
         loadDataRadio.selectedProperty().addListener((observable, oldValue, newValue) -> updateUIBasedOnSelection());
+        monitorChanges(loadDataRadio);
 
         CheckBox uniformCheckBox = uiComponentProvider.getUniformCheckBox();
         uniformCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateUIBasedOnSelection());
+        monitorChanges(uniformCheckBox);
 
         Button generateUniformDataButton = uiComponentProvider.getGenerateUniformDataButton();
         generateUniformDataButton.setOnAction(event -> handleUniformDataGeneration());
 
         CheckBox gaussianCheckBox = uiComponentProvider.getGaussianCheckBox();
         gaussianCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateUIBasedOnSelection());
+        monitorChanges(gaussianCheckBox);
+
+        TextField meanField = uiComponentProvider.getMeanField();
+        monitorChanges(meanField, "^-?\\d+(\\.\\d+)?$");
+
+        TextField deviationField = uiComponentProvider.getDeviationField();
+        monitorChanges(deviationField, "^(?:[1-9]\\d*|0\\.\\d+|\\d+\\.\\d+)$");
 
         Button generateGaussianDataButton = uiComponentProvider.getGenerateGaussianDataButton();
         generateGaussianDataButton.setOnAction(event -> handleGaussianDataGeneration());
 
         CheckBox exponentialCheckBox = uiComponentProvider.getExponentialCheckBox();
         exponentialCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateUIBasedOnSelection());
+        monitorChanges(exponentialCheckBox);
+
+        TextField lambdaField = uiComponentProvider.getLambdaField();
+        monitorChanges(lambdaField, "^(?:[1-9]\\d*|0\\.\\d+|\\d+\\.\\d+)$");
 
         Button generateExponentialDataButton = uiComponentProvider.getGenerateExponentialDataButton();
         generateExponentialDataButton.setOnAction(event -> handleExponentialDataGeneration());
 
         Button fileChooserButton = uiComponentProvider.getFileChooserButton();
         fileChooserButton.setOnAction(event -> handleFileChooser());
+
+        TextField filePathField = uiComponentProvider.getFilePathField();
+        monitorChanges(filePathField, "^.+$");
+
+        TextField benchmarkIterationsField = uiComponentProvider.getBenchmarkIterationsField();
+        monitorChanges(benchmarkIterationsField, "^[1-9]\\d*$");
+
+        TextField benchmarkThresholdField = uiComponentProvider.getBenchmarkThresholdField();
+        monitorChanges(benchmarkThresholdField, "^(?:[1-9]\\d*|0\\.\\d+|\\d+\\.\\d+)$");
+
+        TextField testIterationsField = uiComponentProvider.getTestIterationsField();
+        monitorChanges(testIterationsField, "^[1-9]\\d*$");
+
+        TextField testThresholdField = uiComponentProvider.getTestThresholdField();
+        monitorChanges(testThresholdField, "^(?:[1-9]\\d*|0\\.\\d+|\\d+\\.\\d+)$");
+
+        TextField warmupIterationsField = uiComponentProvider.getWarmupIterationsField();
+        monitorChanges(warmupIterationsField, "^[0-9]\\d*$");
 
         Button runTestButton = uiComponentProvider.getRunTestButton();
         runTestButton.setOnAction(event -> handleRunTest(uiComponentProvider.getTestCheckListView()));
@@ -85,6 +142,122 @@ public class HashLabEventHandler {
 
         CheckListView<HashTestConfig> testCheckListView = uiComponentProvider.getTestCheckListView();
         testCheckListView.setOnMouseClicked(event -> handleTestCheckList(event));
+    }
+
+    private void monitorChanges(TextField textField, String validPattern){
+        textField.getStyleClass().add("text-field-default");
+
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.matches(validPattern)) {
+                if (!newValue.equals(oldValue)) {
+                    textField.getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-green");
+                    textField.getStyleClass().add("text-field-blue");
+                }
+            } else {
+                textField.getStyleClass().removeAll("text-field-default", "text-field-blue", "text-field-green");
+                textField.getStyleClass().add("text-field-red");
+            }
+        });
+    }
+
+    private void monitorChanges(ComboBox<String> comboBox) {
+        comboBox.getStyleClass().add("text-field-default");
+
+        comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty()) {
+                comboBox.getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-green");
+                comboBox.getStyleClass().add("text-field-blue");
+            } else {
+                comboBox.getStyleClass().removeAll("text-field-default", "text-field-blue", "text-field-green");
+                comboBox.getStyleClass().add("text-field-red");
+            }
+        });
+    }
+
+    private void monitorChanges(CheckListView<String> checkListView) {
+        checkListView.getStyleClass().add("text-field-default");
+
+        checkListView.getCheckModel().getCheckedItems().addListener((ListChangeListener<? super String>) change -> {
+            if (checkListView.getCheckModel().getCheckedItems().isEmpty()) {
+                checkListView.getStyleClass().removeAll("text-field-default", "text-field-blue", "text-field-green");
+                checkListView.getStyleClass().add("text-field-red");
+            } else {
+                checkListView.getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-green");
+                checkListView.getStyleClass().add("text-field-blue");
+            }
+        });
+    }
+
+    private void monitorChanges(CheckBox checkBox){
+        checkBox.getStyleClass().add("text-field-default");
+
+        checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            checkBox.getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-green");
+            checkBox.getStyleClass().add("text-field-blue");
+        });
+
+    }
+
+    private void monitorChanges(RadioButton radioButton){
+        radioButton.getStyleClass().add("text-field-default");
+
+        radioButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            radioButton.getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-green");
+            radioButton.getStyleClass().add("text-field-blue");
+        });
+    }
+
+    private void setFieldsGreen() {
+        uiComponentProvider.getAlgorithmChoice().getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-blue");
+        uiComponentProvider.getAlgorithmChoice().getStyleClass().add("text-field-green");
+
+        TextField[] textFields = {
+                uiComponentProvider.getHashTableSizeField(),
+                uiComponentProvider.getChunkSizeField(),
+                uiComponentProvider.getDataSizeField(),
+                uiComponentProvider.getMeanField(),
+                uiComponentProvider.getDeviationField(),
+                uiComponentProvider.getLambdaField(),
+                uiComponentProvider.getFilePathField(),
+                uiComponentProvider.getBenchmarkIterationsField(),
+                uiComponentProvider.getBenchmarkThresholdField(),
+                uiComponentProvider.getTestIterationsField(),
+                uiComponentProvider.getTestThresholdField(),
+                uiComponentProvider.getWarmupIterationsField()
+        };
+
+        for (TextField textField : textFields) {
+            textField.getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-blue");
+            textField.getStyleClass().add("text-field-green");
+        }
+
+        CheckListView<String> hashFunctionCheckListView = uiComponentProvider.getHashFunctionChoice();
+        hashFunctionCheckListView.getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-blue");
+        hashFunctionCheckListView.getStyleClass().add("text-field-green");
+
+        CheckBox[] checkBoxes = {
+                uiComponentProvider.getPutCheckbox(),
+                uiComponentProvider.getGetCheckbox(),
+                uiComponentProvider.getDeleteCheckbox(),
+                uiComponentProvider.getUniformCheckBox(),
+                uiComponentProvider.getGaussianCheckBox(),
+                uiComponentProvider.getExponentialCheckBox()
+        };
+
+        for (CheckBox checkBox : checkBoxes) {
+            checkBox.getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-blue");
+            checkBox.getStyleClass().add("text-field-green");
+        }
+
+        RadioButton[] radioButtons = {
+                uiComponentProvider.getGenerateDataRadio(),
+                uiComponentProvider.getLoadDataRadio()
+        };
+
+        for (RadioButton radioButton : radioButtons) {
+            radioButton.getStyleClass().removeAll("text-field-default", "text-field-red", "text-field-blue");
+            radioButton.getStyleClass().add("text-field-green");
+        }
     }
 
     private void handleTestCheckList(MouseEvent event){
@@ -379,6 +552,7 @@ public class HashLabEventHandler {
 
                 tests.addTest(config);
                 uiComponentProvider.getTestCheckListView().setItems(FXCollections.observableArrayList(tests.getTestsList()));
+                setFieldsGreen();
             } catch (NumberFormatException ex) {
                 showAlert("Error", "Please enter valid numerical values");
             }
