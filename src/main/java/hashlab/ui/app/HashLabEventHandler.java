@@ -111,13 +111,13 @@ public class HashLabEventHandler {
         monitorChanges(benchmarkIterationsField, "^[1-9]\\d*$");
 
         TextField benchmarkThresholdField = uiComponentProvider.getBenchmarkThresholdField();
-        monitorChanges(benchmarkThresholdField, "^(?:[1-9]\\d*|0\\.\\d+|\\d+\\.\\d+)$");
+        monitorChanges(benchmarkThresholdField, "^-?(?:[1-9]\\d*|0\\.\\d+|\\d+\\.\\d+)$");
 
         TextField testIterationsField = uiComponentProvider.getTestIterationsField();
         monitorChanges(testIterationsField, "^[1-9]\\d*$");
 
         TextField testThresholdField = uiComponentProvider.getTestThresholdField();
-        monitorChanges(testThresholdField, "^(?:[1-9]\\d*|0\\.\\d+|\\d+\\.\\d+)$");
+        monitorChanges(testThresholdField, "^-?(?:[1-9]\\d*|0\\.\\d+|\\d+\\.\\d+)$");
 
         TextField warmupIterationsField = uiComponentProvider.getWarmupIterationsField();
         monitorChanges(warmupIterationsField, "^[0-9]\\d*$");

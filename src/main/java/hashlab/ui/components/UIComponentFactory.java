@@ -380,7 +380,8 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                 "Enter the benchmark threshold value.\n" +
                         "Must be a positive floating-point number.\n" +
                         "If the difference between successive iteration averages falls below this value, benchmarking will stop early.\n" +
-                        "Recommended values are between 0.001 and 0.01 for a good balance between precision and efficiency."
+                        "Recommended values are between 0.001 and 0.01 for a good balance between precision and efficiency.\n" +
+                        "Entering a negative number will result in the execution of all iterations."
         );
         benchmarkThresholdTooltip.setShowDuration(javafx.util.Duration.seconds(60));
         Tooltip.install(benchmarkThresholdField, benchmarkThresholdTooltip);
@@ -412,7 +413,8 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                 "Enter the threshold for ending test iterations early.\n" +
                         "This value must be a positive floating-point number.\n" +
                         "If the difference between consecutive iteration averages falls below this threshold, testing will end early to save time.\n" +
-                        "Recommended values are between 0.001 and 0.01 for a good balance between precision and efficiency."
+                        "Recommended values are between 0.001 and 0.01 for a good balance between precision and efficiency.\n" +
+                        "Entering a negative number will result in the execution of all iterations."
         );
         testThresholdTooltip.setShowDuration(javafx.util.Duration.seconds(60));
         Tooltip.install(testThresholdField, testThresholdTooltip);

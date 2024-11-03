@@ -13,9 +13,15 @@ public class Benchmark {
         double previousAverage = 0;
         double total = 0;
 
+        for (int i = 0; i < 100; i++) {
+            factorial(20);
+        }
+
         for (int i = 0; i < iterations; i++) {
             long startTime = System.nanoTime();
-            factorial(20);
+            for (int j = 0; j < 1000; j++) {
+                factorial(20);
+            }
             long endTime = System.nanoTime();
 
             total += (endTime - startTime);
