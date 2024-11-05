@@ -5,6 +5,15 @@ plugins {
     id 'org.beryx.jlink' version '2.25.0'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Manifest-Version': '1.0',
+                'Main-Class': 'hashlab.ui.app.NewHashLabApp'
+        )
+    }
+}
+
 group 'com.example'
 version '1.0-SNAPSHOT'
 
