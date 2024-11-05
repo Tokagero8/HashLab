@@ -1,5 +1,5 @@
 .root {
-    -fx-font-family: 'Roboto', 'Segoe UI', sans-serif; /* Nowoczesna, przyjazna czcionka */
+    -fx-font-family: 'Roboto', 'Segoe UI', sans-serif;
     -fx-background-color: #FFFFFF;
     -fx-base: #DDDDDD;
     -fx-control-inner-background: #F4F4F4;
@@ -20,11 +20,25 @@
     -fx-padding: 10 20;
     -fx-font-size: 11pt;
     -fx-background-radius: 5;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.0, 0, 1); /* Dodanie cienia */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.0, 0, 1);
 }
 
 .button:hover {
     -fx-background-color: linear-gradient(to bottom, #FFA000, #FF8F00);
+}
+
+.buttons-pane {
+    -fx-background-color: #F4f4f4;
+}
+
+.titled-label {
+    -fx-text-fill: #333333;
+    -fx-font-size: 12pt;
+    -fx-background-color: linear-gradient(to bottom, #F4F4F4, #E1E1E1);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0.0, 0, 2);
+    -fx-border-color: #FFC107;
+    -fx-border-width: 0 0 2 0;
+    -fx-padding: 5px;
 }
 
 .titled-pane {
@@ -101,7 +115,6 @@
     -fx-text-fill: #333333;
 }
 
-/* Stylizacja pasków przewijania */
 .scroll-bar:vertical, .scroll-bar:horizontal {
     -fx-background-color: #F4F4F4;
     -fx-background-radius: 3;

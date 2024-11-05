@@ -1,8 +1,10 @@
     package hashlab.ui.components;
 
     import javafx.geometry.Insets;
+    import javafx.geometry.Pos;
     import javafx.scene.Scene;
     import javafx.scene.control.*;
+    import javafx.scene.layout.BorderPane;
     import javafx.scene.layout.VBox;
     import javafx.stage.Stage;
 
@@ -18,39 +20,69 @@
 
         public void buildUI(Stage primaryStage){
 
-            VBox layout = new VBox(10);
-            layout.setPadding(new Insets(5));
-            layout.setSpacing(5);
+            VBox mainLayout = new VBox(10);
+            mainLayout.setPadding(new Insets(5));
+            mainLayout.setSpacing(5);
 
-
-            layout.getChildren().addAll(
+            mainLayout.getChildren().addAll(
                     uiComponentFactory.createHashAlgorithmsPane(),
                     uiComponentFactory.createHashFunctionsPane(),
                     uiComponentFactory.createTestOperationsPane(),
                     uiComponentFactory.createDataGenerationPane(),
                     uiComponentFactory.createDataSourcePane(primaryStage),
                     uiComponentFactory.createBenchmarkParamsPane(),
-                    uiComponentFactory.createAdditionalSettingsPane(),
+                    uiComponentFactory.createAdditionalSettingsPane()
+            );
+
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(mainLayout);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
+
+            VBox buttonsLayout = new VBox(10);
+            buttonsLayout.setPadding(new Insets(5));
+            buttonsLayout.setSpacing(5);
+            buttonsLayout.setAlignment(Pos.CENTER);
+            buttonsLayout.getStyleClass().add("buttons-pane");
+
+            buttonsLayout.getChildren().addAll(
                     uiComponentFactory.createRunTestButton(),
                     uiComponentFactory.createAddTestButton(),
                     uiComponentFactory.createRemoveTestButton(),
                     uiComponentFactory.createExportSelectedTestsButton(),
                     uiComponentFactory.createImportTestsButton(),
-                    uiComponentFactory.createLoadCSVFileButton(),
-                    uiComponentFactory.createTestCheckListView()
+                    uiComponentFactory.createLoadCSVFileButton()
             );
 
-            ScrollPane scrollPane = new ScrollPane();
-            scrollPane.setContent(layout);
-            scrollPane.setFitToWidth(true);
-            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-            Scene scene = new Scene(scrollPane, 1600, 900);
+            VBox listLayout = new VBox(10);
+            listLayout.setPadding(new Insets(5));
+            listLayout.setSpacing(5);
+
+            Label testsListLabel = new Label("Tests list");
+            testsListLabel.getStyleClass().add("titled-label");
+            testsListLabel.setMaxWidth(Double.MAX_VALUE);
+
+            ListView<?> testCheckListView = uiComponentFactory.createTestCheckListView();
+            testCheckListView.setPrefHeight(225);
+
+            listLayout.getChildren().addAll(
+                    testsListLabel,
+                    testCheckListView
+            );
+
+
+            BorderPane mainPane = new BorderPane();
+            mainPane.setCenter(scrollPane);
+            mainPane.setRight(buttonsLayout);
+            mainPane.setBottom(listLayout);
+
+            Scene scene = new Scene(mainPane, 1600, 900);
             scene.getStylesheets().add(getClass().getResource("/hashlab/css/fresh-look.css").toExternalForm());
             primaryStage.setScene(scene);
 
-            primaryStage.setScene(scene);
             primaryStage.setTitle("Testing Hashing Algorithms");
             primaryStage.show();
         }
