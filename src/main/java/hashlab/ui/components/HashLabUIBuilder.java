@@ -40,6 +40,13 @@
             scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
             scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
+            VBox rightLayout = new VBox(10);
+            rightLayout.setPadding(new Insets(5));
+            rightLayout.setSpacing(10);
+            rightLayout.setAlignment(Pos.TOP_CENTER);
+
+            rightLayout.getChildren().add(uiComponentFactory.createLanguagePane());
+
 
             VBox buttonsLayout = new VBox(10);
             buttonsLayout.setPadding(new Insets(5));
@@ -55,6 +62,8 @@
                     uiComponentFactory.createImportTestsButton(),
                     uiComponentFactory.createLoadCSVFileButton()
             );
+
+            rightLayout.getChildren().add(buttonsLayout);
 
 
             VBox listLayout = new VBox(10);
@@ -76,7 +85,7 @@
 
             BorderPane mainPane = new BorderPane();
             mainPane.setCenter(scrollPane);
-            mainPane.setRight(buttonsLayout);
+            mainPane.setRight(rightLayout);
             mainPane.setBottom(listLayout);
 
             Scene scene = new Scene(mainPane, 1600, 900);

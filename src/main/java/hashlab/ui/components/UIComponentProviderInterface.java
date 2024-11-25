@@ -6,6 +6,8 @@ import org.controlsfx.control.CheckListView;
 import org.controlsfx.control.ToggleSwitch;
 
 public interface UIComponentProviderInterface {
+    ComboBox<String> getLanguageComboBox();
+    TitledPane getLanguagePane();
     ComboBox<String> getAlgorithmChoice();
     TextField getHashTableSizeField();
     TextField getChunkSizeField();

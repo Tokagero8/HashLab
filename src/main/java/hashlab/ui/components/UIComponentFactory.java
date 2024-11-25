@@ -10,8 +10,13 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import org.controlsfx.control.ToggleSwitch;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class UIComponentFactory implements UIComponentFactoryInterface{
 
+    private ComboBox<String> languageComboBox;
+    private TitledPane languagePane;
     private ComboBox<String> algorithmChoice;
     private TextField hashTableSizeField;
     private TextField chunkSizeField;
@@ -58,6 +63,27 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private Button importTestsButton;
     private Button loadCSVFileButton;
     private CheckListView<HashTestConfig> testCheckListView;
+
+    @Override
+    public TitledPane createLanguagePane(){
+        languageComboBox = new ComboBox<>();
+        Set<String> languageSet = new HashSet<>();
+        languageSet.add("English");
+        languageSet.add("Polski");
+        languageComboBox.getItems().addAll(languageSet);
+        Tooltip languageTooltip = new Tooltip(
+                "Select application language"
+        );
+        languageTooltip.setShowDuration(javafx.util.Duration.seconds(60));
+        Tooltip.install(languageComboBox, languageTooltip);
+
+
+        HBox language = new HBox(10, languageComboBox);
+        languagePane = new TitledPane("Language", language);
+        languagePane.setCollapsible(false);
+
+        return languagePane;
+    }
 
     @Override
     public TitledPane createHashAlgorithmsPane() {
@@ -537,6 +563,14 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
 
     //Getters
+    public ComboBox<String> getLanguageComboBox() {
+        return languageComboBox;
+    }
+
+    public TitledPane getLanguagePanePane(){
+        return languagePane;
+    }
+
     public ComboBox<String> getAlgorithmChoice() {
         return algorithmChoice;
     }

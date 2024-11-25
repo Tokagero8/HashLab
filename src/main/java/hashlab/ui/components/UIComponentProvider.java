@@ -14,6 +14,16 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
+    public ComboBox<String> getLanguageComboBox(){
+        return uiComponentFactory.getLanguageComboBox();
+    }
+
+    @Override
+    public TitledPane getLanguagePane(){
+        return uiComponentFactory.getLanguagePanePane();
+    }
+
+    @Override
     public ComboBox<String> getAlgorithmChoice() {
         return uiComponentFactory.getAlgorithmChoice();
     }
