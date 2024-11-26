@@ -40,6 +40,7 @@ public interface UIComponentProviderInterface {
     Button getFileChooserButton();
     RadioButton getLoadDataRadio();
     ToggleSwitch getDataLoadingTimingSwitch();
+    TitledPane getDataSourcePane();
     TextField getBenchmarkIterationsField();
     TextField getBenchmarkThresholdField();
     TitledPane getBenchmarkParamsPane();

@@ -184,6 +184,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
+    public TitledPane getDataSourcePane(){
+        return uiComponentFactory.getDataSourcePane();
+    }
+
+    @Override
     public TextField getBenchmarkIterationsField() {
         return uiComponentFactory.getBenchmarkIterationsField();
     }

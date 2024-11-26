@@ -1,5 +1,6 @@
 package hashlab.ui.app;
 
+import hashlab.algorithms.registry.LanguageRegistry;
 import hashlab.tests.HashTestConfig;
 import hashlab.ui.components.TestsListInterface;
 import hashlab.ui.components.UIComponentProviderInterface;
@@ -14,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
+import org.controlsfx.control.ToggleSwitch;
 
 import javax.swing.*;
 import java.io.*;
@@ -39,6 +41,14 @@ public class HashLabEventHandler {
     }
 
     public void attachEventHandlers() {
+        ComboBox<String> languageComboBox = uiComponentProvider.getLanguageComboBox();
+        languageComboBox.valueProperty().addListener(((observable, oldValue, newValue) -> {
+            if(newValue != null && !newValue.equals(oldValue)){
+                changeLanguage(newValue);
+            }
+        }));
+
+
         ComboBox<String> algorithmChoiceComboBox = uiComponentProvider.getAlgorithmChoice();
         monitorChanges(algorithmChoiceComboBox);
 
@@ -142,6 +152,169 @@ public class HashLabEventHandler {
 
         CheckListView<HashTestConfig> testCheckListView = uiComponentProvider.getTestCheckListView();
         testCheckListView.setOnMouseClicked(event -> handleTestCheckList(event));
+    }
+
+    private void changeLanguage(String language){
+        Locale locale = LanguageRegistry.getLocale(language);
+        ResourceBundle languageBundle = ResourceBundle.getBundle("languages.AppTexts", locale);
+
+        ComboBox<String> languageComboBox = uiComponentProvider.getLanguageComboBox();
+        languageComboBox.getTooltip().setText(languageBundle.getString("languageComboBox.tooltip"));
+
+        TitledPane languagePane = uiComponentProvider.getLanguagePane();
+        languagePane.setText(languageBundle.getString("languagePane.text"));
+
+        ComboBox<String> algorithmComboBox = uiComponentProvider.getAlgorithmChoice();
+        algorithmComboBox.getTooltip().setText(languageBundle.getString("algorithmComboBox.tooltip"));
+
+        TextField hashTableSizeField = uiComponentProvider.getHashTableSizeField();
+        hashTableSizeField.setPromptText(languageBundle.getString("hashTableSizeField.promptText"));
+        hashTableSizeField.getTooltip().setText(languageBundle.getString("hashTableSizeField.tooltip"));
+
+        TextField chunkSizeField = uiComponentProvider.getChunkSizeField();
+        chunkSizeField.setPromptText(languageBundle.getString("chunkSizeField.promptText"));
+        chunkSizeField.getTooltip().setText(languageBundle.getString("chunkSizeField.tooltip"));
+
+        TitledPane hashAlgorithmsPane = uiComponentProvider.getHashAlgorithmsPane();
+        hashAlgorithmsPane.setText(languageBundle.getString("hashAlgorithmsPane.text"));
+
+        CheckListView<String> hashFunctionChoice = uiComponentProvider.getHashFunctionChoice();
+        hashFunctionChoice.getTooltip().setText("hashFunctionChoice.tooltip");
+
+        TitledPane hashFunctionsPane = uiComponentProvider.getHashFunctionsPane();
+        hashFunctionsPane.setText(languageBundle.getString("hashFunctionsPane.text"));
+
+        TitledPane testOperationsPane = uiComponentProvider.getTestOperationsPane();
+        testOperationsPane.setText(languageBundle.getString("testOperationsPane.text"));
+        testOperationsPane.getTooltip().setText("testOperationsPane.tooltip");
+
+        RadioButton generateDataRadio = uiComponentProvider.getGenerateDataRadio();
+        generateDataRadio.setText(languageBundle.getString("generateDataRadio.text"));
+        generateDataRadio.getTooltip().setText("generateDataRadio.tooltip");
+
+        TextField dataSizeField = uiComponentProvider.getDataSizeField();
+        dataSizeField.setPromptText(languageBundle.getString("dataSizeField.promptText"));
+        dataSizeField.getTooltip().setText("dataSizeField.tooltip");
+
+        ToggleSwitch dataGenerationTimingSwitch = uiComponentProvider.getDataGenerationTimingSwitch();
+        dataGenerationTimingSwitch.setText(languageBundle.getString("dataGenerationTimingSwitch.text"));
+        dataGenerationTimingSwitch.getTooltip().setText("dataGenerationTimingSwitch.tooltip");
+
+        TitledPane generateDataPane = uiComponentProvider.getGenerateDataPane();
+        generateDataPane.setText(languageBundle.getString("generateDataPane.text"));
+
+        TitledPane dataGenerationPane = uiComponentProvider.getDataGenerationPane();
+        dataGenerationPane.setText(languageBundle.getString("dataGenerationPane.text"));
+
+        CheckBox uniformCheckBox = uiComponentProvider.getUniformCheckBox();
+        uniformCheckBox.setText(languageBundle.getString("uniformCheckBox.text"));
+        uniformCheckBox.getTooltip().setText("uniformCheckBox.tooltip");
+
+        Button generateUniformDataButton = uiComponentProvider.getGenerateUniformDataButton();
+        generateUniformDataButton.setText(languageBundle.getString("generateUniformDataButton.text"));
+        generateUniformDataButton.getTooltip().setText("generateUniformDataButton.tooltip");
+
+        TitledPane uniformPane = uiComponentProvider.getUniformPane();
+        uniformPane.setText(languageBundle.getString("uniformPane.text"));
+
+        CheckBox gaussianCheckBox = uiComponentProvider.getGaussianCheckBox();
+        gaussianCheckBox.setText(languageBundle.getString("gaussianCheckBox.text"));
+        gaussianCheckBox.getTooltip().setText("gaussianCheckBox.tooltip");
+
+        TextField meanField = uiComponentProvider.getMeanField();
+        meanField.setPromptText(languageBundle.getString("meanField.promptText"));
+        meanField.getTooltip().setText(languageBundle.getString("meanField.tooltip"));
+
+        TextField deviationField = uiComponentProvider.getDeviationField();
+        deviationField.setPromptText(languageBundle.getString("deviationField.promptText"));
+        deviationField.getTooltip().setText(languageBundle.getString("deviationField.tooltip"));
+
+        Button generateGaussianDataButton = uiComponentProvider.getGenerateGaussianDataButton();
+        generateGaussianDataButton.setText(languageBundle.getString("generateGaussianDataButton.text"));
+        generateGaussianDataButton.getTooltip().setText("generateGaussianDataButton.tooltip");
+
+        TitledPane gaussianPane = uiComponentProvider.getGaussianPane();
+        gaussianPane.setText(languageBundle.getString("gaussianPane.text"));
+
+        CheckBox exponentialCheckBox = uiComponentProvider.getExponentialCheckBox();
+        exponentialCheckBox.setText(languageBundle.getString("exponentialCheckBox.text"));
+        exponentialCheckBox.getTooltip().setText("exponentialCheckBox.tooltip");
+
+        TextField lambdaField = uiComponentProvider.getLambdaField();
+        lambdaField.setPromptText(languageBundle.getString("lambdaField.promptText"));
+        lambdaField.getTooltip().setText(languageBundle.getString("lambdaField.tooltip"));
+
+        Button generateExponentialDataButton = uiComponentProvider.getGenerateExponentialDataButton();
+        generateExponentialDataButton.setText(languageBundle.getString("generateExponentialDataButton.text"));
+        generateExponentialDataButton.getTooltip().setText("generateExponentialDataButton.tooltip");
+
+        TitledPane exponentialPane = uiComponentProvider.getExponentialPane();
+        exponentialPane.setText(languageBundle.getString("exponentialPane.text"));
+
+        Button fileChooserButton = uiComponentProvider.getFileChooserButton();
+        fileChooserButton.setText(languageBundle.getString("fileChooserButton.text"));
+        fileChooserButton.getTooltip().setText(languageBundle.getString("fileChooserButton.tooltip"));
+
+        RadioButton loadDataRadio = uiComponentProvider.getLoadDataRadio();
+        loadDataRadio.setText(languageBundle.getString("loadDataRadio.text"));
+        loadDataRadio.getTooltip().setText(languageBundle.getString("loadDataRadio.tooltip"));
+
+        ToggleSwitch dataLoadingTimingSwitch = uiComponentProvider.getDataLoadingTimingSwitch();
+        dataLoadingTimingSwitch.setText(languageBundle.getString("dataLoadingTimingSwitch.text"));
+        dataLoadingTimingSwitch.getTooltip().setText(languageBundle.getString("dataLoadingTimingSwitch.tooltip"));
+
+        TitledPane dataSourcePane = uiComponentProvider.getDataSourcePane();
+        dataSourcePane.setText(languageBundle.getString("dataSourcePane.text"));
+
+        TextField benchmarkIterationsField = uiComponentProvider.getBenchmarkIterationsField();
+        benchmarkIterationsField.setPromptText(languageBundle.getString("benchmarkIterationsField.promptText"));
+        benchmarkIterationsField.getTooltip().setText(languageBundle.getString("benchmarkIterationsField.tooltip"));
+
+        TextField benchmarkThresholdField = uiComponentProvider.getBenchmarkThresholdField();
+        benchmarkThresholdField.setPromptText(languageBundle.getString("benchmarkThresholdField.promptText"));
+        benchmarkThresholdField.getTooltip().setText(languageBundle.getString("benchmarkThresholdField.tooltip"));
+
+        TitledPane benchmarkParamsPane = uiComponentProvider.getBenchmarkParamsPane();
+        benchmarkParamsPane.setText(languageBundle.getString("benchmarkParamsPane.text"));
+
+        TextField testIterationsField = uiComponentProvider.getTestIterationsField();
+        testIterationsField.setPromptText(languageBundle.getString("testIterationsField.promptText"));
+        testIterationsField.getTooltip().setText(languageBundle.getString("testIterationsField.tooltip"));
+
+        TextField testThresholdField = uiComponentProvider.getTestThresholdField();
+        testThresholdField.setPromptText(languageBundle.getString("testThresholdField.promptText"));
+        testThresholdField.getTooltip().setText(languageBundle.getString("testThresholdField.tooltip"));
+
+        TextField warmupIterationsField = uiComponentProvider.getWarmupIterationsField();
+        warmupIterationsField.setPromptText(languageBundle.getString("warmupIterationsField.promptText"));
+        warmupIterationsField.getTooltip().setText(languageBundle.getString("warmupIterationsField.tooltip"));
+
+        TitledPane additionalSettingsPane = uiComponentProvider.getAdditionalSettingsPane();
+        additionalSettingsPane.setText(languageBundle.getString("additionalSettingsPane.text"));
+
+        Button runTestButton = uiComponentProvider.getRunTestButton();
+        runTestButton.setText(languageBundle.getString("runTestButton.text"));
+        runTestButton.getTooltip().setText("runTestButton.tooltip");
+
+        Button addTestButton = uiComponentProvider.getAddTestButton();
+        addTestButton.setText(languageBundle.getString("addTestButton.text"));
+        addTestButton.getTooltip().setText("addTestButton.tooltip");
+
+        Button removeTestButton = uiComponentProvider.getRemoveTestButton();
+        removeTestButton.setText(languageBundle.getString("removeTestButton.text"));
+        removeTestButton.getTooltip().setText("removeTestButton.tooltip");
+
+        Button exportSelectedTestsButton = uiComponentProvider.getExportSelectedTestsButton();
+        exportSelectedTestsButton.setText(languageBundle.getString("exportSelectedTestsButton.text"));
+        exportSelectedTestsButton.getTooltip().setText("exportSelectedTestsButton.tooltip");
+
+        Button importTestsButton = uiComponentProvider.getImportTestsButton();
+        importTestsButton.setText(languageBundle.getString("importTestsButton.text"));
+        importTestsButton.getTooltip().setText("importTestsButton.tooltip");
+
+        Button loadCSVFileButton = uiComponentProvider.getLoadCSVFileButton();
+        loadCSVFileButton.setText(languageBundle.getString("loadCSVFileButton.text"));
+        loadCSVFileButton.getTooltip().setText("loadCSVFileButton.tooltip");
     }
 
     private void monitorChanges(TextField textField, String validPattern){

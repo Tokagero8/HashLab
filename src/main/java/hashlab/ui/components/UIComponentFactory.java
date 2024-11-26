@@ -1,6 +1,7 @@
 package hashlab.ui.components;
 
 import hashlab.algorithms.registry.HashRegistry;
+import hashlab.algorithms.registry.LanguageRegistry;
 import hashlab.tests.HashTestConfig;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
@@ -9,9 +10,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import org.controlsfx.control.ToggleSwitch;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class UIComponentFactory implements UIComponentFactoryInterface{
 
@@ -49,6 +47,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private Button fileChooserButton;
     private RadioButton loadDataRadio;
     private ToggleSwitch dataLoadingTimingSwitch;
+    private TitledPane dataSourcePane;
     private TextField benchmarkIterationsField;
     private TextField benchmarkThresholdField;
     private TitledPane benchmarkParamsPane;
@@ -67,15 +66,13 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     @Override
     public TitledPane createLanguagePane(){
         languageComboBox = new ComboBox<>();
-        Set<String> languageSet = new HashSet<>();
-        languageSet.add("English");
-        languageSet.add("Polski");
-        languageComboBox.getItems().addAll(languageSet);
+        languageComboBox.getItems().addAll(LanguageRegistry.getAllLanguages());
         Tooltip languageTooltip = new Tooltip(
                 "Select application language"
         );
+        languageComboBox.setValue(languageComboBox.getItems().get(0));
         languageTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(languageComboBox, languageTooltip);
+        languageComboBox.setTooltip(languageTooltip);
 
 
         HBox language = new HBox(10, languageComboBox);
@@ -95,7 +92,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Different algorithms handle collisions and data distribution in various ways, which can significantly impact performance."
         );
         algorithmTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(algorithmChoice, algorithmTooltip);
+        algorithmChoice.setTooltip(algorithmTooltip);
 
         hashTableSizeField = new TextField();
         hashTableSizeField.setPromptText("Hash table size");
@@ -107,7 +104,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "A larger table size can reduce the number of collisions, improving efficiency, but may also use more memory."
         );
         hashTableSizeTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(hashTableSizeField, hashTableSizeTooltip);
+        hashTableSizeField.setTooltip(hashTableSizeTooltip);
 
         chunkSizeField = new TextField();
         chunkSizeField.setPromptText("Data chunk size");
@@ -118,7 +115,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "A larger chunk size means more data will be hashed at once, which can impact both performance and memory usage."
         );
         chunkSizeTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(chunkSizeField, chunkSizeTooltip);
+        chunkSizeField.setTooltip(chunkSizeTooltip);
 
         HBox hashAlgorithms = new HBox(10, algorithmChoice, hashTableSizeField, chunkSizeField);
         hashAlgorithmsPane = new TitledPane("Hash algorithms", hashAlgorithms);
@@ -139,7 +136,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Choosing multiple functions will allow for a comparative analysis of their performance and collision resistance."
         );
         hashFunctionTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(hashFunctionChoice, hashFunctionTooltip);
+        hashFunctionChoice.setTooltip(hashFunctionTooltip);
 
         return hashFunctionsPane;
     }
@@ -161,7 +158,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "- Delete: Removes data from the hash table, useful for testing the effectiveness of deletion processes and reorganization."
         );
         testOperationsTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(testOperationsPane, testOperationsTooltip);
+        testOperationsPane.setTooltip(testOperationsTooltip);
 
         return testOperationsPane;
     }
@@ -177,7 +174,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Generated data will be used during the performance evaluation of hashing algorithms."
         );
         generateDataTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(generateDataRadio, generateDataTooltip);
+        generateDataRadio.setTooltip(generateDataTooltip);
 
         dataSizeField = new TextField();
         dataSizeField.setPromptText("Data size");
@@ -190,7 +187,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Ensure the selected data size does not entirely fill the hash table to avoid potential issues."
         );
         dataSizeTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(dataSizeField, dataSizeTooltip);
+        dataSizeField.setTooltip(dataSizeTooltip);
 
         dataGenerationTimingSwitch = new ToggleSwitch("Generate data during test addition: ");
         dataGenerationTimingSwitch.setDisable(true);
@@ -202,7 +199,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "allowing for a broader evaluation of algorithm performance under varying conditions."
         );
         dataGenerationTimingTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(dataGenerationTimingSwitch, dataGenerationTimingTooltip);
+        dataGenerationTimingSwitch.setTooltip(dataGenerationTimingTooltip);
 
         VBox dataSizeBox = new VBox(5, generateDataRadio, dataSizeField, dataGenerationTimingSwitch);
         generateDataPane = new TitledPane("Data", dataSizeBox);
@@ -227,7 +224,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "input values, providing insight into collision handling under idealized conditions."
         );
         uniformTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(uniformCheckBox, uniformTooltip);
+        uniformCheckBox.setTooltip(uniformTooltip);
 
         generateUniformDataButton = new Button("Generate Sample Uniform Data");
         generateUniformDataButton.setDisable(true);
@@ -237,7 +234,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "The generated data will be visualized on a chart, allowing you to observe the uniform distribution pattern."
         );
         generateUniformDataTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(generateUniformDataButton, generateUniformDataTooltip);
+        generateUniformDataButton.setTooltip(generateUniformDataTooltip);
 
         VBox uniformBox = new VBox(5, uniformCheckBox, generateUniformDataButton);
         uniformPane = new TitledPane("Uniform", uniformBox);
@@ -260,7 +257,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Specify the mean and standard deviation to control the center and spread of the distribution."
         );
         gaussianTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(gaussianCheckBox, gaussianTooltip);
+        gaussianCheckBox.setTooltip(gaussianTooltip);
 
         meanField = new TextField();
         meanField.setDisable(true);
@@ -271,7 +268,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "A higher mean will shift the distribution to higher values, while a lower mean will shift it to lower values."
         );
         meanTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(meanField, meanTooltip);
+        meanField.setTooltip(meanTooltip);
 
         deviationField = new TextField();
         deviationField.setDisable(true);
@@ -283,7 +280,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "while a lower value keeps the data points closer to the mean."
         );
         deviationTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(deviationField, deviationTooltip);
+        deviationField.setTooltip(deviationTooltip);
 
 
         generateGaussianDataButton = new Button("Generate Sample Uniform Data");
@@ -293,7 +290,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "The generated data will be based on the specified mean and standard deviation, allowing you to visualize the distribution pattern on a chart."
         );
         generateGaussianDataTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(generateGaussianDataButton, generateGaussianDataTooltip);
+        generateGaussianDataButton.setTooltip(generateGaussianDataTooltip);
 
         VBox gaussianBox = new VBox(5, gaussianCheckBox, meanField, deviationField, generateGaussianDataButton);
         gaussianPane = new TitledPane("Gaussian", gaussianBox);
@@ -314,7 +311,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Specify the lambda (rate) value to control the spread and frequency of occurrences within the distribution."
         );
         exponentialTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(exponentialCheckBox, exponentialTooltip);
+        exponentialCheckBox.setTooltip(exponentialTooltip);
 
         lambdaField = new TextField();
         lambdaField.setDisable(true);
@@ -325,7 +322,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "A higher lambda value results in more data points being clustered near the beginning of the distribution, indicating a higher rate of occurrence."
         );
         lambdaTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(lambdaField, lambdaTooltip);
+        lambdaField.setTooltip(lambdaTooltip);
 
         generateExponentialDataButton = new Button("Generate Sample Exponential Data");
         generateExponentialDataButton.setDisable(true);
@@ -334,7 +331,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "The generated data will be based on the specified lambda (rate) value, and will be visualized on a chart to help you understand the distribution pattern."
         );
         generateExponentialDataTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(generateExponentialDataButton, generateExponentialDataTooltip);
+        generateExponentialDataButton.setTooltip(generateExponentialDataTooltip);
 
         VBox exponentialBox = new VBox(5, exponentialCheckBox, lambdaField, generateExponentialDataButton);
         exponentialPane = new TitledPane("Exponential", exponentialBox);
@@ -356,7 +353,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Only text-based file formats are supported (e.g., .txt, .csv)."
         );
         fileChooserTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(fileChooserButton, fileChooserTooltip);
+        fileChooserButton.setTooltip(fileChooserTooltip);
 
         loadDataRadio = new RadioButton("Load from file");
         loadDataRadio.setToggleGroup(dataToggleGroup);
@@ -365,7 +362,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "By choosing this option, you can use custom datasets stored in a file, which allows for more flexible testing scenarios."
         );
         loadDataTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(loadDataRadio, loadDataTooltip);
+        loadDataRadio.setTooltip(loadDataTooltip);
 
         dataLoadingTimingSwitch = new ToggleSwitch("Load data during test addition: ");
         dataLoadingTimingSwitch.setDisable(true);
@@ -377,10 +374,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "which might be useful for evaluating performance under slightly different conditions each time."
         );
         dataLoadingTimingTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(dataLoadingTimingSwitch, dataLoadingTimingTooltip);
+        dataLoadingTimingSwitch.setTooltip(dataLoadingTimingTooltip);
 
         VBox dataSourceBox = new VBox(5, loadDataRadio, fileChooserButton, filePathField, dataLoadingTimingSwitch);
-        TitledPane dataSourcePane = new TitledPane("Data source", dataSourceBox);
+        dataSourcePane = new TitledPane("Data source", dataSourceBox);
         dataSourcePane.setCollapsible(false);
 
         return dataSourcePane;
@@ -398,7 +395,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "A recommended number of iterations is between 100 and 1000, depending on the desired balance between precision and test duration."
         );
         benchmarkIterationsTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(benchmarkIterationsField, benchmarkIterationsTooltip);
+        benchmarkIterationsField.setTooltip(benchmarkIterationsTooltip);
 
         benchmarkThresholdField = new TextField();
         benchmarkThresholdField.setPromptText("Benchmark threshold");
@@ -410,7 +407,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Entering a negative number will result in the execution of all iterations."
         );
         benchmarkThresholdTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(benchmarkThresholdField, benchmarkThresholdTooltip);
+        benchmarkThresholdField.setTooltip(benchmarkThresholdTooltip);
 
         VBox benchmarkParamsBox = new VBox(5, benchmarkIterationsField, benchmarkThresholdField);
         benchmarkParamsPane = new TitledPane("Benchmark parameters", benchmarkParamsBox);
@@ -431,7 +428,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "A recommended number of iterations is between 50 and 500, depending on the desired balance between precision and the time taken for the test."
         );
         testIterationsTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(testIterationsField, testIterationsTooltip);
+        testIterationsField.setTooltip(testIterationsTooltip);
 
         testThresholdField = new TextField();
         testThresholdField.setPromptText("Test Threshold");
@@ -443,7 +440,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Entering a negative number will result in the execution of all iterations."
         );
         testThresholdTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(testThresholdField, testThresholdTooltip);
+        testThresholdField.setTooltip(testThresholdTooltip);
 
         warmupIterationsField = new TextField();
         warmupIterationsField.setPromptText("Warmup iterations");
@@ -454,7 +451,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "A recommended number is between 10 and 50 to properly prepare for performance testing."
         );
         warmupIterationsTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(warmupIterationsField, warmupIterationsTooltip);
+        warmupIterationsField.setTooltip(warmupIterationsTooltip);
 
         VBox testParamsBox = new VBox(5, testIterationsField, testThresholdField, warmupIterationsField);
         additionalSettingsPane = new TitledPane("Additional Settings", testParamsBox);
@@ -471,7 +468,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "The tests configured with the specified parameters will run sequentially, and performance metrics will be collected for analysis."
         );
         runTestTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(runTestButton, runTestTooltip);
+        runTestButton.setTooltip(runTestTooltip);
         return runTestButton;
     }
 
@@ -483,7 +480,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "The test will be saved to the list and can be run later"
         );
         addTestTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(addTestButton, addTestTooltip);
+        addTestButton.setTooltip(addTestTooltip);
         return addTestButton;
     }
 
@@ -495,7 +492,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Ensure you have selected the tests you wish to remove, as this action cannot be undone."
         );
         removeTestTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(removeTestButton, removeTestTooltip);
+        removeTestButton.setTooltip(removeTestTooltip);
         return removeTestButton;
     }
 
@@ -507,7 +504,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "This allows you to save the test configurations for future use or share them with others."
         );
         exportSelectedTestsTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(exportSelectedTestsButton, exportSelectedTestsTooltip);
+        exportSelectedTestsButton.setTooltip(exportSelectedTestsTooltip);
         return exportSelectedTestsButton;
     }
 
@@ -519,7 +516,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "This allows you to load previously saved tests or configurations shared by others."
         );
         importTestsTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(importTestsButton, importTestsTooltip);
+        importTestsButton.setTooltip(importTestsTooltip);
         return importTestsButton;
     }
 
@@ -530,8 +527,9 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                 "Click this button to load performance results from a CSV file.\n" +
                         "This allows you to review and analyze results obtained previously in the testing environment."
         );
-        Tooltip.install(loadCSVFileButton, loadCSVFileTooltip);
         loadCSVFileTooltip.setShowDuration(javafx.util.Duration.seconds(60));
+        loadCSVFileButton.setTooltip(loadCSVFileTooltip);
+
         return loadCSVFileButton;
     }
 
@@ -556,7 +554,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
                         "Double-click on a test to view its detailed configuration."
         );
         testCheckListTooltip.setShowDuration(javafx.util.Duration.seconds(60));
-        Tooltip.install(testCheckListView, testCheckListTooltip);
+        testCheckListView.setTooltip(testCheckListTooltip);
 
         return testCheckListView;
     }
@@ -697,6 +695,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
     public ToggleSwitch getDataLoadingTimingSwitch(){
         return dataLoadingTimingSwitch;
+    }
+
+    public TitledPane getDataSourcePane() {
+        return dataSourcePane;
     }
 
     public TextField getBenchmarkIterationsField() {
