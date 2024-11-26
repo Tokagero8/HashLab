@@ -61,6 +61,7 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     private Button exportSelectedTestsButton;
     private Button importTestsButton;
     private Button loadCSVFileButton;
+    private Label testsListLabel;
     private CheckListView<HashTestConfig> testCheckListView;
 
     @Override
@@ -534,6 +535,15 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
     }
 
     @Override
+    public Label createTestsListLabel(){
+        testsListLabel = new Label("Tests list");
+        testsListLabel.getStyleClass().add("titled-label");
+        testsListLabel.setMaxWidth(Double.MAX_VALUE);
+
+        return testsListLabel;
+    }
+
+    @Override
     public CheckListView<HashTestConfig> createTestCheckListView() {
 
         testCheckListView = new CheckListView<>();
@@ -751,6 +761,10 @@ public class UIComponentFactory implements UIComponentFactoryInterface{
 
     public Button getLoadCSVFileButton(){
         return loadCSVFileButton;
+    }
+
+    public Label getTestsListLabel(){
+        return testsListLabel;
     }
 
     public CheckListView<HashTestConfig> getTestCheckListView() {

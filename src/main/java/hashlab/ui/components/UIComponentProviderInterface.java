@@ -54,5 +54,6 @@ public interface UIComponentProviderInterface {
     Button getExportSelectedTestsButton();
     Button getImportTestsButton();
     Button getLoadCSVFileButton();
+    Label getTestsListLabel();
     CheckListView<HashTestConfig> getTestCheckListView();
 }

@@ -254,6 +254,11 @@ public class UIComponentProvider implements UIComponentProviderInterface{
     }
 
     @Override
+    public Label getTestsListLabel(){
+        return uiComponentFactory.getTestsListLabel();
+    }
+
+    @Override
     public CheckListView<HashTestConfig> getTestCheckListView() {
         return uiComponentFactory.getTestCheckListView();
     }

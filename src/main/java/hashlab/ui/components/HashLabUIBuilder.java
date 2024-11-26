@@ -70,15 +70,11 @@
             listLayout.setPadding(new Insets(5));
             listLayout.setSpacing(5);
 
-            Label testsListLabel = new Label("Tests list");
-            testsListLabel.getStyleClass().add("titled-label");
-            testsListLabel.setMaxWidth(Double.MAX_VALUE);
-
             ListView<?> testCheckListView = uiComponentFactory.createTestCheckListView();
             testCheckListView.setPrefHeight(225);
 
             listLayout.getChildren().addAll(
-                    testsListLabel,
+                    uiComponentFactory.createTestsListLabel(),
                     testCheckListView
             );
 
@@ -92,7 +88,7 @@
             scene.getStylesheets().add(getClass().getResource("/hashlab/css/fresh-look.css").toExternalForm());
             primaryStage.setScene(scene);
 
-            primaryStage.setTitle("Testing Hashing Algorithms");
+            primaryStage.setTitle("HashLab");
             primaryStage.show();
         }
 

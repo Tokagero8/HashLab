@@ -3,6 +3,7 @@ package hashlab.ui.components;
 import hashlab.tests.HashTestConfig;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
@@ -25,5 +26,6 @@ public interface UIComponentFactoryInterface {
     Button createExportSelectedTestsButton();
     Button createImportTestsButton();
     Button createLoadCSVFileButton();
+    Label createTestsListLabel();
     CheckListView<HashTestConfig> createTestCheckListView();
 }

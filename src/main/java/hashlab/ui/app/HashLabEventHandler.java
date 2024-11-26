@@ -315,6 +315,12 @@ public class HashLabEventHandler {
         Button loadCSVFileButton = uiComponentProvider.getLoadCSVFileButton();
         loadCSVFileButton.setText(languageBundle.getString("loadCSVFileButton.text"));
         loadCSVFileButton.getTooltip().setText("loadCSVFileButton.tooltip");
+
+        Label testsListLabel = uiComponentProvider.getTestsListLabel();
+        testsListLabel.setText(languageBundle.getString("testsListLabel.text"));
+
+        CheckListView<HashTestConfig> testCheckListView = uiComponentProvider.getTestCheckListView();
+        testCheckListView.getTooltip().setText(languageBundle.getString("testCheckListView.tooltip"));
     }
 
     private void monitorChanges(TextField textField, String validPattern){
