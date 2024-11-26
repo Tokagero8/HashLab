@@ -29,6 +29,7 @@ public class HashLabEventHandler {
     private NewHashLabAppController controller;
     private Stage primaryStage;
     private TestsListInterface tests;
+    private ResourceBundle classLanguageBundle;
 
 
 
@@ -37,6 +38,7 @@ public class HashLabEventHandler {
         this.controller = new NewHashLabAppController();
         this.primaryStage = primaryStage;
         this.tests = tests;
+        this.classLanguageBundle = ResourceBundle.getBundle("languages.AppTexts", Locale.ENGLISH);
         controller.initialize(this);
     }
 
@@ -157,6 +159,7 @@ public class HashLabEventHandler {
     private void changeLanguage(String language){
         Locale locale = LanguageRegistry.getLocale(language);
         ResourceBundle languageBundle = ResourceBundle.getBundle("languages.AppTexts", locale);
+        classLanguageBundle = ResourceBundle.getBundle("languages.AppTexts", locale);
 
         ComboBox<String> languageComboBox = uiComponentProvider.getLanguageComboBox();
         languageComboBox.getTooltip().setText(languageBundle.getString("languageComboBox.tooltip"));
@@ -450,14 +453,14 @@ public class HashLabEventHandler {
 
     private void showTestDetails(HashTestConfig test) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Test Details");
+        alert.setTitle(classLanguageBundle.getString("alert.title.testDetails"));
         alert.setHeaderText(test.getTestName());
         alert.setContentText(test.toString());
 
-        ButtonType buttonUniform = new ButtonType("Uniform Data");
-        ButtonType buttonGaussian = new ButtonType("Gaussian Data");
-        ButtonType buttonExponential = new ButtonType("Exponential Data");
-        ButtonType buttonFileData = new ButtonType("File Data");
+        ButtonType buttonUniform = new ButtonType(classLanguageBundle.getString("button.uniformData"));
+        ButtonType buttonGaussian = new ButtonType(classLanguageBundle.getString("button.gaussianData"));
+        ButtonType buttonExponential = new ButtonType(classLanguageBundle.getString("button.exponentialData"));
+        ButtonType buttonFileData = new ButtonType(classLanguageBundle.getString("button.fileData"));
 
 
         if (test.isUniformSelected()) {
@@ -492,7 +495,7 @@ public class HashLabEventHandler {
 
     private void checkAndDisplayHistogram(String data){
         if (data == null || data.isEmpty()) {
-            showAlert("Error", "No data available to display.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.noData"));
             return;
         }
         showHistogram(data);
@@ -539,9 +542,9 @@ public class HashLabEventHandler {
             String sampleData = DataGenerator.generateUniformASCIIValue(Integer.parseInt(uiComponentProvider.getDataSizeField().getText()));
             showHistogram(sampleData);
         } catch (NumberFormatException exception) {
-            showAlert("Error", "Invalid data format. Please enter a correct numeric value.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidDataFormat"));
         } catch (Exception e) {
-            showAlert("Error", "A problem occurred while generating sample data. Please check the validity of the input parameters.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.dataGenerationProblem"));
         }
 
     }
@@ -554,9 +557,9 @@ public class HashLabEventHandler {
                     Integer.parseInt(uiComponentProvider.getDataSizeField().getText()));
             showHistogram(sampleData);
         } catch (NumberFormatException exception) {
-            showAlert("Error", "Invalid data format. Please enter a correct numeric value.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidDataFormat"));
         } catch (Exception exception){
-            showAlert("Error", "A problem occurred while generating sample data. Please check the validity of the input parameters.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.dataGenerationProblem"));
         }
 
     }
@@ -568,9 +571,9 @@ public class HashLabEventHandler {
                     Integer.parseInt(uiComponentProvider.getDataSizeField().getText()));
             showHistogram(sampleData);
         } catch (NumberFormatException exception) {
-            showAlert("Error", "Invalid data format. Please enter a correct numeric value.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidDataFormat"));
         } catch (Exception exception){
-            showAlert("Error", "A problem occurred while generating data. Please check the validity of the input parameters.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.dataGenerationProblem"));
         }
 
     }
@@ -590,7 +593,7 @@ public class HashLabEventHandler {
 
         Scene dialogScene = new Scene(dialogLayout, 1600, 900);
         dialog.setScene(dialogScene);
-        dialog.setTitle("Histogram ASCII");
+        dialog.setTitle(classLanguageBundle.getString("dialog.title.histogram"));
         dialog.show();
 
         nudgeWindow(dialog);
@@ -611,7 +614,7 @@ public class HashLabEventHandler {
 
         Scene dialogScene = new Scene(dialogLayout, 1600, 900);
         dialog.setScene(dialogScene);
-        dialog.setTitle("Result Charts");
+        dialog.setTitle(classLanguageBundle.getString("dialog.title.resultCharts"));
         dialog.show();
     }
 
@@ -646,10 +649,10 @@ public class HashLabEventHandler {
 
     private void handleRunTest(CheckListView<HashTestConfig> testCheckListView){
 
-        TextInputDialog fileDialog = new TextInputDialog("results");
-        fileDialog.setTitle("Result File Name");
-        fileDialog.setHeaderText("Enter the name of the file to save results:");
-        fileDialog.setContentText("File name:");
+        TextInputDialog fileDialog = new TextInputDialog(classLanguageBundle.getString("dialog.resultFileName.textInput"));
+        fileDialog.setTitle(classLanguageBundle.getString("dialog.resultFileName.title"));
+        fileDialog.setHeaderText(classLanguageBundle.getString("dialog.resultFileName.header"));
+        fileDialog.setContentText(classLanguageBundle.getString("dialog.resultFileName.content"));
 
         Optional<String> resultFileName = fileDialog.showAndWait();
 
@@ -665,9 +668,9 @@ public class HashLabEventHandler {
         }
 
         TextInputDialog dialog = new TextInputDialog("Test " + (tests.getTestsList().size() + 1));
-        dialog.setTitle("Test name");
-        dialog.setHeaderText("Enter a name for the new test:");
-        dialog.setContentText("Name:");
+        dialog.setTitle(classLanguageBundle.getString("dialog.testName.title"));
+        dialog.setHeaderText(classLanguageBundle.getString("dialog.testName.header"));
+        dialog.setContentText(classLanguageBundle.getString("dialog.testName.content"));
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
@@ -733,7 +736,7 @@ public class HashLabEventHandler {
                 uiComponentProvider.getTestCheckListView().setItems(FXCollections.observableArrayList(tests.getTestsList()));
                 setFieldsGreen();
             } catch (NumberFormatException ex) {
-                showAlert("Error", "Please enter valid numerical values");
+                showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.addTestNumeric.content"));
             }
         });
 
@@ -749,7 +752,7 @@ public class HashLabEventHandler {
                 contentBuilder.append(line).append(System.lineSeparator());
             }
         } catch (IOException e) {
-            showAlert("Error", "Failed to load data from file: " + filePath + ". Please check the file path and try again.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.fileLoadingFailed.part1") + " " + filePath + classLanguageBundle.getString("error.fileLoadingFailed.part2"));
             e.printStackTrace();
             return "";
         }
@@ -759,44 +762,44 @@ public class HashLabEventHandler {
     private boolean validateTestConfig(){
 
         if (uiComponentProvider.getAlgorithmChoice().getValue() == null || uiComponentProvider.getAlgorithmChoice().getValue().isEmpty()) {
-            showAlert("Error", "Please select a hashing algorithm.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.selectHashAlgorithm"));
             return false;
         }
 
         try {
             int hashTableSize = Integer.parseInt(uiComponentProvider.getHashTableSizeField().getText());
             if (hashTableSize <= 0) {
-                showAlert("Error", "Hash table size must be greater than 0.");
+                showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidHashTableSize"));
                 return false;
             }
         } catch (NumberFormatException e) {
-            showAlert("Error", "Hash table size must be a valid integer.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidHashTableFormat"));
             return false;
         }
 
         try{
             int chunkSize = Integer.parseInt(uiComponentProvider.getChunkSizeField().getText());
             if (chunkSize <= 0) {
-                showAlert("Error", "Chunk size must be a greater than 0.");
+                showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidChunkSize"));
                 return false;
             }
         } catch(NumberFormatException e) {
-            showAlert("Error", "Chunk size must be a valid integer.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidChunkFormat"));
             return false;
         }
 
         if (uiComponentProvider.getHashFunctionChoice().getCheckModel().getCheckedItems().isEmpty()) {
-            showAlert("Error", "Please select at least one hash function.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.selectHashFunction"));
             return false;
         }
 
         if (!(uiComponentProvider.getPutCheckbox().isSelected() || uiComponentProvider.getGetCheckbox().isSelected() || uiComponentProvider.getDeleteCheckbox().isSelected())) {
-            showAlert("Error", "Please select at least one test operation.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.selectTestOperation"));
             return false;
         }
 
         if (!uiComponentProvider.getGenerateDataRadio().isSelected() && !uiComponentProvider.getLoadDataRadio().isSelected()) {
-            showAlert("Error", "Please select a data generation method or choose to load data from a file.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.selectDataMethod"));
             return false;
         }
 
@@ -804,23 +807,23 @@ public class HashLabEventHandler {
             try {
                 int dataSize = Integer.parseInt(uiComponentProvider.getDataSizeField().getText());
                 if (dataSize <= 0) {
-                    showAlert("Error", "Data size must be a positive integer.");
+                    showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidDataSize"));
                     return false;
                 }
             } catch (NumberFormatException e) {
-                showAlert("Error", "Invalid data size. Please enter a valid integer.");
+                showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidDataSizeFormat"));
                 return false;
             }
 
             if (!uiComponentProvider.getUniformCheckBox().isSelected() && !uiComponentProvider.getGaussianCheckBox().isSelected() && !uiComponentProvider.getExponentialCheckBox().isSelected()) {
-                showAlert("Error", "Please select at least one data generation method.");
+                showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.selectDataGenerationMethod"));
                 return false;
             }
         }
 
 
         if (uiComponentProvider.getLoadDataRadio().isSelected() && (uiComponentProvider.getFilePathField().getText().isEmpty())) {
-            showAlert("Error", "Please choose a valid file to load data from.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.fileNotChosen"));
             return false;
         }
 
@@ -833,7 +836,7 @@ public class HashLabEventHandler {
                     Double.parseDouble(uiComponentProvider.getMeanField().getText());
                     Double.parseDouble(uiComponentProvider.getDeviationField().getText());
                 } catch (NumberFormatException e) {
-                    showAlert("Error", "Please enter valid numbers for Gaussian parameters.");
+                    showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidGaussianParams"));
                     return false;
                 }
             }
@@ -842,7 +845,7 @@ public class HashLabEventHandler {
                 try {
                     Double.parseDouble(uiComponentProvider.getLambdaField().getText());
                 } catch (NumberFormatException e) {
-                    showAlert("Error", "Please enter a valid number for Lambda.");
+                    showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidLambda"));
                     return false;
                 }
             }
@@ -851,47 +854,47 @@ public class HashLabEventHandler {
         try {
             int benchmarkIterations = Integer.parseInt(uiComponentProvider.getBenchmarkIterationsField().getText());
             if (benchmarkIterations <= 0) {
-                showAlert("Error", "Benchmark iterations must be greater than 0.");
+                showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidBenchmarkIterations"));
                 return false;
             }
         } catch (NumberFormatException e) {
-            showAlert("Error", "Benchmark iterations must be a valid integer.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidBenchmarkIterationsFormat"));
             return false;
         }
 
         try {
             Double.parseDouble(uiComponentProvider.getBenchmarkThresholdField().getText());
         } catch (NumberFormatException e) {
-            showAlert("Error", "Benchmark threshold must be a valid number.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidBenchmarkThreshold"));
             return false;
         }
 
         try {
             int testIterations = Integer.parseInt(uiComponentProvider.getTestIterationsField().getText());
             if (testIterations <= 0) {
-                showAlert("Error", "Test iterations must be greater than 0.");
+                showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidTestIterations"));
                 return false;
             }
         } catch (NumberFormatException e) {
-            showAlert("Error", "Test iterations must be a valid integer.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidTestIterationsFormat"));
             return false;
         }
 
         try {
             Double.parseDouble(uiComponentProvider.getTestThresholdField().getText());
         } catch (NumberFormatException e) {
-            showAlert("Error", "Test threshold must be a valid number.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidTestThreshold"));
             return false;
         }
 
         try {
             int warmupIterations = Integer.parseInt(uiComponentProvider.getWarmupIterationsField().getText());
             if (warmupIterations <= 0) {
-                showAlert("Error", "Warmup iterations must be greater than 0.");
+                showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidWarmupIterations"));
                 return false;
             }
         } catch (NumberFormatException e) {
-            showAlert("Error", "Warmup iterations must be a valid integer.");
+            showAlert(classLanguageBundle.getString("error.error"), classLanguageBundle.getString("error.invalidWarmupIterationsFormat"));
             return false;
         }
 
