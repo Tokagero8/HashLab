@@ -5,6 +5,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -137,6 +138,17 @@ public class ChartController {
                 false
         );
 
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        for (int i = 0; i < dataset.getSeriesCount(); i++) {
+            renderer.setSeriesStroke(i, new BasicStroke(2.5f));
+        }
+
+        chart.getXYPlot().setRenderer(renderer);
+        chart.setBackgroundPaint(Color.WHITE);
+        chart.getXYPlot().setBackgroundPaint(Color.WHITE);
+        chart.getXYPlot().setDomainGridlinePaint(Color.BLACK);
+        chart.getXYPlot().setRangeGridlinePaint(Color.BLACK);
+
 
         chartPanel.removeAll();
         chartPanel.add(new ChartPanel(chart), BorderLayout.CENTER);
@@ -196,11 +208,23 @@ public class ChartController {
         JFreeChart chart = ChartFactory.createXYLineChart(
                 selectedAlgorithm + " " + selectedOperation + " Operation Results",
                 "Table Size (Log Scale)",
-                "Execution Time (ms)",
+                "Normalized Performance Score",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true, true, false
         );
+
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        for (int i = 0; i < dataset.getSeriesCount(); i++) {
+            renderer.setSeriesStroke(i, new BasicStroke(2.5f));
+        }
+
+        chart.getXYPlot().setRenderer(renderer);
+        chart.setBackgroundPaint(Color.WHITE);
+        chart.getXYPlot().setBackgroundPaint(Color.WHITE);
+        chart.getXYPlot().setDomainGridlinePaint(Color.BLACK);
+        chart.getXYPlot().setRangeGridlinePaint(Color.BLACK);
+
 
         ChartPanel newChartPanel = new ChartPanel(chart);
         chartPanel.removeAll();
