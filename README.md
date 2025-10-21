@@ -287,7 +287,7 @@ Covers:
 
 ---
 
-- ## Known Bugs
+## Known Bugs
 
 During the build process (gradlew test or gradlew build), you might see error messages such as:
 
